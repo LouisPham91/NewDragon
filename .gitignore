@@ -1,0 +1,28 @@
+# === Build output Windows ===
+bin/
+obj/
+Debug/
+Release/
+publish/
+x64/
+x86/
+
+# === Visual Studio ===
+.vs/
+*.user
+*.suo
+*.userosscache
+*.tmp
+
+# === File nặng không đẩy ===
+*.exe
+*.pdb
+*.apk
+*.dll
+
+# === Thư mục extension nặng ===
+Dragon.UI/Extension/
+
+# === Secret local ===
+appsettings.local.json
+google_oauth.json

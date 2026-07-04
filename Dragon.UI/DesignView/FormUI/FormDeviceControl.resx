@@ -1,0 +1,459 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!--
+    Microsoft ResX Schema
+
+    Version 2.0
+
+    The primary goals of this format is to allow a simple XML format
+    that is mostly human readable. The generation and parsing of the
+    various data types are done through the TypeConverter classes
+    associated with the data types.
+
+    Example:
+
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+
+    There are any number of "resheader" rows that contain simple
+    name/value pairs.
+
+    Each data row contains a name, and value. The row also contains a
+    type or mimetype. Type corresponds to a .NET class that support
+    text/value conversion through the TypeConverter architecture.
+    Classes that don't support this are serialized and stored with the
+    mimetype set.
+
+    The mimetype is used for serialized objects, and tells the
+    ResXResourceReader how to depersist the object. This is currently not
+    extensible. For a given mimetype the value must be set accordingly:
+
+    Note - application/x-microsoft.net.object.binary.base64 is the format
+    that the ResXResourceWriter will generate, however the reader can
+    read any of the formats listed below.
+
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="pictureBoxBrightn3.DG_SVGString" xml:space="preserve">
+    <value>&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"&gt;&lt;!--! Font Awesome Pro 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2025 Fonticons, Inc. --&gt;&lt;path fill="currentColor" d="M97.5 416c-10.8 0-18.5-10.5-15.3-20.8l50-160c2.1-6.7 8.3-11.2 15.3-11.2L527 224c10.8 0 18.5 10.5 15.3 20.8l-50 160C490.1 411.5 484 416 477 416L97.5 416zm126.7 32L477 448c21 0 39.6-13.6 45.8-33.7l50-160c9.7-30.9-13.4-62.3-45.8-62.3l-379.4 0c-21 0-39.6 13.6-45.8 33.7L64.2 345.6 64.2 96c0-17.7 14.3-32 32-32l138.7 0c6.9 0 13.7 2.2 19.2 6.4l38.4 28.8c11.1 8.3 24.6 12.8 38.4 12.8l117.3 0c17.7 0 32 14.3 32 32l32 0c0-35.3-28.7-64-64-64L330.9 80c-6.9 0-13.7-2.2-19.2-6.4L273.3 44.8C262.2 36.5 248.8 32 234.9 32L96.2 32c-35.3 0-64 28.7-64 64l0 288c0 35.3 28.7 64 64 64l128 0z"/&gt;&lt;/svg&gt;</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="pictureBoxBrightn3.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAANtJREFUOE/llKEOAjEQBeuQSCSST0AikUgkEolE4pBIJJJPQCKRSCQSicTCmx5t
+        aHOiXRRhkkl6l8trt9ue+ymGci+PmRs5kFVM5E2u5SqTwMd73JFFnOS0GbbCCvnmmXmXW9mXCVc5aoZV
+        9CTbRBUJ1kDoSvY/4ZvAVkIgs51lvlel0lRPCKSTB1nczQ8om1BPCGR1M14YGEtyPAwI4rxRtoWdjN0m
+        kFLRChcjNpZAVjf3T/UQRGDkItlQDqoFSqXkyEISyPVjthrDf4CmRDgmlJv/aUpdyv/EuRfF700gKSck
+        NgAAAABJRU5ErkJggg==
+</value>
+  </data>
+  <data name="pictureBoxInstallFolder.DG_SVGString" xml:space="preserve">
+    <value>&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"&gt;&lt;!--! Font Awesome Pro 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2025 Fonticons, Inc. --&gt;&lt;path fill="currentColor" d="M64 416l384 0c17.7 0 32-14.3 32-32l0-240c0-17.7-14.3-32-32-32l-149.3 0c-13.8 0-27.3-4.5-38.4-12.8L221.9 70.4c-5.5-4.2-12.3-6.4-19.2-6.4L64 64C46.3 64 32 78.3 32 96l0 288c0 17.7 14.3 32 32 32zm384 32L64 448c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l138.7 0c13.8 0 27.3 4.5 38.4 12.8l38.4 28.8c5.5 4.2 12.3 6.4 19.2 6.4L448 80c35.3 0 64 28.7 64 64l0 240c0 35.3-28.7 64-64 64z"/&gt;&lt;/svg&gt;</value>
+  </data>
+  <data name="pictureBoxInstallFolder.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAAJtJREFUOE9joBUIB+J5QLwPC84HYnkgJhrUA/F/IAYZCGKj43NA/A2I44GYKHAP
+        iEGuwAdA8iBDrwExNl+AcBsQ8wMx2HX2IAYBIA7E6UCMzRcgw0AOWwfERBtICPgDMcgsqhkIMmPUQMrA
+        qIGUA7iBxORlYgCoxALld3BeBDGwZXhS8DsgXgbEYAAyHT3Dk4pBBQc7EA9qwMAAAEQgTe7iJLY8AAAA
+        AElFTkSuQmCC
+</value>
+  </data>
+  <data name="pictureBoxInstallAPK.DG_SVGString" xml:space="preserve">
+    <value>&lt;?xml version="1.0" encoding="utf-8"?&gt;&lt;!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools --&gt;
+&lt;svg width="800px" height="800px" viewBox="0 0 24 24" id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"&gt;&lt;defs&gt;&lt;style&gt;.cls-1{fill:none;stroke:#020202;stroke-miterlimit:10;stroke-width:1.91px;}.cls-2{fill:#020202;}&lt;/style&gt;&lt;/defs&gt;&lt;path class="cls-1" d="M12,8.16h0a10.5,10.5,0,0,1,10.5,10.5v1a0,0,0,0,1,0,0H1.5a0,0,0,0,1,0,0v-1A10.5,10.5,0,0,1,12,8.16Z"/&gt;&lt;circle class="cls-2" cx="7.23" cy="14.84" r="0.95"/&gt;&lt;circle class="cls-2" cx="16.77" cy="14.84" r="0.95"/&gt;&lt;line class="cls-1" x1="3.41" y1="3.39" x2="6.27" y2="9.11"/&gt;&lt;line class="cls-1" x1="20.59" y1="3.39" x2="17.73" y2="9.11"/&gt;&lt;/svg&gt;</value>
+  </data>
+  <data name="pictureBoxInstallAPK.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAAQpJREFUOE/VlCEQAUEUhq+JoiiKoiiKoiiKoqiJoiiKZhRRlIwZRRBEUVT5vze3
+        N+vcnXVjzPhnvjHvdve9f9/bEf2dGvHvJ8o9MxU3UbMoTBVxEUuLUmqKuyBxqIaCM12LMkSlUJfO3d6i
+        HPku6U1PTMQmZiYGoiXeunNaiYNgswMn59S3k9iJQlH5KDiwFR3hX78q2mIh2HMV7MlUXdA/GPHhjUiE
+        cxJT5EX0iEVchgr3uKQdDCkRjSYZA0BcDcd5IpFrRV/4Z030za/ClIueA8/LX18LWmUiCRV4Ek4hDv11
+        94R4dtYzAq5dVk85XHYCplUGJp7cchwH32AurBdZVctQ5u/vp4qiB7LoW87fOFnGAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="pictureBoxADB.DG_SVGString" xml:space="preserve">
+    <value>&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"&gt;&lt;!--! Font Awesome Pro 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2025 Fonticons, Inc. --&gt;&lt;path fill="currentColor" d="M448 96c17.7 0 32 14.3 32 32l0 256c0 17.7-14.3 32-32 32L64 416c-17.7 0-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32l384 0zM64 64C28.7 64 0 92.7 0 128L0 384c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-256c0-35.3-28.7-64-64-64L64 64zM400 368c8.8 0 16-7.2 16-16s-7.2-16-16-16l-176 0c-8.8 0-16 7.2-16 16s7.2 16 16 16l176 0zM123.3 148.7c-6.2-6.2-16.4-6.2-22.6 0s-6.2 16.4 0 22.6l84.7 84.7-84.7 84.7c-6.2 6.2-6.2 16.4 0 22.6s16.4 6.2 22.6 0l96-96c6.2-6.2 6.2-16.4 0-22.6l-96-96z"/&gt;&lt;/svg&gt;</value>
+  </data>
+  <data name="pictureBoxADB.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAAMdJREFUOE/VlL0NwjAQRt0xBiUlIzACJSUlJSPQUTICZUagZARGYARKWvjeSUZR
+        8NmxUyA+6UnnSH7+OTnhbzIXW3FohLkLYVmLp7iLayPMfYmdCDdxppgYdvqgwLyimBgcuL6EjFmtNq6Q
+        C26RukLSIs0KSZTubVROUbgUdO1ko3Kywii7iBkfRsQVtsiIKxzKjiL1OiI8W+IKqfs742nS7RT9hn2E
+        vMOxncxlI/gn2EoUqePUwFV1woJ9eJxa+NPUNPEnCeENPEJkj+/tTX0AAAAASUVORK5CYII=
+</value>
+  </data>
+  <data name="pictureBoxImportFile.DG_SVGString" xml:space="preserve">
+    <value>&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"&gt;&lt;!--! Font Awesome Pro 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2025 Fonticons, Inc. --&gt;&lt;path fill="currentColor" d="M128 32l128 0 0 96c0 35.3 28.7 64 64 64l96 0 0 256c0 17.7-14.3 32-32 32l-256 0c-17.7 0-32-14.3-32-32l0-48-32 0 0 48c0 35.3 28.7 64 64 64l256 0c35.3 0 64-28.7 64-64l0-261.5c0-17-6.7-33.3-18.7-45.3L306.7 18.7C294.7 6.7 278.5 0 261.5 0L128 0C92.7 0 64 28.7 64 64l0 208 32 0 0-208c0-17.7 14.3-32 32-32zM288 45.3L402.7 160 320 160c-17.7 0-32-14.3-32-32l0-82.7zM0 336c0 8.8 7.2 16 16 16l249.4 0-44.7 44.7c-6.2 6.2-6.2 16.4 0 22.6s16.4 6.2 22.6 0l72-72c6.2-6.2 6.2-16.4 0-22.6l-72-72c-6.2-6.2-16.4-6.2-22.6 0s-6.2 16.4 0 22.6L265.4 320 16 320c-8.8 0-16 7.2-16 16z"/&gt;&lt;/svg&gt;</value>
+  </data>
+  <data name="pictureBoxImportFile.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAAPxJREFUOE+9lK0OwjAURud4DCQSiUQikUgeAYnEIXkEJI+ARCKRSCQSiYXvZGnS
+        rffSO8OXnKzputOuf00vC3ERH4Ob2ItwJuItTmJukMRHEcpG3NuiGWS0eYmQdCf4XS8IGelUhKRRIQlJ
+        a8KH4JdTqtKakPcsGm0SdMLIkRepCclK0C4HKc8iVNaEVvjmP8K1OLTFTqhn8s15Ulyhl5E4C09aCDm/
+        VPyCM8wKI+WI5imE7CMqazwFW4SVzsO7jjAS/oIRWpvYFY6FNUcz4cmIK6SSl/3QSX7k+nGFW3Fti4Pi
+        CtMlyr5Ll2qNpWA6+MYMPSEdAjc8e1Vpmi/Memcex8cUhQAAAABJRU5ErkJggg==
+</value>
+  </data>
+  <data name="pictureBoxShutDown.DG_SVGString" xml:space="preserve">
+    <value>&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"&gt;&lt;!--! Font Awesome Pro 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2025 Fonticons, Inc. --&gt;&lt;path fill="currentColor" d="M272-16c0-8.8-7.2-16-16-16s-16 7.2-16 16l0 272c0 8.8 7.2 16 16 16s16-7.2 16-16l0-272zM151.5 57.8c7.8-4.1 10.8-13.8 6.7-21.6s-13.8-10.8-21.6-6.7C55.4 72.4 0 157.7 0 256 0 397.4 114.6 512 256 512S512 397.4 512 256c0-98.3-55.4-183.6-136.5-226.5-7.8-4.1-17.5-1.1-21.6 6.7s-1.1 17.5 6.7 21.6C431.6 95.4 480 170.1 480 256 480 379.7 379.7 480 256 480S32 379.7 32 256C32 170.1 80.4 95.4 151.5 57.8z"/&gt;&lt;/svg&gt;</value>
+  </data>
+  <data name="pictureBoxShutDown.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAAS5JREFUOE+llC0YAUEURaeJoiiKoiiKoiiKoqiJoiiKoiiKoiiKoso9b3dYa2dm
+        cb7vMsPunfe362qyzvUTLWkjtW2XUTZsSlupY7sIA+kqHSRu8pQNGxKH3qQpP1SB2V2a2e6dsqFnLFWa
+        kh6RLWz3ScgQhhKBENAT6rHLlpXEDGEunbOlc12JE/gOkTKkkaROtG4lHVlESBkCPmRqqS5ZRKhjOJFO
+        LPhgE6OOIU0hbXeRaH+MkfTWxQr82Fn9UinXgfll9CwVnox/oSF7Fj734qP2LTyKzCHzaBvSThU9Bkb0
+        gnk0GGqipPjf0pNohg11EV/UVDeLYEaqwex4OXAaF6RqSgD+WsoWhFMZdmrCO48b+7l4TWHA/2TzkWYI
+        TsSIcSKKomggmTwb8MK5B9vqTFq0gLUlAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="pictureBoxTurnOnScreen.DG_SVGString" xml:space="preserve">
+    <value>&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"&gt;&lt;!--! Font Awesome Pro 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2025 Fonticons, Inc. --&gt;&lt;path fill="currentColor" d="M480 192c0 42.7-16.7 81.4-43.9 110.1-19.9 20.9-40.4 48.7-48.5 81.9l-135.2 0c-8.1-33.3-28.6-61-48.5-81.9-27.2-28.7-43.9-67.4-43.9-110.1 0-88.4 71.6-160 160-160s160 71.6 160 160zM256 416l128 0 0 16c0 26.5-21.5 48-48 48l-32 0c-26.5 0-48-21.5-48-48l0-16zm160-2.3C416 379.4 435.7 349 459.3 324.1 492 289.7 512 243.2 512 192 512 86 426 0 320 0S128 86 128 192c0 51.2 20 97.7 52.7 132.1 23.6 24.9 43.3 55.3 43.3 89.6l0 18.3c0 44.2 35.8 80 80 80l32 0c44.2 0 80-35.8 80-80l0-18.3zM304 112c8.8 0 16-7.2 16-16s-7.2-16-16-16c-53 0-96 43-96 96 0 8.8 7.2 16 16 16s16-7.2 16-16c0-35.3 28.7-64 64-64zM40.9 18.7c-7.4-4.9-17.3-2.9-22.2 4.4s-2.9 17.3 4.4 22.2l48 32c7.4 4.9 17.3 2.9 22.2-4.4s2.9-17.3-4.4-22.2l-48-32zm576 26.6c7.4-4.9 9.3-14.8 4.4-22.2s-14.8-9.3-22.2-4.4l-48 32c-7.4 4.9-9.3 14.8-4.4 22.2s14.8 9.3 22.2 4.4l48-32zM16 176c-8.8 0-16 7.2-16 16s7.2 16 16 16l48 0c8.8 0 16-7.2 16-16s-7.2-16-16-16l-48 0zm560 0c-8.8 0-16 7.2-16 16s7.2 16 16 16l48 0c8.8 0 16-7.2 16-16s-7.2-16-16-16l-48 0zM88.9 333.3c7.4-4.9 9.3-14.8 4.4-22.2s-14.8-9.3-22.2-4.4l-48 32c-7.4 4.9-9.3 14.8-4.4 22.2s14.8 9.3 22.2 4.4l48-32zm480-26.6c-7.4-4.9-17.3-2.9-22.2 4.4s-2.9 17.3 4.4 22.2l48 32c7.4 4.9 17.3 2.9 22.2-4.4s2.9-17.3-4.4-22.2l-48-32z"/&gt;&lt;/svg&gt;</value>
+  </data>
+  <data name="pictureBoxTurnOnScreen.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAAStJREFUOE/VlKESwjAQROuQSCQSiUQikUgkEskn4JBIJJ+ARCKRSCQSicTCviTX
+        CW3SztT1zSykbXLJ3l1b9IKRNPbDGjNpL12DDtJCSlHGmUgvactFYCgRyO7PgzbSQzpJzDFWEnPLzYi+
+        80PHUTpLLGLDqWQMJJ5f3JVnLTEvCSd5SgTjdF8Jq1VuEoFaYbHt+An/KdgYFzWWEnYtJ3cJiwQljzmY
+        //ZDNyYGsZwtLixP2M1VPYZc4gBYS4y4sCXYcDu1QBDctEJrxBXMQa6bUuKa2KCC9FYO5tJ3lvd4rbvJ
+        iXgTDCpLwlMVpmfJc/zG0JccwuWeH2xW4V6qLbBKgCo4opWycHKaOqXGhU3QFrRHDAE7Q17jSpIG8tcZ
+        isLXxaz+fVH6SFH8APmxPb/HzgcyAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="pictureBoxRotateRight.DG_SVGString" xml:space="preserve">
+    <value>&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"&gt;&lt;!--! Font Awesome Pro 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2025 Fonticons, Inc. --&gt;&lt;path fill="currentColor" d="M53.2 340.7c5.5-5.5 13.9-6.2 20.1-2.1l2.5 2.1 48 48 2.1 2.5c4.1 6.2 3.4 14.7-2.1 20.1s-13.9 6.2-20.1 2.1l-2.5-2.1-20.7-20.7 0 25.4c0 44.2 35.8 80 80 80 22.6 0 42.9-9.4 57.5-24.5l22.7 22.7c-20.3 20.9-48.7 33.8-80.2 33.8-61.9 0-112-50.1-112-112l0-25.4-20.7 20.7c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l48-48zM184.1 14.3c25.1-20.5 62.2-19 85.7 4.4l256 256 4.4 4.8c20.5 25.1 19 62.2-4.4 85.7l-128 128c-23.4 23.4-60.5 24.9-85.7 4.4l-4.8-4.4-256-256c-25-25-25-65.5 0-90.5l128-128 4.8-4.4zm63 27c-11.6-11.6-30.1-12.4-42.6-2.4l-3.1 2.8-127.6 127.6c-12.5 12.5-12.5 32.8 0 45.2l255.6 255.6 3.1 2.8c12.5 10.1 30.9 9.3 42.6-2.4l128-128 2.1-2.3c9.6-11.6 9.7-28.4 .5-40.2L502.7 297 247.1 41.4zM407.7 322.6c6.2-4.1 14.7-3.4 20.1 2.1s6.2 13.9 2.1 20.1l-2.1 2.5-48 48c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l48-48 2.5-2.1zM416.5-16c61.9 0 112 50.1 112 112l0 25.4 20.7-20.7c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6l-48 48c-5.5 5.5-13.9 6.2-20.1 2.1l-2.5-2.1-48-48-2.1-2.5c-4.1-6.2-3.4-14.7 2.1-20.1s13.9-6.2 20.1-2.1l2.5 2.1 20.7 20.7 0-25.4c0-44.2-35.8-80-80-80-22.6 0-42.9 9.4-57.5 24.5L336.3 17.8C356.7-3 385.1-16 416.5-16z"/&gt;&lt;/svg&gt;</value>
+  </data>
+  <data name="pictureBoxRotateRight.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAAShJREFUOE/NlKsSwjAUBeuQSCQSiUQi+QwkEonEIfkEJBKJRCKRSD4BiYWzmd5M
+        GtI0RbEzZ/qYZHObR6sfGSlzZeyeCpkqe2WjDHlRXw/KW7nX17PCAFkWylPZKUfloVg1DGACBjgpF/fU
+        gsm4GlsllIYMFNrzRV+kZEZKSoWIqHCpzBRPTmbE0onyUujH+5viYJQumRFL6YO0UT2rScNSUpU2VprV
+        RNqH1Jx6sPPJTGwfslKbx7+Q2gFIUiJlM3NiDPYffTyUzQtkkJMi4/wSsGe/qIzEISdI2ALQJqU9AkSh
+        nHsHHdYKE8u9VQmllXqZwbahQvtNhaSkWZlxVfjXhcSfz5fwrlMGNOSnSdgGdIjnlL8K55YFyMoMGq0U
+        Vp3JT27WdqrqA4UjVHiq/rYOAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="pictureBoxReStart.DG_SVGString" xml:space="preserve">
+    <value>&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"&gt;&lt;!--! Font Awesome Pro 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2025 Fonticons, Inc. --&gt;&lt;path fill="currentColor" d="M16 0c8.8 0 16 7.2 16 16l0 103.8 37-39.1C117.6 29.2 185.2 0 256 0 397.4 0 512 114.6 512 256S397.4 512 256 512c-98.3 0-183.6-55.4-226.5-136.5-4.1-7.8-1.1-17.5 6.7-21.6s17.5-1.1 21.6 6.7C95.4 431.6 170.1 480 256 480 379.7 480 480 379.7 480 256S379.7 32 256 32c-62 0-121.2 25.5-163.8 70.6L53.1 144 160 144c8.8 0 16 7.2 16 16s-7.2 16-16 16L16 176c-8.8 0-16-7.2-16-16L0 16C0 7.2 7.2 0 16 0z"/&gt;&lt;/svg&gt;</value>
+  </data>
+  <data name="pictureBoxReStart.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAASRJREFUOE+t1C1XxDAQheE6JBKJRCKRSCQ/AYlEInFIfgISiUQikUgkEonEwn3a
+        zbL0i+6e3HPes9m0vZlkMtNED+HIoKfDcBOee9yF4zCp73DaDVvthdtg/jM8BcZ4DO/BM/MHYaBNQyu/
+        rTgxMSFGDC14YWJTxdCDr3Af9sMSXQffXLb/VmLIxO9gtQUqgazzwKiYirQwlqgp2f5LN/w95D4SsFTO
+        VJS77HBSotwmiH/lqn10wzo6D46qms5CVUN30kWvJglR61Wk/l0/9d5KymVpVzGS4XWzUBkO1O+20kR8
+        K8t/pM9ZZa7L9OVdW1W2o2KqhK6Cc5mTrIqM2ey7WpH0i9YC7ldpGBZioF96Z7DNKVlRobsGPhRJ4TVI
+        4Ei3bpof5OZNt27DCoIAAAAASUVORK5CYII=
+</value>
+  </data>
+  <data name="pictureBoxBrightn1.DG_SVGString" xml:space="preserve">
+    <value>&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"&gt;&lt;!--! Font Awesome Pro 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2025 Fonticons, Inc. --&gt;&lt;path fill="currentColor" d="M166.6 329.4L284.7 447.4c.4 .4 .9 .6 1.4 .6 1.1 0 1.9-.9 1.9-1.9l0-380.1c0-1.1-.9-1.9-1.9-1.9-.5 0-1 .2-1.4 .6L166.6 182.6c-6 6-14.1 9.4-22.6 9.4l-64 0c-8.8 0-16 7.2-16 16l0 96c0 8.8 7.2 16 16 16l64 0c8.5 0 16.6 3.4 22.6 9.4zM80 160l64 0 118.1-118.1c6.4-6.4 15-9.9 24-9.9 18.7 0 33.9 15.2 33.9 33.9l0 380.1c0 18.7-15.2 33.9-33.9 33.9-9 0-17.6-3.6-24-9.9L144 352 80 352c-26.5 0-48-21.5-48-48l0-96c0-26.5 21.5-48 48-48zm329.6 19.2C432.9 196.7 448 224.6 448 256s-15.1 59.3-38.4 76.8c-7.1 5.3-17.1 3.9-22.4-3.2s-3.9-17.1 3.2-22.4C406 295.5 416 276.9 416 256s-10-39.5-25.6-51.2c-7.1-5.3-8.5-15.3-3.2-22.4s15.3-8.5 22.4-3.2zm42-69.2c5.6-6.8 15.7-7.8 22.5-2.1 42.6 35.2 69.8 88.5 69.8 148.1s-27.2 112.9-69.8 148.1c-6.8 5.6-16.9 4.7-22.5-2.2s-4.7-16.9 2.1-22.5C489.4 350.1 512 305.7 512 256s-22.6-94.1-58.2-123.4c-6.8-5.6-7.8-15.7-2.1-22.5zm86.7-73.6C600.5 89.2 640 168 640 256S600.5 422.8 538.4 475.6c-6.7 5.7-16.8 4.9-22.6-1.8s-4.9-16.8 1.8-22.6c55.3-47 90.4-117 90.4-195.2S572.9 107.8 517.6 60.8c-6.7-5.7-7.6-15.8-1.8-22.6s15.8-7.6 22.6-1.8z"/&gt;&lt;/svg&gt;</value>
+  </data>
+  <data name="pictureBoxBrightn1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAAQtJREFUOE/tk6GSwkAQRNchTyKRSCQSiUQikSeR/AESiUQikUgkn4BEIpFY6LfD
+        pCZhcxSae1Vd6SSzvbPZbPqnSUdaP9UG73pm/4awvbSR7jxoYS6dJOpbiWFQCvyVfszmOq99oRkGpUCW
+        ujObx9DlJN+JsXSWGIias8XA4fNKyFGiU+C6NZvSRRqYLRIDmWxhNnfkXfYlcjKlJUXi+650NZu/oXuo
+        6j4JZKk3szUPVR0PfcdKxECW68scSQeztc5zEYMQmzOVIjFwJvnk7PTSbB7j4TX4uIQy0ImBDu+p83C6
+        9h1/gaMUQ0uBK8l/IYLenpYYWgp0COV3YWVvIZSZURucquqEfB0pPQAiDEDQFHeLwAAAAABJRU5ErkJg
+        gg==
+</value>
+  </data>
+  <data name="pictureBoxBrightn2.DG_SVGString" xml:space="preserve">
+    <value>&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"&gt;&lt;!--! Font Awesome Pro 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2025 Fonticons, Inc. --&gt;&lt;path fill="currentColor" d="M134.6 329.4L252.7 447.4c.4 .4 .9 .6 1.4 .6 1.1 0 1.9-.9 1.9-1.9l0-380.1c0-1.1-.9-1.9-1.9-1.9-.5 0-1 .2-1.4 .6L134.6 182.6c-6 6-14.1 9.4-22.6 9.4l-64 0c-8.8 0-16 7.2-16 16l0 96c0 8.8 7.2 16 16 16l64 0c8.5 0 16.6 3.4 22.6 9.4zM48 160l64 0 118.1-118.1c6.4-6.4 15-9.9 24-9.9 18.7 0 33.9 15.2 33.9 33.9l0 380.1c0 18.7-15.2 33.9-33.9 33.9-9 0-17.6-3.6-24-9.9L112 352 48 352c-26.5 0-48-21.5-48-48l0-96c0-26.5 21.5-48 48-48zm329.6 19.2C400.9 196.7 416 224.6 416 256s-15.1 59.3-38.4 76.8c-7.1 5.3-17.1 3.9-22.4-3.2s-3.9-17.1 3.2-22.4C374 295.5 384 276.9 384 256s-10-39.5-25.6-51.2c-7.1-5.3-8.5-15.3-3.2-22.4s15.3-8.5 22.4-3.2z"/&gt;&lt;/svg&gt;</value>
+  </data>
+  <data name="pictureBoxBrightn2.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAANdJREFUOE/Fky0OAjEUBuuQHAPJEZAcAYlEIpE4JBLJMZBIJBLJEZBY+GY3hPZt
+        Cd0+EiaZsCXb2Z9uwz+ZyKUcNiMnc/mQN7ngDw+vGL9HuZbVxDFwBW0MegVn8iCZhDYGxUEm8sI3kgk4
+        lRYb3Ep70QbujNg3bJDYXY6aUUTpo+TOO0u+zwRP8CRX7eGb2uBY8sjsogSucJGcjOyG3BazQcb79jCF
+        yTvJCUicVecOYmywsxifGEhW3kZtsBe5qCsINuoOQhy9ys4nUgNRthnh4oX4ASE8Abu3Po+rjRwrAAAA
+        AElFTkSuQmCC
+</value>
+  </data>
+  <data name="pictureBoxExportFile.DG_SVGString" xml:space="preserve">
+    <value>&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"&gt;&lt;!--! Font Awesome Pro 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2025 Fonticons, Inc. --&gt;&lt;path fill="currentColor" d="M136 80l112 0c13.3 0 24-10.7 24-24s-10.7-24-24-24L136 32c-13.3 0-24 10.7-24 24s10.7 24 24 24zm0 32c-28.2 0-51.6-20.9-55.4-48L64 64C46.3 64 32 78.3 32 96l0 352c0 17.7 14.3 32 32 32l256 0c17.7 0 32-14.3 32-32l0-352c0-17.7-14.3-32-32-32l-16.6 0c-3.9 27.1-27.2 48-55.4 48l-112 0zM248 0c22.3 0 41.6 13.1 50.6 32L320 32c35.3 0 64 28.7 64 64l0 352c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l21.4 0c9-18.9 28.3-32 50.6-32L248 0zM192 224c-8.8 0-16-7.2-16-16s7.2-16 16-16l96 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-96 0zm0 160l96 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-96 0c-8.8 0-16-7.2-16-16s7.2-16 16-16zm-56 16c0 13.3-10.7 24-24 24s-24-10.7-24-24 10.7-24 24-24 24 10.7 24 24zM112 280a24 24 0 1 1 0 48 24 24 0 1 1 0-48zM88 208a24 24 0 1 1 48 0 24 24 0 1 1 -48 0zM192 320c-8.8 0-16-7.2-16-16s7.2-16 16-16l96 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-96 0z"/&gt;&lt;/svg&gt;</value>
+  </data>
+  <data name="pictureBoxExportFile.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAAP9JREFUOE/FlC0OAjEQheuQSI7AEZAcAYlEIpFIbsERkEgkEolEIpFILLyPMsnQ
+        3W5mExJe8iX9fe10mkkdmoqjeBacxUyENBIbgdFDbAXGHuYxZg3tsWgVZjdxFRixibE2sW4nLoKDW00X
+        goWDdy+Hhjk38WDi19Ff5+a3LFQTGziEcc9SDIWJPYw3xKA3jOp/hrwLISPLvrESFnbYkIc/5WaaC+Y8
+        llnaIUNuYJnsUtgwqrDhQfDB0UQwZ+xF75BLQ+Y9vZMSVdjw50kpv40vYXfBM6CwYfmxyzJmqhpiYDfq
+        o6ohpxIOtypvU4PKTT20SBriJP9WESi0n+Sl9ALYrm2a2ZvNqQAAAABJRU5ErkJggg==
+</value>
+  </data>
+  <data name="pictureBoxExportApk.DG_SVGString" xml:space="preserve">
+    <value>&lt;svg xmlns="http://www.w3.org/2000/svg" width="800px" height="800px" viewBox="0 -2 24 26"&gt;&lt;path fill="none" stroke="#020202" stroke-miterlimit="10" stroke-width="1.91" d="M12,8.16h0a10.5,10.5,0,0,1,10.5,10.5v1H1.5v-1A10.5,10.5,0,0,1,12,8.16Z"/&gt;&lt;circle fill="#020202" cx="7.23" cy="14.84" r="0.95"/&gt;&lt;circle fill="#020202" cx="16.77" cy="14.84" r="0.95"/&gt;&lt;line stroke="#020202" stroke-miterlimit="10" stroke-width="1.91" x1="3.41" y1="3.39" x2="6.27" y2="9.11"/&gt;&lt;line stroke="#020202" stroke-miterlimit="10" stroke-width="1.91" x1="20.59" y1="3.39" x2="17.73" y2="9.11"/&gt;&lt;path d="M10 -1 L7 2 L10 5" stroke="#020202" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/&gt;&lt;line x1="7" y1="2" x2="17" y2="2" stroke="#020202" stroke-width="1.5" stroke-linecap="round"/&gt;&lt;/svg&gt;</value>
+  </data>
+  <data name="pictureBoxExportApk.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAAQxJREFUOE/FlCsOAjEURcchkTiQSCQSiUQikUiWwA5IMBgScEgkEokEQQIolkDC
+        CuDe13ZSOm3pTEg4yUk/mbav7etkCQx0+ROm2p+whGvYC5hETZdN+IQHuA/YgsSM8XKEDVWVAfZAH5zs
+        oksvEzhTVYGTbVXVi/t9Aa50hybKGMnfuqt24Riy376Mr9EZuPINzuEL8mIWkIN5puzbwTNM2YlEdIKM
+        IEQfXuFQWhE4GSNqSytOHfLCgpOaFIiliUt0zAqOVFXOJvbkeEkdVc139QFXeuiS8GMevGm7bCDP0cAH
+        YRYQ2GBnVezdCdwCU6MqhZzkeTHr7cdfRl4Mo8xhCri/p7ImJfm/ybI3A7ZASeTj5uUAAAAASUVORK5C
+        YII=
+</value>
+  </data>
+  <data name="pictureBoxScreenShot.DG_SVGString" xml:space="preserve">
+    <value>&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"&gt;&lt;!--! Font Awesome Pro 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2025 Fonticons, Inc. --&gt;&lt;path fill="currentColor" d="M0 64l0 80c0 8.8 7.2 16 16 16s16-7.2 16-16l0-80c0-17.7 14.3-32 32-32l80 0c8.8 0 16-7.2 16-16S152.8 0 144 0L64 0C28.7 0 0 28.7 0 64zM216.6 96c-16.7 0-31.6 10.3-37.5 26l-2.3 6-24.9 0c-30.9 0-56 25.1-56 56l0 144c0 30.9 25.1 56 56 56l208 0c30.9 0 56-25.1 56-56l0-144c0-30.9-25.1-56-56-56l-24.9 0-2.3-6C327 106.3 312 96 295.4 96l-78.7 0zm-7.5 37.2c1.2-3.1 4.2-5.2 7.5-5.2l78.7 0c3.3 0 6.3 2.1 7.5 5.2l6.2 16.4c2.3 6.2 8.3 10.4 15 10.4l36 0c13.3 0 24 10.7 24 24l0 144c0 13.3-10.7 24-24 24l-208 0c-13.3 0-24-10.7-24-24l0-144c0-13.3 10.7-24 24-24l36 0c6.7 0 12.6-4.1 15-10.4l6.2-16.4zM224 256a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm96 0a64 64 0 1 0 -128 0 64 64 0 1 0 128 0zM448 0L368 0c-8.8 0-16 7.2-16 16s7.2 16 16 16l80 0c17.7 0 32 14.3 32 32l0 80c0 8.8 7.2 16 16 16s16-7.2 16-16l0-80c0-35.3-28.7-64-64-64zM0 448c0 35.3 28.7 64 64 64l80 0c8.8 0 16-7.2 16-16s-7.2-16-16-16l-80 0c-17.7 0-32-14.3-32-32l0-80c0-8.8-7.2-16-16-16S0 359.2 0 368l0 80zm448 64c35.3 0 64-28.7 64-64l0-80c0-8.8-7.2-16-16-16s-16 7.2-16 16l0 80c0 17.7-14.3 32-32 32l-80 0c-8.8 0-16 7.2-16 16s7.2 16 16 16l80 0z"/&gt;&lt;/svg&gt;</value>
+  </data>
+  <data name="pictureBoxScreenShot.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAAT9JREFUOE+t1SFTw0AQxfE4JBKJRCKRyEokEolEIvkWSCQSieQjIJFIJBIL7xey
+        nZu0aSaUN/PvZG437/bu9tIuOgz34T18D3yE4zAl78ipfO8+hqPQPQTBq3A+cBbmVLnw7lt4Cd1nuPSw
+        p1ZBtf2PWaZk6VXJiYEJic8a2lvxluewTWvDr9DumWcbXAZtTLXyy9gyS/LENpbhxJ6CGU8NjCRfTPX2
+        /yCUNrbELGZvk4gBxuNyjU9KUFKJgVYwBq2hB0uLDS+CfbEUTatfb0JpsaGGZVJLVeHt72OvxYZVFaPX
+        oNr2oBYbEtO7gfGpzxpamlawTxJ34bqquP8gtLKktnmvgzGz78LEqi45uL6xBc24r3jw+n9DZbZ38q9a
+        G7oJMFBs3Mktqjtd+KD4DvQBfca9UPXcX0Cbjxxkt/oBtr5uX9wszNYAAAAASUVORK5CYII=
+</value>
+  </data>
+  <data name="pictureBoxScreenShootFolder.DG_SVGString" xml:space="preserve">
+    <value>&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"&gt;&lt;!--! Font Awesome Pro 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2025 Fonticons, Inc. --&gt;&lt;path fill="currentColor" d="M64 416l384 0c17.7 0 32-14.3 32-32l0-240c0-17.7-14.3-32-32-32l-149.3 0c-13.8 0-27.3-4.5-38.4-12.8L221.9 70.4c-5.5-4.2-12.3-6.4-19.2-6.4L64 64C46.3 64 32 78.3 32 96l0 288c0 17.7 14.3 32 32 32zm384 32L64 448c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l138.7 0c13.8 0 27.3 4.5 38.4 12.8l38.4 28.8c5.5 4.2 12.3 6.4 19.2 6.4L448 80c35.3 0 64 28.7 64 64l0 240c0 35.3-28.7 64-64 64z"/&gt;&lt;/svg&gt;</value>
+  </data>
+  <data name="pictureBoxScreenShootFolder.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAAJtJREFUOE9joBUIB+J5QLwPC84HYnkgJhrUA/F/IAYZCGKj43NA/A2I44GYKHAP
+        iEGuwAdA8iBDrwExNl+AcBsQ8wMx2HX2IAYBIA7E6UCMzRcgw0AOWwfERBtICPgDMcgsqhkIMmPUQMrA
+        qIGUA7iBxORlYgCoxALld3BeBDGwZXhS8DsgXgbEYAAyHT3Dk4pBBQc7EA9qwMAAAEQgTe7iJLY8AAAA
+        AElFTkSuQmCC
+</value>
+  </data>
+  <data name="pictureBoxActionRecord.DG_SVGString" xml:space="preserve">
+    <value>&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"&gt;&lt;!--! Font Awesome Pro 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2025 Fonticons, Inc. --&gt;&lt;path fill="currentColor" d="M96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l256 0c17.7 0 32-14.3 32-32l0-256c0-17.7-14.3-32-32-32L96 96zM32 128c0-35.3 28.7-64 64-64l256 0c35.3 0 64 28.7 64 64l0 256c0 35.3-28.7 64-64 64L96 448c-35.3 0-64-28.7-64-64l0-256zm432 84l0-40 73.6-55.2c4.2-3.1 9.2-4.8 14.4-4.8 13.3 0 24 10.7 24 24l0 240c0 13.3-10.7 24-24 24-5.2 0-10.2-1.7-14.4-4.8l-73.6-55.2 0-40 80 60 0-208-80 60z"/&gt;&lt;/svg&gt;</value>
+  </data>
+  <data name="pictureBoxActionRecord.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAALdJREFUOE/tk60OAjEQBs8hkUgegUdAIpFIJBKJ5C1OIpFIJBKJRCKRSCzMXOHS
+        EO4noYIEJpm0qfi2aXez36aPC1w2OMMu1jLGC+b4LiR2g1fsYSVbtHJbDJ2HbYnFzCk44TBsW7FCA8Sb
+        7tCMmwfySeAB1+i7JgkcPVZJEhjznYFx+yT7lEnYpgl8DoVnZeAR499q4vUNHds9OkEFdr0HVvOmdU7x
+        jAOspIOOnh3fpGNn6B/JsjuCvUGEZkBbkAAAAABJRU5ErkJggg==
+</value>
+  </data>
+  <data name="pictureBoxExcuteAction.DG_SVGString" xml:space="preserve">
+    <value>&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"&gt;&lt;!--! Font Awesome Pro 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2025 Fonticons, Inc. --&gt;&lt;path fill="currentColor" d="M51.6 37.6C39.5 44.8 32 57.9 32 72l0 368c0 14.1 7.5 27.2 19.6 34.4s27.2 7.5 39.6 .7l336-184c12.8-7 20.8-20.5 20.8-35.1s-8-28.1-20.8-35.1l-336-184c-12.4-6.8-27.4-6.5-39.6 .7zM75.8 65l336 184c2.6 1.4 4.2 4.1 4.2 7s-1.6 5.6-4.2 7L75.8 447c-2.5 1.4-5.5 1.3-7.9-.1S64 442.8 64 440L64 72c0-2.8 1.5-5.4 3.9-6.9s5.4-1.5 7.9-.1z"/&gt;&lt;/svg&gt;</value>
+  </data>
+  <data name="pictureBoxExcuteAction.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAAPtJREFUOE/NlCEQAUEYRreJoiiKoiiKoiiKoqiJoiiKoiiKoiiKosr3zuzMcnvr
+        /jVmvJk345z7Zvffz7lfM5Yz2SquvmQgb/Ikr3IuGzIbAvbPj24oz/IiJ3yRQxgIrG4qWS2rZgcm3gM9
+        TbmQjIP7XVmLqkAPB7WWd7mRbZnkU6CHFe4kK15KdhClbqCnL4+SGVO1UiOsgZ6RpA2r4iogN5DZMgJ8
+        wRrI7HiGWR5k6ZAsgZSdbVJ+/gRR6gTyMCUnjNInSQX2JPfYHr+rrEpILJC5bCVl5hRNb6EwkAcpLUEE
+        dqQZ3oXMhiDKSmkpbzbMhdWwSsr6Dzj3AE7KPGaANlu6AAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="pictureBoxDesignFlowCode.DG_SVGString" xml:space="preserve">
+    <value>&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"&gt;&lt;!--! Font Awesome Pro 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2025 Fonticons, Inc. --&gt;&lt;path fill="currentColor" d="M96 64C78.3 64 64 78.3 64 96s14.3 32 32 32l320 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L96 64zM32 96c0-35.3 28.7-64 64-64l320 0c35.3 0 64 28.7 64 64s-28.7 64-64 64l-144 0 0 24 6.6 6.6 42.7 42.7 6.6 6.6 56 0c44.2 0 80 35.8 80 80l0 32 16 0c17.7 0 32 14.3 32 32l0 64c0 17.7-14.3 32-32 32l-64 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l16 0 0-32c0-26.5-21.5-48-48-48l-56 0-56 56 0 24 16 0c17.7 0 32 14.3 32 32l0 64c0 17.7-14.3 32-32 32l-64 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l16 0 0-24-6.6-6.6-42.7-42.7-6.6-6.6-56 0c-26.5 0-48 21.5-48 48l0 32 16 0c17.7 0 32 14.3 32 32l0 64c0 17.7-14.3 32-32 32l-64 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l16 0 0-32c0-44.2 35.8-80 80-80l56 0 6.6-6.6 42.7-42.7 6.6-6.6 0-24-144 0c-35.3 0-64-28.7-64-64zM48 384l-16 0 0 64 64 0 0-64-48 0zm192 0l-16 0 0 64 64 0 0-64-48 0zm192 0l-16 0 0 64 64 0 0-64-48 0zM213.3 256L256 298.7 298.7 256 256 213.3 213.3 256z"/&gt;&lt;/svg&gt;</value>
+  </data>
+  <data name="pictureBoxDesignFlowCode.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAAS5JREFUOE+11CFTAzEQhuFzSCQSiUQikUh+AhKJROKQlUh+AhKJRCKRSCQSC99D
+        Zzu5uwiulG/mneaS7Gazu+nwnzoJq/C0EDZnYaTT8BVsuFnIY2B7ETa6Dw/r4Va6CxxvJOyXsPfztVyc
+        jQI6DB9B6NvwGaRtpIMgD708iV4UjHqw/bWk4Tm8hn0TfxFnInsLosQipza319ZGnMmxtXJa65fBWldH
+        4T0oTjWtbxFW9bXXdF1BzsNM8tQak9NFaL6cHYeSveY5Hsl1lN/zm6qcTp2V3Izt6OreosnZm4wcJkL0
+        CjKzFbKJQm5KImobXr7aQ7u2BpqT/PouVaVLxuZKXdudO3QNodtYVyhdBwWxhhqXurZXwcnFbSh5o/5F
+        ak1hVLWksVvb9rBdaBi+AeKeheqbQMoTAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="pictureBoxSwitchMode.DG_SVGString" xml:space="preserve">
+    <value>&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"&gt;&lt;!--! Font Awesome Pro 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2025 Fonticons, Inc. --&gt;&lt;path fill="currentColor" d="M475.3 107.3c6.2-6.2 6.2-16.4 0-22.6l-96-96c-6.2-6.2-16.4-6.2-22.6 0s-6.2 16.4 0 22.6L425.4 80 192 80C86 80 0 166 0 272 0 280.8 7.2 288 16 288s16-7.2 16-16c0-88.4 71.6-160 160-160l233.4 0-68.7 68.7c-6.2 6.2-6.2 16.4 0 22.6s16.4 6.2 22.6 0l96-96zM36.7 404.7c-6.2 6.2-6.2 16.4 0 22.6l96 96c6.2 6.2 16.4 6.2 22.6 0s6.2-16.4 0-22.6L86.6 432 320 432c106 0 192-86 192-192 0-8.8-7.2-16-16-16s-16 7.2-16 16c0 88.4-71.6 160-160 160l-233.4 0 68.7-68.7c6.2-6.2 6.2-16.4 0-22.6s-16.4-6.2-22.6 0l-96 96z"/&gt;&lt;/svg&gt;</value>
+  </data>
+  <data name="pictureBoxSwitchMode.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAAOBJREFUOE/Fk6EOwjAUReuQyEkkkk9A7hOQSCQSiZtEIpFIJBKJ5BOQSCQW7imZ
+        aFrgdZRwkpOsy+td+9q5L7jKvez5UQFG8j+hAzmRjTwYPMu7XMmIubxJvkrx0uBJEsjcgJ0kaOpHNqgl
+        jOAAXlwk27XyMozGsk36lkMyDHh5fD6Wgd4lTyiToWSn/thzt5tiJsnyySVYS3YbwSFxBys/skEtV45V
+        BnT9P6lnEQFdwlgZ9cwL7nAbRlNrOf7gQm4lc5Lt4S5yUa3y/25k1LOWvqSIFeb8fm/5eSjPmTj3AGhA
+        TkAUoKAKAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="labelAppSwitch.DG_SVGString" xml:space="preserve">
+    <value>&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"&gt;&lt;!--! Font Awesome Pro 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2025 Fonticons, Inc. --&gt;&lt;path fill="currentColor" d="M0 80c0-8.8 7.2-16 16-16l416 0c8.8 0 16 7.2 16 16s-7.2 16-16 16L16 96C7.2 96 0 88.8 0 80zM0 256c0-8.8 7.2-16 16-16l416 0c8.8 0 16 7.2 16 16s-7.2 16-16 16L16 272c-8.8 0-16-7.2-16-16zM448 432c0 8.8-7.2 16-16 16L16 448c-8.8 0-16-7.2-16-16s7.2-16 16-16l416 0c8.8 0 16 7.2 16 16z"/&gt;&lt;/svg&gt;</value>
+  </data>
+  <data name="labelAppSwitch.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAAF5JREFUOE9joAioqqqqA4E9MVhTU1Mfqo2BASiwTENDYx+ReJuMjAw7VOuQAUB3
+        m6MHAi4MUgvWBPIokFMOFKwnBoPUDtHAycfmH2wYxY+gkAIKYg1FbBisiTzAwAAAi4I/r7uC/FkAAAAA
+        SUVORK5CYII=
+</value>
+  </data>
+  <data name="labelHome.DG_SVGString" xml:space="preserve">
+    <value>&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"&gt;&lt;!--! Font Awesome Pro 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2025 Fonticons, Inc. --&gt;&lt;path fill="currentColor" d="M245.6 4.3c6.1-5.7 15.7-5.7 21.8 0l240 224c6.5 6 6.8 16.2 .8 22.6s-16.2 6.8-22.6 .8l-21.1-19.7 0 216c0 35.3-28.7 64-64 64l-288 0c-35.3 0-64-28.7-64-64l0-216-21.1 19.7c-6.5 6-16.6 5.7-22.6-.8s-5.7-16.6 .8-22.6l240-224zm10.9 33.6l-176 164.3 0 245.8c0 17.7 14.3 32 32 32l64 0 0-112c0-35.3 28.7-64 64-64l32 0c35.3 0 64 28.7 64 64l0 112 64 0c17.7 0 32-14.3 32-32l0-245.8-176-164.3zM208.5 480l96 0 0-112c0-17.7-14.3-32-32-32l-32 0c-17.7 0-32 14.3-32 32l0 112z"/&gt;&lt;/svg&gt;</value>
+  </data>
+  <data name="labelHome.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAAR5JREFUOE+1k60SwjAQhOuQSExnUP0zRSKRSB6BR0AieQskEolEIpFIZCUSWQu7
+        6RYKTaHhZ2duptn0vuQuiddGcRzPESvf9zuyPhdAS0QeRdEJsU/TtKspd3FXiDNAozAM+/g+MJyhLA2J
+        W8KSJBnI9ggSNOMCsl9LSYRlVVgpze84HwRBJNuutjtoquBB1R7hp57sRgl667HsQoJlhLk2XNAc5Y+N
+        wS3zSsC81FZqKeYSivwpB2wwV/kWaA7SHERpfgNk7kO7fgHUsJDN1GGxFJbEONoWteVaTXg7eHsc3IRz
+        iDW88/NNcAHerwOku8edDmUZuQA/9v4DrJZHtUku22AD8h1vOFEGf0TM3ngLjPPak60+QcconpyR510B
+        US+tA3IFGy8AAAAASUVORK5CYII=
+</value>
+  </data>
+  <data name="labelBack.DG_SVGString" xml:space="preserve">
+    <value>&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"&gt;&lt;!--! Font Awesome Pro 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2025 Fonticons, Inc. --&gt;&lt;path fill="currentColor" d="M396.4 37.6C408.5 44.8 416 57.9 416 72l0 368c0 14.1-7.5 27.2-19.6 34.4s-27.2 7.5-39.6 .7l-336-184C8 284.1 0 270.6 0 256s8-28.1 20.8-35.1l336-184c12.4-6.8 27.4-6.5 39.6 .7zM372.2 65L36.2 249c-2.6 1.4-4.2 4.1-4.2 7s1.6 5.6 4.2 7l336 184c2.5 1.4 5.5 1.3 7.9-.1s3.9-4.1 3.9-6.9l0-368c0-2.8-1.5-5.4-3.9-6.9s-5.4-1.5-7.9-.1z"/&gt;&lt;/svg&gt;</value>
+  </data>
+  <data name="labelBack.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAAS1JREFUOE/NlCtTw0AUheOQSExmUHmZICuRyEokshJZWVeJrOxPqIxEIvsTIiuR
+        tfAd5ixThmzYRPHNnNnMvXvP7Osm+ze0bXtd1/Wz5NB8ZFJV1YmxR+98r5yaRtM0y2Ai0zzPrxhfMdx4
+        ShoULSh6YzwzbrVdp5RLNyzL8paCA/pAe1Z449Q3SYYqRC826vi+c+oXo4Y6EyWZpDM6FkXx4FSUqCHB
+        FTpZTw7/yaAhwbVXtdYqHU4iZrhD2mLlUDKDhn71HdIl7IZuM8agYYDEPROOSO9tc/neYowaBpj0iHom
+        qr1GezXJULit1Py6rJ5jWDr1g2TDgLZNwZbCs4rRwqkvJhsGdFEU75Eu7qC2VHy2YUBtKBMb67nprOf9
+        vi5RW2Kmp9ZNbYYJZNknpPBwZV6fDooAAAAASUVORK5CYII=
+</value>
+  </data>
+  <data name="label3dot.DG_SVGString" xml:space="preserve">
+    <value>&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"&gt;&lt;!--! Font Awesome Pro 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2025 Fonticons, Inc. --&gt;&lt;path fill="currentColor" d="M448 256a32 32 0 1 1 -64 0 32 32 0 1 1 64 0zm-192 0a32 32 0 1 1 -64 0 32 32 0 1 1 64 0zM32 288a32 32 0 1 1 0-64 32 32 0 1 1 0 64z"/&gt;&lt;/svg&gt;</value>
+  </data>
+  <data name="label3dot.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAAFFJREFUOE9jGAW0AhoaGtM0NTX9oVwwUFdXTwfieigXDIDqzIFiy2RkZNgZQARQ
+        4BoQl0PlwQDInwfE26BcMABqigfiZ3p6evxQoVFARcDAAACuAg1yzFc3SAAAAABJRU5ErkJggg==
+</value>
+  </data>
+  <data name="labelPrint.DG_SVGString" xml:space="preserve">
+    <value>&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"&gt;&lt;!--! Font Awesome Pro 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2025 Fonticons, Inc. --&gt;&lt;path fill="currentColor" d="M484.7 231.4l-28.1-28.1-102.7 119.2c6.2 43.1-2.8 88.3-28 126.9l-3.2 4.9c-13.9 21.3-43.8 24.4-61.8 6.4L51.3 251c-18-18-14.8-47.9 6.4-61.8l4.8-3.2c38.6-25.2 83.8-34.2 126.9-28L308.6 55.4 280.6 27.3c-6.2-6.2-6.2-16.4 0-22.6s16.4-6.2 22.6 0L507.3 208.8c6.2 6.2 6.2 16.4 0 22.6s-16.4 6.2-22.6 0zM331.1 78.3L204.9 187.1c-3.5 3-8.2 4.4-12.7 3.7l-7.2-1c-35.6-5.2-72.9 2.3-104.9 23.1L75.2 216c-4.3 2.8-4.9 8.8-1.3 12.4L283.6 438.1c3.6 3.6 9.6 3 12.4-1.3l3.2-4.9c20.8-31.9 28.3-69.2 23.1-104.9l-1-7.2c-.7-4.6 .7-9.2 3.7-12.7L433.7 180.9 331.1 78.3zM110.9 378.5l22.6 22.6-106.2 106.2c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6L110.9 378.5z"/&gt;&lt;/svg&gt;</value>
+  </data>
+  <data name="labelPrint.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAANRJREFUOE+Vki0SwjAUhOOQXKAzqDapKRKJRHKESiQSyQ2QHKOyshJZWYnkHN0N
+        22lJf6Z8M0+83beZl0zMEmma7p1zN7X/gWBlrb2rXQdCV1SNKleHMfxEFVEUbViz4SzLtjAuNDFU4X4P
+        WZ7JMJoc4pvDNFBHWT9A58EfzniBKyF09s0MPAz10ma5F5Mk2SHcxHF88kIAdEufc5J65sK6W4M6SBoz
+        FZZWqR3D3flTwrDWLP1QCEMw6+7Sw7Be+vsYQ8JQh8L8NTXvKbkHRjF54iLGtDxgRM/I8fxtAAAAAElF
+        TkSuQmCC
+</value>
+  </data>
+  <data name="labelRotate.DG_SVGString" xml:space="preserve">
+    <value>&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"&gt;&lt;!--! Font Awesome Pro 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2025 Fonticons, Inc. --&gt;&lt;path fill="currentColor" d="M53.2 340.7c5.5-5.5 13.9-6.2 20.1-2.1l2.5 2.1 48 48 2.1 2.5c4.1 6.2 3.4 14.7-2.1 20.1s-13.9 6.2-20.1 2.1l-2.5-2.1-20.7-20.7 0 25.4c0 44.2 35.8 80 80 80 22.6 0 42.9-9.4 57.5-24.5l22.7 22.7c-20.3 20.9-48.7 33.8-80.2 33.8-61.9 0-112-50.1-112-112l0-25.4-20.7 20.7c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l48-48zM184.1 14.3c25.1-20.5 62.2-19 85.7 4.4l256 256 4.4 4.8c20.5 25.1 19 62.2-4.4 85.7l-128 128c-23.4 23.4-60.5 24.9-85.7 4.4l-4.8-4.4-256-256c-25-25-25-65.5 0-90.5l128-128 4.8-4.4zm63 27c-11.6-11.6-30.1-12.4-42.6-2.4l-3.1 2.8-127.6 127.6c-12.5 12.5-12.5 32.8 0 45.2l255.6 255.6 3.1 2.8c12.5 10.1 30.9 9.3 42.6-2.4l128-128 2.1-2.3c9.6-11.6 9.7-28.4 .5-40.2L502.7 297 247.1 41.4zM407.7 322.6c6.2-4.1 14.7-3.4 20.1 2.1s6.2 13.9 2.1 20.1l-2.1 2.5-48 48c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l48-48 2.5-2.1zM416.5-16c61.9 0 112 50.1 112 112l0 25.4 20.7-20.7c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6l-48 48c-5.5 5.5-13.9 6.2-20.1 2.1l-2.5-2.1-48-48-2.1-2.5c-4.1-6.2-3.4-14.7 2.1-20.1s13.9-6.2 20.1-2.1l2.5 2.1 20.7 20.7 0-25.4c0-44.2-35.8-80-80-80-22.6 0-42.9 9.4-57.5 24.5L336.3 17.8C356.7-3 385.1-16 416.5-16z"/&gt;&lt;/svg&gt;</value>
+  </data>
+  <data name="labelRotate.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAAOdJREFUOE+Nki0SwjAQheuQSExnUP0zRSKRSI5QyRG4AZIjVFYikchKjsBV4H3p
+        LlPaDMOb2Ul2874k3Sb5R1mW7YuiaKqqWlnpW2maLsqybBV3RstPzAUeFb1iZ/ZBZrqxMzkjOfVgkPI8
+        X6v2sHQOuaawrnoBVLRu6KaQawzb/BW8fpr5ohrDVhpEkc5ZGlUUrut6qYX+X9jSQb9gTqGjzOXp1KSN
+        tzhcNQZ7D2Q++O/Ax/fxs58AvIwpjHkMhdNcKvAyPi8iBs8gBIRRi1tC88ZhxTkKudhdhivBRlYOm/IJ
+        lpqS5A0qv1xASNYybQAAAABJRU5ErkJggg==
+</value>
+  </data>
+  <data name="PictureBoxCloseForm.DG_SVGString" xml:space="preserve">
+    <value>&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"&gt;&lt;!--! Font Awesome Pro 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2025 Fonticons, Inc. --&gt;&lt;path fill="currentColor" d="M379.3 91.3c6.2-6.2 6.2-16.4 0-22.6s-16.4-6.2-22.6 0L192 233.4 27.3 68.7c-6.2-6.2-16.4-6.2-22.6 0s-6.2 16.4 0 22.6L169.4 256 4.7 420.7c-6.2 6.2-6.2 16.4 0 22.6s16.4 6.2 22.6 0L192 278.6 356.7 443.3c6.2 6.2 16.4 6.2 22.6 0s6.2-16.4 0-22.6L214.6 256 379.3 91.3z"/&gt;&lt;/svg&gt;</value>
+  </data>
+  <data name="PictureBoxCloseForm.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAAJFJREFUOE/NkTEKgDAMRXsjj+Do6BE8gqOjN3Zp62wC/6NCbKqC+CDQ/JbX0oT/
+        EmNstdC6pJSanHOPdkdD2VylOkSXQLLIxSOiM3Jg8GSUSM2IbEqyagmxZLcl5Ch7LCGUvZIofInKpNxp
+        mlCiL5G1O02TowTR6c8QlbEkpFpWkhBXViMhRRk2J7Qud89/TQgbbUMBc3OZm14AAAAASUVORK5CYII=
+</value>
+  </data>
+</root>

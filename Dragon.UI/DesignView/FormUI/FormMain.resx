@@ -1,0 +1,166 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!--
+    Microsoft ResX Schema
+
+    Version 2.0
+
+    The primary goals of this format is to allow a simple XML format
+    that is mostly human readable. The generation and parsing of the
+    various data types are done through the TypeConverter classes
+    associated with the data types.
+
+    Example:
+
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+
+    There are any number of "resheader" rows that contain simple
+    name/value pairs.
+
+    Each data row contains a name, and value. The row also contains a
+    type or mimetype. Type corresponds to a .NET class that support
+    text/value conversion through the TypeConverter architecture.
+    Classes that don't support this are serialized and stored with the
+    mimetype set.
+
+    The mimetype is used for serialized objects, and tells the
+    ResXResourceReader how to depersist the object. This is currently not
+    extensible. For a given mimetype the value must be set accordingly:
+
+    Note - application/x-microsoft.net.object.binary.base64 is the format
+    that the ResXResourceWriter will generate, however the reader can
+    read any of the formats listed below.
+
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="labelKeepVerison.DG_SVGString" xml:space="preserve">
+    <value>&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"&gt;&lt;!--! Font Awesome Pro 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2025 Fonticons, Inc. --&gt;&lt;path fill="currentColor" d="M300.2 52a20 20 0 1 1 40 0 20 20 0 1 1 -40 0zM342 99.2c17.8-8.2 30.2-26.3 30.2-47.2 0-28.7-23.3-52-52-52s-52 23.3-52 52c0 20.8 12.3 38.8 30 47.1L192 192 87.6 171.1c5.3-7.7 8.4-17.1 8.4-27.1 0-26.5-21.5-48-48-48S0 117.5 0 144c0 26 20.6 47.1 46.4 48l1.7 3.9 110.9 246.4c10.3 23 33.2 37.7 58.4 37.7l205.2 0c25.2 0 48-14.8 58.4-37.7l110.9-246.4 1.8-3.9c25.8-.9 46.4-22 46.4-48 0-26.5-21.5-48-48-48s-48 21.5-48 48c0 10.1 3.1 19.4 8.4 27.1L448 192 342 99.2zM454.3 223.4l99-19.8-101.5 225.6c-5.2 11.5-16.6 18.9-29.2 18.9l-205.2 0c-12.6 0-24-7.4-29.2-18.9l-101.5-225.6 99 19.8c9.8 2 19.9-.7 27.3-7.3L320 122.5 426.9 216.1c7.5 6.6 17.6 9.2 27.3 7.3zM592 128a16 16 0 1 1 0 32 16 16 0 1 1 0-32zM32 144a16 16 0 1 1 32 0 16 16 0 1 1 -32 0z"/&gt;&lt;/svg&gt;</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="labelKeepVerison.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAALdJREFUOE+9kaESQUEUQLeJoiiKoiiKoiiKPkETRVEURVEURdFnyM7Z9Z73dpYZ
+        gTNzZu7uu3f37n3hFwxxksLvuOERB3FVoI+enrNHiztx9cL8eNgZr9h18cQWLdzh0o0GFzQ/zPGOW1yg
+        iRZUN63Qb+at0dwNRgy8RWduZIxxiiP03TX2fUjhR+zGA1pY2EthEVs/pbCNk617L+AT8kHVOOF8/BW+
+        7d23OARHbUtN/QWlof2NEB5RHB7AvWzngwAAAABJRU5ErkJggg==
+</value>
+  </data>
+  <data name="labelKeepCommon.DG_SVGString" xml:space="preserve">
+    <value>&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"&gt;&lt;!--! Font Awesome Pro 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2025 Fonticons, Inc. --&gt;&lt;path fill="currentColor" d="M245.6 4.3c6.1-5.7 15.7-5.7 21.8 0l240 224c6.5 6 6.8 16.2 .8 22.6s-16.2 6.8-22.6 .8l-21.1-19.7 0 216c0 35.3-28.7 64-64 64l-288 0c-35.3 0-64-28.7-64-64l0-216-21.1 19.7c-6.5 6-16.6 5.7-22.6-.8s-5.7-16.6 .8-22.6l240-224zm10.9 33.6l-176 164.3 0 245.8c0 17.7 14.3 32 32 32l64 0 0-112c0-35.3 28.7-64 64-64l32 0c35.3 0 64 28.7 64 64l0 112 64 0c17.7 0 32-14.3 32-32l0-245.8-176-164.3zM208.5 480l96 0 0-112c0-17.7-14.3-32-32-32l-32 0c-17.7 0-32 14.3-32 32l0 112z"/&gt;&lt;/svg&gt;</value>
+  </data>
+  <data name="labelKeepCommon.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAAMBJREFUOE+NkqESgkAQhrcZjUajj2E0Gok+gtFIIxKNPoLRaCQaiUQjz+D/HRzD
+        3OAe/8w37HL3L7d7mKObqIdwvUrxEpV4io3I6iEwxc2xyF8zC5gg1UV8xDZkM2Gi6j1ky8LciF3IJKq8
+        Bf3kdBad2JPQPMmRJCMMX9GGTKKvtUZONyk10sdVMNEDL0ZljQyBYdATx4rTdI18DWPUfM01pouukaso
+        htA10i/3PYnN9IKBY/ZjDIyfv4aY58nM7AdSyizZuBev6wAAAABJRU5ErkJggg==
+</value>
+  </data>
+  <data name="labelKeepOTG.DG_SVGString" xml:space="preserve">
+    <value>&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"&gt;&lt;!--! Font Awesome Pro 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2025 Fonticons, Inc. --&gt;&lt;path fill="currentColor" d="M128 96c0-17.7 14.3-32 32-32l192 0c17.7 0 32 14.3 32 32l0 32 32 0c17.7 0 32 14.3 32 32l0 32 32 0c17.7 0 32 14.3 32 32l0 192c0 17.7-14.3 32-32 32L32 448c-17.7 0-32-14.3-32-32L0 224c0-17.7 14.3-32 32-32l32 0 0-32c0-17.7 14.3-32 32-32l32 0 0-32zm224 0l-192 0 0 48c0 8.8-7.2 16-16 16l-48 0 0 48c0 8.8-7.2 16-16 16l-48 0 0 192 64 0 0-80c0-8.8 7.2-16 16-16s16 7.2 16 16l0 80 64 0 0-80c0-8.8 7.2-16 16-16s16 7.2 16 16l0 80 64 0 0-80c0-8.8 7.2-16 16-16s16 7.2 16 16l0 80 64 0 0-80c0-8.8 7.2-16 16-16s16 7.2 16 16l0 80 64 0 0-192-48 0c-8.8 0-16-7.2-16-16l0-48-48 0c-8.8 0-16-7.2-16-16l0-48z"/&gt;&lt;/svg&gt;</value>
+  </data>
+  <data name="labelKeepOTG.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAALZJREFUOE+t0i0OwkAQhuG9ARKJRCKRHKESiUQikdwAieQIPQJHQCKRnIN5Fpqw
+        G1J+v+RNZr6ZabezTf/UOJhV8Ho1D07BoYK3DJ7KkKZFzkrx1PQUcpRjsAlGjEqDQE3PlEGOwNjnrF+7
+        QO9Kcg4sYCh5IW/We5EY/FR55ufBJljfwtQGjg4x+a5uq8WgldscWb3tQkxq3VXlGZfL9GRNYoXtHTFP
+        TY84L2cSPP5e72DmG6V0BVpLLP/mDxm0AAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="pictureBoxBrightn1.DG_SVGString" xml:space="preserve">
+    <value>&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"&gt;&lt;!--! Font Awesome Pro 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2025 Fonticons, Inc. --&gt;&lt;path fill="currentColor" d="M412.1 416.6C398.1 361.1 347.9 320 288 320l-64 0C164.1 320 113.9 361.1 99.9 416.6 58 375.9 32 319 32 256 32 132.3 132.3 32 256 32S480 132.3 480 256c0 63-26 119.9-67.9 160.6zm-28.5 23.4C347.5 465.2 303.4 480 256 480s-91.5-14.8-127.7-39.9c4-49.3 45.3-88.1 95.7-88.1l64 0c50.4 0 91.6 38.8 95.7 88.1zM256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm0-272a48 48 0 1 1 0-96 48 48 0 1 1 0 96zm-80-48a80 80 0 1 0 160 0 80 80 0 1 0 -160 0z"/&gt;&lt;/svg&gt;</value>
+  </data>
+  <data name="PictureBox_Sun_Bright.DG_SVGString" xml:space="preserve">
+    <value>&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"&gt;&lt;!--! Font Awesome Pro 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2025 Fonticons, Inc. --&gt;&lt;path fill="currentColor" d="M256 512c-8.8 0-16-7.2-16-16l0-72c0-8.8 7.2-16 16-16s16 7.2 16 16l0 72c0 8.8-7.2 16-16 16zm0-408c-8.8 0-16-7.2-16-16l0-72c0-8.8 7.2-16 16-16s16 7.2 16 16l0 72c0 8.8-7.2 16-16 16zM437 437c-6.2 6.2-16.4 6.2-22.6 0l-50.9-50.9c-6.2-6.2-6.2-16.4 0-22.6s16.4-6.2 22.6 0L437 414.4c6.2 6.2 6.2 16.4 0 22.6zM148.5 148.5c-6.2 6.2-16.4 6.2-22.6 0L75 97.6c-6.2-6.2-6.2-16.4 0-22.6s16.4-6.2 22.6 0l50.9 50.9c6.2 6.2 6.2 16.4 0 22.6zM496 272l-72 0c-8.8 0-16-7.2-16-16s7.2-16 16-16l72 0c8.8 0 16 7.2 16 16s-7.2 16-16 16zM88 272l-72 0c-8.8 0-16-7.2-16-16s7.2-16 16-16l72 0c8.8 0 16 7.2 16 16s-7.2 16-16 16zM437 75c6.2 6.2 6.2 16.4 0 22.6l-50.9 50.9c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6L414.4 75c6.2-6.2 16.4-6.2 22.6 0zM148.5 363.5c6.2 6.2 6.2 16.4 0 22.6L97.6 437c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l50.9-50.9c6.2-6.2 16.4-6.2 22.6 0zM336 256a80 80 0 1 0 -160 0 80 80 0 1 0 160 0zm-192 0a112 112 0 1 1 224 0 112 112 0 1 1 -224 0z"/&gt;&lt;/svg&gt;</value>
+  </data>
+  <data name="PictureBox_Chevrons_left.DG_SVGString" xml:space="preserve">
+    <value>&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"&gt;&lt;!--! Font Awesome Pro 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2025 Fonticons, Inc. --&gt;&lt;path fill="currentColor" d="M4.7 244.7c-6.2 6.2-6.2 16.4 0 22.6l208 208c6.2 6.2 16.4 6.2 22.6 0s6.2-16.4 0-22.6L38.6 256 235.3 59.3c6.2-6.2 6.2-16.4 0-22.6s-16.4-6.2-22.6 0l-208 208zm400-208l-208 208c-6.2 6.2-6.2 16.4 0 22.6l208 208c6.2 6.2 16.4 6.2 22.6 0s6.2-16.4 0-22.6L230.6 256 427.3 59.3c6.2-6.2 6.2-16.4 0-22.6s-16.4-6.2-22.6 0z"/&gt;&lt;/svg&gt;</value>
+  </data>
+</root>

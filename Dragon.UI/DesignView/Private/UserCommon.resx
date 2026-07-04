@@ -1,0 +1,257 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!--
+    Microsoft ResX Schema
+
+    Version 2.0
+
+    The primary goals of this format is to allow a simple XML format
+    that is mostly human readable. The generation and parsing of the
+    various data types are done through the TypeConverter classes
+    associated with the data types.
+
+    Example:
+
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+
+    There are any number of "resheader" rows that contain simple
+    name/value pairs.
+
+    Each data row contains a name, and value. The row also contains a
+    type or mimetype. Type corresponds to a .NET class that support
+    text/value conversion through the TypeConverter architecture.
+    Classes that don't support this are serialized and stored with the
+    mimetype set.
+
+    The mimetype is used for serialized objects, and tells the
+    ResXResourceReader how to depersist the object. This is currently not
+    extensible. For a given mimetype the value must be set accordingly:
+
+    Note - application/x-microsoft.net.object.binary.base64 is the format
+    that the ResXResourceWriter will generate, however the reader can
+    read any of the formats listed below.
+
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="buttomSocialNetwork.DG_SVGString" xml:space="preserve">
+    <value>&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"&gt;&lt;!--! Font Awesome Pro 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2025 Fonticons, Inc. --&gt;&lt;path fill="currentColor" d="M448 96c0-35.3-28.7-64-64-64s-64 28.7-64 64c0 5.6 .7 11 2 16.1 2.6 10.2 7.7 19.4 14.6 26.9 .3 .4 .6 .7 1 1 11.7 12.3 28.1 19.9 46.4 19.9 35.3 0 64-28.7 64-64zM293.5 128c-3.5-10-5.5-20.8-5.5-32 0-53 43-96 96-96s96 43 96 96-43 96-96 96c-30.3 0-57.4-14.1-75-36L186.5 224c3.5 10 5.5 20.8 5.5 32s-1.9 22-5.5 32L309 356c17.6-22 44.6-36 75-36 53 0 96 43 96 96s-43 96-96 96-96-43-96-96c0-11.2 1.9-22 5.5-32L171 316c-17.6 22-44.6 36-75 36-53 0-96-43-96-96s43-96 96-96c30.3 0 57.4 14.1 75 36l122.5-68zM142.4 211.9c-11.7-12.3-28.1-19.9-46.4-19.9-35.3 0-64 28.7-64 64s28.7 64 64 64c18.3 0 34.7-7.7 46.4-19.9 6.7-7 11.8-15.6 14.7-25 .3-1 .6-1.9 .8-2.9 1.3-5.1 2-10.6 2-16.1s-.7-11-2-16.1c-2.6-10.2-7.7-19.4-14.6-26.9-.3-.4-.6-.7-1-1zM384 480c35.3 0 64-28.7 64-64s-28.7-64-64-64c-18.3 0-34.7 7.6-46.4 19.9-.3 .3-.7 .7-1 1-6.9 7.5-11.9 16.7-14.6 26.9-1.3 5.1-2 10.5-2 16.1 0 35.3 28.7 64 64 64z"/&gt;&lt;/svg&gt;</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="buttomSocialNetwork.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAAPNJREFUOE+NUi0TgkAQpRmNRqPRaAIKdzckf4Y/wWgzEolGo5FoNBKJRCPRCL63
+        7M1g8ODN7Nzd8vbtF9Echjzf9NaWsGdvzGNwbqufwhCyMRcRyLITBGr9FAaInV4FEGpms0oWY9485R3H
+        Kwh9hiRZjwRrdywHTucJ8J0R1MJ307PkSb8POkp6BhpTqbWwwiuLsHMpOHsJIqBUTx0SqJmDALHxPRAI
+        ulNdn/+BwCuM+0ll3BiGVLEoeNwPF1zovg76rmQG1r5wb3B2sAVtgDQlc0isiFMXQggk6lUAEbYx/9ux
+        RN+vZEQFyzKyX/b302MUfQHG6rDiNIrHYgAAAABJRU5ErkJggg==
+</value>
+  </data>
+  <data name="buttonDevice.DG_SVGString" xml:space="preserve">
+    <value>&lt;?xml version="1.0" encoding="iso-8859-1"?&gt;&lt;!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"&gt;&lt;svg fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="800px" height="800px" viewBox="0 0 59.28 59.28" xml:space="preserve"&gt;&lt;g&gt;&lt;g&gt;&lt;path d="M38.975,0h-18.67c-4.016,0-7.283,4.414-7.283,9.837v39.604c0,5.425,3.267,9.839,7.283,9.839h18.67c4.016,0,7.283-4.414,7.283-9.839V9.837C46.256,4.414,42.991,0,38.975,0z M38.975,54.07h-18.67c-1.651,0-3.046-2.118-3.046-4.629V9.837c0-2.508,1.395-4.628,3.046-4.628h18.67c1.65,0,3.047,2.12,3.047,4.628v39.604C42.022,51.952,40.625,54.07,38.975,54.07z"/&gt;&lt;g&gt;&lt;circle cx="29.64" cy="49.206" r="2.401"/&gt;&lt;/g&gt;&lt;/g&gt;&lt;/g&gt;&lt;/svg&gt;</value>
+  </data>
+  <data name="buttonDevice.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAAJFJREFUOE9jQAb/3d3l/7m57fvv5vYfGQPFzv13ddWHKsMEQMn6f66u64AG2CNj
+        oFgbEG+DKsMEuEz+b2vLDpT7BuViAqCp90DOhXJRAMjJUCYmGNU42DReAypQB7NdXMyBkZ4PlgAC/Brd
+        3ObBFINSC8x2oJg7EB8DsbECUHIDOxdoOjIGanoHpP2hyoCAgQEAxVOHLdSE3mwAAAAASUVORK5CYII=
+</value>
+  </data>
+  <data name="buttomDarkMode.DG_SVGString" xml:space="preserve">
+    <value>&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"&gt;&lt;!--! Font Awesome Pro 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2025 Fonticons, Inc. --&gt;&lt;path fill="currentColor" d="M134.6 153.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l64 64c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-64-64zM288 192c0 17.7 14.3 32 32 32s32-14.3 32-32l0-96c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 96zm153.4 25.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l64-64c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-64 64zM0 384c0 17.7 14.3 32 32 32l64 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-64 0c-17.7 0-32 14.3-32 32zm224-32c-17.7 0-32 14.3-32 32s14.3 32 32 32l192 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-192 0zm320 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l64 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-64 0z"/&gt;&lt;/svg&gt;</value>
+  </data>
+  <data name="buttomDarkMode.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAAKBJREFUOE9jGAbgn6trHxBvg3Jxg/+urvpQJhj8c3ObB8T7oFwwQFfD8N/Ojv+/
+        m9t/kGKoEIZGoKZ6kJr/7u72UCEIAErEgzW7uoaD+W5u6v9cXMxBbBAN1gTUDOJjAJBT/nt6ikO5cABy
+        EcwQygHQH9NAfgE6sQ3Md3FJB/ORMbqcq+s6MAfscaAfwZJubu5QPjJGlXNzKwfxhwRgYAAAB5FlguYJ
+        9mIAAAAASUVORK5CYII=
+</value>
+  </data>
+  <data name="buttonADB.DG_SVGString" xml:space="preserve">
+    <value>&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"&gt;&lt;!--! Font Awesome Pro 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2025 Fonticons, Inc. --&gt;&lt;path fill="currentColor" d="M480 96l0 320-448 0 0-320 448 0zM32 64l-32 0 0 384 512 0 0-384-480 0zM281.4 176l11.3 11.3 68.7 68.7-68.7 68.7-11.3 11.3 22.6 22.6 11.3-11.3 80-80 11.3-11.3-11.3-11.3-80-80-11.3-11.3-22.6 22.6zm-62.1 11.3l11.3-11.3-22.6-22.6-11.3 11.3-80 80-11.3 11.3 11.3 11.3 80 80 11.3 11.3 22.6-22.6-11.3-11.3-68.7-68.7 68.7-68.7z"/&gt;&lt;/svg&gt;</value>
+  </data>
+  <data name="buttonADB.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAAJNJREFUOE9jIBv8d3e3Jwcz/HNz+wbE+0jE3xj+ubreg1pONADrwabxv5ub/387
+        O/7/trbsQPlwqDAcYNX439U1Hii2DaQJxAc6ax5QrB4sCQUYGtE1wQC6ZgyN2EwHAQxXoGsEAXTN2FyB
+        VSMIAMX6/nt6ioMDx81tGobTcWkkBCAa3dzegZxGCgbpIT/JkQcYGAAfvM1abt8y0QAAAABJRU5ErkJg
+        gg==
+</value>
+  </data>
+  <data name="buttomLoad.DG_SVGString" xml:space="preserve">
+    <value>&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"&gt;&lt;!--! Font Awesome Pro 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2025 Fonticons, Inc. --&gt;&lt;path fill="currentColor" d="M288 32l0-32-64 0 0 128 64 0 0-96zm0 384l0-32-64 0 0 128 64 0 0-96zM0 224l0 64 128 0 0-64-128 0zm416 0l-32 0 0 64 128 0 0-64-96 0zM97.6 52.4L52.4 97.6c11.3 11.3 33.9 33.9 67.9 67.9l22.6 22.6 45.3-45.3c-11.3-11.3-33.9-33.9-67.9-67.9L97.6 52.4zM391.8 346.5l-22.6-22.6-45.3 45.3c11.3 11.3 33.9 33.9 67.9 67.9l22.6 22.6 45.3-45.3c-11.3-11.3-33.9-33.9-67.9-67.9zM52.4 414.4l45.3 45.3c11.3-11.3 33.9-33.9 67.9-67.9l22.6-22.6-45.3-45.3c-11.3 11.3-33.9 33.9-67.9 67.9L52.4 414.4zM346.5 120.2l-22.6 22.6 45.3 45.3c11.3-11.3 33.9-33.9 67.9-67.9l22.6-22.6-45.3-45.3c-11.3 11.3-33.9 33.9-67.9 67.9z"/&gt;&lt;/svg&gt;</value>
+  </data>
+  <data name="buttomLoad.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAANJJREFUOE+lkr0RwjAMhd1RUlIyAhMkVHYuE1AyQkZgE8agZARGyBiUMXqKJPwX
+        Gr47nZ0nP/lHcVss3s8I+dwmen+SKdMylmtcHIbzEsKb4i5SZSTTLYYQSbuIRGLf78n04oSYaZwQnP+a
+        ZtrkCM1QMyUfset2IjMo1jQpMJcmJY7jQaYrVO2pQUe6ilyBXLrW4ewWdBdZV6H31BD5T7hqY1c5prUq
+        Q4/Cr7e+sLWDxqxVBn4AM8mTY47gfNJn7A7NQPW0T6kRcKt+PJ5RGnOc+wCq1K0xAZdjBQAAAABJRU5E
+        rkJggg==
+</value>
+  </data>
+  <data name="buttonMobileRotate.DG_SVGString" xml:space="preserve">
+    <value>&lt;svg fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="800px" height="800px" viewBox="0 0 401.856 401.856" xml:space="preserve"&gt;&lt;g&gt;&lt;path d="M276.085,114.713c-5.326-0.698-7.535,2.075-8.233,3.318c-0.698,1.224-1.979,4.561,1.349,8.807l17.336,22.29 c4.055,4.064,10.558,4.466,15.119,0.937l21.2-16.361c2.868-2.19,3.604-4.533,3.71-6.091c0.229-3.682-2.649-6.77-7.354-7.382 l-10.404-1.329c-1.243-0.182-2.553-1.683-2.63-3.069c-1.568-30.17-14.238-58.609-35.688-80.067 c-16.103-16.104-36.347-27.339-58.541-32.532c-15.807-3.72-31.996-4.236-48.109-1.521c-30.438,5.154-57.576,21.315-76.395,45.508 c-1.578,2.037-2.792,4.905,1.052,8.75c0.708,0.708,1.645,1.54,2.697,2.362c2.343,1.817,7.765,5.996,11.207,1.587 c16.323-20.98,39.13-34.549,64.681-38.862c13.502-2.286,27.1-1.865,40.43,1.243c18.628,4.37,35.63,13.817,49.142,27.339 c17.576,17.566,28.19,40.842,29.893,65.522l-1.022,0.765L276.085,114.713z"/&gt;&lt;path d="M359.355,207.604H206.967v26.67h134.104c3.003,0,5.432,2.438,5.432,5.441v108.229c0,3.002-2.429,5.44-5.432,5.44H206.967 v26.689h152.397c10.931,0,19.775-8.864,19.775-19.766V227.36C379.14,216.439,370.285,207.604,359.355,207.604z"/&gt;&lt;path d="M175.42,401.856c10.911,0,19.766-8.855,19.766-19.775V128.483c0-10.93-8.865-19.775-19.766-19.775H42.473 c-10.93,0-19.756,8.855-19.756,19.775v253.598c0,10.93,8.836,19.775,19.756,19.775H175.42z M108.617,389.779 c-6.885,0-12.45-5.565-12.45-12.441c0-6.875,5.565-12.45,12.45-12.45c6.866,0,12.441,5.575,12.441,12.45 C121.048,384.214,115.473,389.779,108.617,389.779z M49.377,146.767c0-3.002,2.438-5.432,5.441-5.432h108.228 c3.003,0,5.441,2.429,5.441,5.432v195.247c0,3.003-2.438,5.432-5.441,5.432H54.828c-3.002,0-5.441-2.429-5.441-5.432V146.767 H49.377z"/&gt;&lt;/g&gt;&lt;/svg&gt;</value>
+  </data>
+  <data name="buttonMobileRotate.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAAM9JREFUOE/FUiESwjAQrKtEIpFIJCqtadKp4gk8BYfkGUgksrKSJyCRSGTS3eSG
+        yaSkA4qd2aaX7F7uMlekcMbsrNYXa0zP1Wm9kaM8IDpAfHRVtfBx1y0Rn7jvBTnksjOZbZqthN/Dte2K
+        N0sYwLLQl0uJHgeRhL6NeSJBLVuSLRIREK5xw13CwilVTkoVYy+hh5T2Nn7EnJF98Szhma89a+Qr47+O
+        CW3oFZ+fSvUJ/2p80Rxx8AKt9xy3mNQGYzQAEF/BhwzADcLJ43gqVY6H29RPBqyu+wAAAABJRU5ErkJg
+        gg==
+</value>
+  </data>
+  <data name="buttomSetting.DG_SVGString" xml:space="preserve">
+    <value>&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"&gt;&lt;!--! Font Awesome Pro 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2025 Fonticons, Inc. --&gt;&lt;path fill="currentColor" d="M208 0L194.9 0c-.5 2.6-4.6 23.1-12.3 61.3-4.2 1.6-8.3 3.3-12.4 5.1-32.5-21.6-49.8-33.2-52-34.7l-9.3 9.3-67.9 67.9-9.3 9.3c1.5 2.2 13.1 19.6 34.7 52-1.8 4.1-3.6 8.2-5.1 12.4-38.2 7.6-58.7 11.7-61.3 12.3L0 317.1c2.6 .5 23.1 4.6 61.3 12.3 1.6 4.2 3.3 8.3 5.1 12.4-21.6 32.5-33.2 49.8-34.7 52l9.3 9.3 67.9 67.9 9.3 9.3c2.2-1.5 19.6-13.1 52-34.7 4.1 1.8 8.2 3.6 12.4 5.1 7.6 38.2 11.7 58.7 12.3 61.3l122.2 0c.5-2.6 4.6-23.1 12.3-61.3 4.2-1.6 8.3-3.3 12.4-5.1 32.5 21.6 49.8 33.2 52 34.7l9.3-9.3 67.9-67.9 9.3-9.3c-1.5-2.2-13.1-19.6-34.7-52 1.8-4.1 3.6-8.2 5.1-12.4 38.2-7.6 58.7-11.7 61.3-12.3l0-122.2c-2.6-.5-23.1-4.6-61.3-12.3-1.6-4.2-3.3-8.3-5.1-12.4 21.6-32.5 33.2-49.8 34.7-52l-9.3-9.3-67.9-67.9-9.3-9.3c-2.2 1.5-19.6 13.1-52 34.7-4.1-1.8-8.2-3.6-12.4-5.1-7.6-38.2-11.7-58.7-12.3-61.3L208 0zm4.2 76.5l8.9-44.5 69.8 0 8.9 44.5 1.8 9.2 8.9 2.9c8.7 2.8 17.2 6.4 25.3 10.5l8.3 4.3 7.8-5.2 37.8-25.2 49.3 49.3-25.2 37.8-5.2 7.8 4.3 8.3c4.1 8.1 7.6 16.5 10.5 25.3l2.9 8.9 9.2 1.8 44.5 8.9 0 69.8-44.5 8.9-9.2 1.8-2.9 8.9c-2.8 8.7-6.4 17.2-10.5 25.3l-4.3 8.3 30.4 45.6-49.3 49.3-37.8-25.2-7.8-5.2-8.3 4.3c-8.1 4.1-16.5 7.6-25.3 10.5l-8.9 2.9-1.8 9.2-8.9 44.5-69.8 0-8.9-44.5-1.8-9.2-8.9-2.9c-8.7-2.8-17.2-6.4-25.3-10.5l-8.3-4.3-7.8 5.2-37.8 25.2-49.3-49.3 25.2-37.8 5.2-7.8-4.3-8.3c-4.1-8.1-7.6-16.5-10.5-25.3l-2.9-8.9-9.2-1.8-44.5-8.9 0-69.8c35.6-7.1 53.5-10.7 53.7-10.7l2.9-8.9c2.8-8.7 6.4-17.2 10.5-25.3l4.3-8.3c-.1-.2-10.3-15.4-30.4-45.6l49.3-49.3c30.2 20.1 45.4 30.3 45.6 30.4l8.3-4.3c8.1-4.1 16.5-7.6 25.3-10.5l8.9-2.9 1.8-9.2zM192 256a64 64 0 1 1 128 0 64 64 0 1 1 -128 0zm160 0a96 96 0 1 0 -192 0 96 96 0 1 0 192 0z"/&gt;&lt;/svg&gt;</value>
+  </data>
+  <data name="buttomSetting.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAATBJREFUOE99kiFTA0EMhdchkZX9CUhUi+nuThUSWVmJRNZVIisrkchKZGUl8uRJ
+        ZOUt78vmdjpQeDOZuyTvZZPshmsYUnorKRVM/ycPX4cIGdKwWNwPMXZlNruxeIyfJcY7fQ/6row8wkQi
+        yJ5MHOOrp8g9X+aamMoKdpxkgX9QlsuJxGe+NZDSo8QHc4Qyn9+q0JrTGkkQZyvuS3VS2tOCbIdvIvfN
+        mDfnqXNr23D100MmATz5c8bm+2g9ws5jBg2/gewueZZi3YwwDWolPsZt+errFqvRWrZczg9wZV/4tMMd
+        Hs0R7C71CCR6J+dheDs6ctcCVGmEv8CSVKxrO7G5eBkKsG6uxxICp5P3bXMDe09VmFi9e5Hew3RzlL8l
+        9ks0ot2XTjcBI3iRy4cQQgjf3SDmUbS/pjsAAAAASUVORK5CYII=
+</value>
+  </data>
+  <data name="buttonMore.DG_SVGString" xml:space="preserve">
+    <value>&lt;svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"&gt;&lt;path d="M2 12.2039C2 9.91549 2 8.77128 2.5192 7.82274C3.0384 6.87421 3.98695 6.28551 5.88403 5.10813L7.88403 3.86687C9.88939 2.62229 10.8921 2 12 2C13.1079 2 14.1106 2.62229 16.116 3.86687L18.116 5.10812C20.0131 6.28551 20.9616 6.87421 21.4808 7.82274C22 8.77128 22 9.91549 22 12.2039V13.725C22 17.6258 22 19.5763 20.8284 20.7881C19.6569 22 17.7712 22 14 22H10C6.22876 22 4.34315 22 3.17157 20.7881C2 19.5763 2 17.6258 2 13.725V12.2039Z" stroke="#1C274C" stroke-width="1.5"/&gt;&lt;path d="M12 15L12 18" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/&gt;&lt;/svg&gt;</value>
+  </data>
+  <data name="buttonMore.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAANNJREFUOE+tUiESwjAQjEMikTwBiWoxvXSqkEiegETikDwBiUQikTwBWYlEIhP2
+        jusNMOkEwc6s2L3b6zWJ60MsikEsy6HKPLg5EG2D9w/wDh5i04y0nEYkWiJ0jd6v1XLQC7B99wy8FopH
+        TN+npmudt7h8rA/zhIlzlb0IVTWVMAa5WNdjXkVrWfBm8hEEZ5hyVj8L+R2cxf+DKE6YKg2/BDdMlQYL
+        dielvgHeiqnSYEERRLfs6wD0PlvrhZDXAe66FVOUnu8t5I3CTAWMuPNXt3NPitOm00vu6SgAAAAASUVO
+        RK5CYII=
+</value>
+  </data>
+  <data name="pictureBoxHome.DG_SVGString" xml:space="preserve">
+    <value>&lt;svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" id="double-alt-arrow-up"&gt;&lt;path fill="#111" fill-rule="evenodd" d="M4.43057 13.4881C4.70014 13.8026 5.17361 13.839 5.48811 13.5694L12 7.98781L18.5119 13.5694C18.8264 13.839 19.2999 13.8026 19.5695 13.4881C19.839 13.1736 19.8026 12.7001 19.4881 12.4306L12.4881 6.43056C12.2072 6.18981 11.7928 6.18981 11.5119 6.43056L4.51192 12.4306C4.19743 12.7001 4.161 13.1736 4.43057 13.4881Z" clip-rule="evenodd"&gt;&lt;/path&gt;&lt;path fill="#111" d="M5.00005 17.75C4.68619 17.75 4.40553 17.5546 4.29664 17.2602C4.18774 16.9658 4.27366 16.6348 4.51196 16.4306L11.512 10.4306C11.7928 10.1898 12.2073 10.1898 12.4881 10.4306L19.4881 16.4306C19.7264 16.6348 19.8124 16.9658 19.7035 17.2602C19.5946 17.5546 19.3139 17.75 19 17.75H5.00005Z"&gt;&lt;/path&gt;&lt;/svg&gt;</value>
+  </data>
+  <data name="pictureBoxHome.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAALlJREFUOE/tkq0OwkAQBs8hkUgkEolEInkEJBLJG1QikUgkEskjIJFIJBILM/Sa
+        VFxbfgwknWSSa7Lfdnvb0PK/THGWH79niXe84QY7+BEGbWAjJxzhFQ/YxbcwYPCCQ+xhP3rEUzy/hIUG
+        DHoe4BmdboK+bB+fnboWwxYaMDiOz95h4RxljV6HNZU40SI/PrdqoNyscIViTeOUkmGqUdkdNm7cgi2m
+        GqT0nms37karPrNKf6mW3yWEB9YQQvBFkj+CAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="labelPhoneTags.DG_SVGString" xml:space="preserve">
+    <value>&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"&gt;&lt;!--! Font Awesome Pro 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2025 Fonticons, Inc. --&gt;&lt;path fill="currentColor" d="M192 352L32 192 352 192 192 352zM381.6 179.8c-5-12-16.6-19.8-29.6-19.8L32 160c-12.9 0-24.6 7.8-29.6 19.8S.2 205.5 9.4 214.6l160 160c12.5 12.5 32.8 12.5 45.3 0l160-160c9.2-9.2 11.9-22.9 6.9-34.9z"/&gt;&lt;/svg&gt;</value>
+  </data>
+  <data name="labelPhoneTags.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAAFNJREFUOE9jGGEgHIjrCeB0IEYB4kB8D4jdgdgeBwbJgdSYAzEKiAfibUDMDuah
+        ApAYSA5kK1aATTNBTTCArJloTTAA00ySJhjwB+J8CHMIAwYGAJXQEtn5fm2jAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="labelPhoneBox.DG_SVGString" xml:space="preserve">
+    <value>&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"&gt;&lt;!--! Font Awesome Pro 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2025 Fonticons, Inc. --&gt;&lt;path fill="currentColor" d="M232.6 480c2.5 1.4 5.2 2.6 7.8 3.6l0-218.3-191.2-109.2c-.6 3-.9 6-.9 9.1l0 181.7c0 17.2 9.2 33.1 24.2 41.7l160 91.4zm47.7 0l160-91.4c15-8.6 24.2-24.5 24.2-41.7l0-181.7c0-3.1-.3-6.1-.9-9.1l-31.2 17.8 0 117.7c0 5.8-3.1 11.1-8.2 13.9l-80 45c-5 2.8-11 2.7-15.9-.1s-7.9-8.1-7.9-13.8l0-98.7-48 27.4 0 218.3c2.7-1 5.3-2.1 7.8-3.6zM388.1 162.4l-193.3-108.7-47 26.9 193.3 108.7 47-26.8zm32.4-18.5l27-15.4c-2.2-1.9-4.6-3.5-7.2-5L280.3 32c-14.8-8.4-32.9-8.4-47.7 0l-5.5 3.1 193.3 108.7zm-68 75.7l0 89.6 48-27 0-90-48 27.4zm-43.8-11.8L115.4 99 72.7 123.4c-2.6 1.5-5 3.1-7.2 5l191 109.1 52.2-29.9zm-12.6 300c-24.6 14-54.8 14-79.4 0l-160-91.4c-24.9-14.2-40.3-40.7-40.3-69.4l0-181.7c0-28.7 15.4-55.2 40.3-69.4l160-91.4c24.6-14.1 54.8-14.1 79.4 0l160 91.4c24.9 14.2 40.3 40.7 40.3 69.4l0 181.7c0 28.7-15.4 55.2-40.3 69.4l-160 91.4z"/&gt;&lt;/svg&gt;</value>
+  </data>
+  <data name="labelPhoneBox.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAAPpJREFUOE+N0qFSw1AQheE4JLISWYlEVlbyCJWVlUgcEllZWYlEIisrKyv7GnC+
+        TDaTSTMZzsw/STb37O7de5sJPYS3cA238Bkew6xeA8Mp/ISXsOtinndaBgt/gwq0CudwDBLswyWIt3oK
+        WlJNS4wW+KZtUPEjiFnbmv1QzWLvJNlXqHYl/A46ElO9eQ+bsOgCEqwDMWlXjEFl1Q6hN5aeg0UqSKQ1
+        w6JZY0ncYGpw9C+jmH/2y6BlA+qNDnvqjMpoMAZlC2T/rVEG+xjfjjIO5VbZe02/rcg8rDw21q2qC9LL
+        cRhGHUcZa8qodifl7IxfByqgblGnpvkDdmlFywS3cCQAAAAASUVORK5CYII=
+</value>
+  </data>
+</root>

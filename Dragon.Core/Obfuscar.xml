@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Obfuscator>
+  <Var name="InPath" value="bin\release\net8.0-windows\win-x64" />
+  <Var name="OutPath" value="bin\Obfuscated" />
+  <Var name="MarkedOnly" value="false" />
+  
+  <Var name="RenameFields" value="true" />
+  <Var name="RenameProperties" value="true" />
+  <Var name="KeepProperties" value="false" />
+  <Var name="RenameEvents" value="true" />
+  <Var name="KeepPublicApi" value="false" />
+  <Var name="HidePrivateApi" value="true" />
+  <Var name="ReuseNames" value="true" />
+  <Var name="UseUnicodeNames" value="true" />
+  <Var name="UseKoreanNames" value="false" />
+  <Var name="HideStrings" value="true" />
+  <Var name="OptimizeMethods" value="true" />
+  <Var name="SuppressIldasm" value="true" />  
+  
+  <Var name="XmlMapping" value="true" />
+  <Var name="RegenerateDebugInfo" value="true" />
+  <Var name="AnalyzeXaml" value="true" />
+  <Var name="SkipGenerated" value="true" />
+  <Module file="$(InPath)\Dragon.dll" />
+  <!--<SkipType name="Dragon.*Form" skipMethods="true" />
+  <SkipType name="System.Windows.Forms.*" skipMethods="true" />-->
+</Obfuscator>

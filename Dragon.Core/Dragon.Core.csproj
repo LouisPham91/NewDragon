@@ -1,0 +1,59 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net10.0-windows</TargetFramework>
+		<AssemblyName>Dragon.Core</AssemblyName>
+		<RootNamespace>Dragon.Controller</RootNamespace>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<Platforms>x64</Platforms>
+
+		<!-- AOT cho library -->
+		<IsAotCompatible>true</IsAotCompatible>
+		<IsTrimmable>true</IsTrimmable>
+
+		<!-- Bỏ PublishAot ở library -->
+		<PublishAot>false</PublishAot>
+
+		<!-- Core không cần Invariant, để UI quyết định -->
+		<InvariantGlobalization>false</InvariantGlobalization>
+
+		<EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+		<TrimmerSingleWarn>false</TrimmerSingleWarn>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AdvancedSharpAdbClient" Version="3.6.16" />
+		<PackageReference Include="FFmpeg.AutoGen" Version="8.1.0" />
+		<PackageReference Include="LibUsbDotNet" Version="3.0.224" />
+		<PackageReference Include="Microsoft.Data.Sqlite.Core" Version="10.0.9" />
+		<PackageReference Include="Otp.NET" Version="1.4.1" />
+		<PackageReference Include="SixLabors.ImageSharp" Version="4.0.0" />
+		<PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="3.0.3" />
+		<PackageReference Include="System.Drawing.Common" Version="10.0.9" />
+		<PackageReference Include="System.Management" Version="10.0.9" />
+		<PackageReference Include="TesseractOCR" Version="5.5.2" />
+	</ItemGroup>
+
+	<!-- Trimmer roots - giữ nguyên của cậu, thêm 2 cái -->
+	<ItemGroup>
+		<TrimmerRootAssembly Include="SixLabors.ImageSharp" />
+		<TrimmerRootAssembly Include="FFmpeg.AutoGen" />
+		<TrimmerRootAssembly Include="TesseractOCR" />
+		<TrimmerRootAssembly Include="Microsoft.Data.Sqlite" />
+		<TrimmerRootAssembly Include="AdvancedSharpAdbClient" />
+		<TrimmerRootAssembly Include="Otp.NET" />
+		<RdXmlFile Include="rd.xml" />
+	</ItemGroup>
+
+	<!-- Xử lý native dll của Sqlite và Tesseract -->
+	<ItemGroup>
+		<!-- e_sqlite3.dll sẽ tự động được nhét vào exe chính nhờ IncludeNativeLibrariesForSelfExtract -->
+		<!-- Tesseract cần tessdata, để UI copy -->
+		<Content Include="x64\*.dll" Condition="Exists('x64')">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
+		</Content>
+	</ItemGroup>
+
+</Project>

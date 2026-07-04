@@ -1,0 +1,158 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net10.0-windows</TargetFramework>
+		<UseWindowsForms>true</UseWindowsForms>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<AssemblyName>Dragon</AssemblyName>
+		<ApplicationManifest>app.manifest</ApplicationManifest>
+		<Platforms>x64</Platforms>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<_SuppressWinFormsTrimError>true</_SuppressWinFormsTrimError>
+		<IsAotCompatible>true</IsAotCompatible>
+		<InvariantGlobalization>false</InvariantGlobalization>
+	</PropertyGroup>
+
+	<!-- DEBUG: chạy nhanh, giữ dll để debug -->
+	<PropertyGroup Condition="'$(Configuration)'=='Debug'">
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<PublishAot>false</PublishAot>
+		<DefineConstants>DEBUG;TRACE</DefineConstants>
+	</PropertyGroup>
+
+
+	<!-- RELEASE: bảo mật tối đa -->
+	<PropertyGroup Condition="'$(Configuration)'=='Release'">
+		<CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+		<PublishSingleFile>true</PublishSingleFile>
+		<PublishAot>true</PublishAot>
+		<IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
+		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+		<EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+
+		<TrimMode>full</TrimMode>
+		<PublishTrimmed>true</PublishTrimmed>
+		<CustomResourceTypesSupport>true</CustomResourceTypesSupport>
+		<IlcGenerateCompleteTypeMetadata>true</IlcGenerateCompleteTypeMetadata>
+
+		<DebuggerSupport>false</DebuggerSupport>
+		<StackTraceSupport>false</StackTraceSupport>
+		<IlcGenerateStackTraceData>false</IlcGenerateStackTraceData>
+		<StripSymbols>true</StripSymbols>
+
+		<IlcOptimizationPreference>Size</IlcOptimizationPreference>
+		<OptimizationPreference>Size</OptimizationPreference>
+		<ControlFlowGuard>Guard</ControlFlowGuard>
+
+		<TrimmerSingleWarn>false</TrimmerSingleWarn>
+		<!--<NoWarn>$(NoWarn);IL3050;IL3051;IL3000;IL3002;IL2026</NoWarn> -->
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<Company></Company>
+		<Authors></Authors>
+		<Copyright></Copyright>
+		<Product>Dragon</Product>
+		<AssemblyTitle>Dragon</AssemblyTitle>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="runtimes\win-x64\native\WebView2Loader.dll">
+			<LogicalName>runtimes.win-x64.native.WebView2Loader.dll</LogicalName>
+		</EmbeddedResource>
+	</ItemGroup>
+	
+	<!-- Content chung -->
+	<ItemGroup>
+		<Content Include="Extension\**\*" Exclude="Extension\**\*.cs;Extension\**\*.csproj">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+
+		<None Update="tessdata\eng.traineddata;tessdata\vie.traineddata">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</None>
+		
+		<EmbeddedResource Include="WebView2.ico">
+			<LogicalName>Dragon.WebView2.ico</LogicalName>
+		</EmbeddedResource>
+
+		<EmbeddedResource Include="Index.html">
+			<LogicalName>Dragon.Index.html</LogicalName>
+		</EmbeddedResource>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Dragon.Core\Dragon.Core.csproj" />
+		<PackageReference Include="AntdUI" Version="2.4.1" />
+		<PackageReference Include="CountryData.Globalization" Version="1.0.0" />
+		<PackageReference Include="SDL3-CS" Version="3.4.10.4" />
+		<PackageReference Include="Svg" Version="3.4.7" />
+		<PackageReference Include="WebView2Aot" Version="1.5.0" />
+	</ItemGroup>
+
+	<!-- WebView2 AOT --><!--
+	<ItemGroup>
+		<Reference Include="DirectN">
+			<HintPath>$(UserProfile)\.nuget\packages\directnaot\1.6.1\lib\net10.0\DirectN.dll</HintPath>
+		</Reference>
+		<Reference Include="DirectN.Extensions">
+			<HintPath>$(UserProfile)\.nuget\packages\directnaot.extensions\1.6.1\lib\net10.0\DirectN.Extensions.dll</HintPath>
+		</Reference>
+		<Reference Include="WebView2">
+			<HintPath>$(UserProfile)\.nuget\packages\webview2aot\1.4.1\lib\net10.0\WebView2.dll</HintPath>
+		</Reference>
+	</ItemGroup>-->
+
+	<!-- Trimmer chỉ Release -->
+	<ItemGroup Condition="'$(Configuration)'=='Release'">
+		<TrimmerRootAssembly Include="System.Drawing" />
+		<TrimmerRootAssembly Include="System.Windows.Forms" />
+		<TrimmerRootAssembly Include="AntdUI" />
+		<TrimmerRootAssembly Include="CountryData.Globalization" />
+		<TrimmerRootAssembly Include="SDL3-CS" />
+		<TrimmerRootAssembly Include="Svg" />
+		<TrimmerRootAssembly Include="Microsoft.Data.Sqlite" />
+		<TrimmerRootAssembly Include="DirectN" />
+		<TrimmerRootAssembly Include="DirectN.Extensions" />
+		<TrimmerRootAssembly Include="WebView2" />
+		<TrimmerRootAssembly Include="System.Reflection.Metadata" />
+		<TrimmerRootAssembly Include="System.Private.Xml" />
+		<RdXmlFile Include="rd.xml" />
+	</ItemGroup>
+
+	<!-- SubType cho Designer - giữ nguyên của cậu -->
+	<ItemGroup>
+		<Compile Update="DesignView\Private\UserPhoneSwitch.cs">
+			<SubType>UserControl</SubType>
+		</Compile>
+		<Compile Update="DesignView\Private\UserSettings.cs">
+			<SubType>UserControl</SubType>
+		</Compile>
+		<Compile Update="DesignView\Private\UserNewOrChangePC.cs" />
+		<Compile Update="DesignView\Private\UserPCOnline.cs">
+			<SubType>UserControl</SubType>
+		</Compile>
+		<Compile Update="DesignView\FormUI\FormAddOneAppData.cs">
+			<SubType>Form</SubType>
+		</Compile>
+		<Compile Update="DesignView\FormUI\FormSocicalNetwork.cs">
+			<SubType>Form</SubType>
+		</Compile>
+		<Compile Update="DesignView\FormUI\FormDeviceMode.cs" />
+		<Compile Update="DesignView\FormUI\FormADDNoteImage.cs" />
+		<Compile Update="DesignView\FormUI\FormExportApk.cs" />
+		<Compile Update="DesignView\FormUI\FormAppData.cs" />
+		<Compile Update="DesignView\FormUI\FormCopy.cs" />
+		<Compile Update="DesignView\FormUI\FormKeybroadSetting.cs" />
+		<Compile Update="DesignView\FormUI\FormTestAction.cs" />
+		<Compile Update="DesignView\FormUI\FormExportFile.cs" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Extension\Backup\" />
+	</ItemGroup>
+
+
+</Project>

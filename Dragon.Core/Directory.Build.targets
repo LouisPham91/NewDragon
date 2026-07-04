@@ -1,0 +1,4 @@
+<Project>
+  <!-- Ghi đè target của SixLabors, đặt SAU khi NuGet import -->
+  <Target Name="SixLabors_ValidateLicense" />
+</Project>
