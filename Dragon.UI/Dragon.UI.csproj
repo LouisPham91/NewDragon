@@ -61,8 +61,11 @@
 		<EmbeddedResource Include="runtimes\win-x64\native\WebView2Loader.dll">
 			<LogicalName>runtimes.win-x64.native.WebView2Loader.dll</LogicalName>
 		</EmbeddedResource>
+		<EmbeddedResource Include="google_oauth.json">
+			<LogicalName>Dragon.UI.google_oauth.json</LogicalName>
+		</EmbeddedResource>
 	</ItemGroup>
-	
+
 	<!-- Content chung -->
 	<ItemGroup>
 		<Content Include="Extension\**\*" Exclude="Extension\**\*.cs;Extension\**\*.csproj">
