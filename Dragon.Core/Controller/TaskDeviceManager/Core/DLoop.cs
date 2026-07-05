@@ -17,6 +17,8 @@ namespace Dragon.Controller.TaskDeviceManager.Core
         public Guid Id { get; set; } = Guid.NewGuid();
         public string Name { get; set; } = string.Empty;
         public bool IsSingleLoop { get; set; } = false; // nếu true, chỉ chạy 1 lần, không lặp lại
+        public ControlMode ControlMode { get; set; }
+        public VisionMode VisionMode { get; set; }
         public string UserGmail { get; set; } = string.Empty; // ví dụ: "dragonfarm@gmail.com"
         public string PhoneModel { get; set; } = string.Empty;
         public NodeType Type { get; set; }
@@ -58,14 +60,95 @@ namespace Dragon.Controller.TaskDeviceManager.Core
             return (T)val;
         }
 
-        public void Hydrate()
+        public void Hydrate(DLoop? parent = null)
         {
-            // parse node này
-            _ = GetNodePayload();
-            // parse con
-            foreach (var c in Children) c.Hydrate();
-        }
+            if (parent != null)
+            {
+                if (ControlMode == default) ControlMode = parent.ControlMode;
+                if (VisionMode == default) VisionMode = parent.VisionMode;
+            }
 
+            var payload = GetNodePayload();
+            if (payload != null) ApplyModes(payload);
+
+            foreach (var c in Children) c.Hydrate(this);
+        }
+        private void ApplyModes(object payload)
+        {
+            switch (payload)
+            {
+                case AppArgs a:
+                    a.ControlMode = ControlMode;
+                    SetArgs(a);
+                    break;
+
+                case GetColumnDataArgs g:
+                    g.ControlMode = ControlMode;
+                    SetArgs(g);
+                    break;
+
+                case SetColumnDataArgs s:
+                    s.ControlMode = ControlMode;
+                    SetArgs(s);
+                    break;
+
+                case EmojiArgs e:
+                    e.ControlMode = ControlMode;
+                    SetArgs(e);
+                    break;
+
+                case HttpRequestConfig h:
+                    h.ControlMode = ControlMode;
+                    SetArgs(h);
+                    break;
+
+                case ImeActionArgs ia:
+                    ia.ControlMode = ControlMode;
+                    SetArgs(ia);
+                    break;
+
+                case KeyPressArgs k:
+                    k.ControlMode = ControlMode;
+                    SetArgs(k);
+                    break;
+
+                case SendTextArgs st:
+                    st.ControlMode = ControlMode;
+                    SetArgs(st);
+                    break;
+
+                case ClickArg c:
+                    c.ControlMode = ControlMode;
+                    SetArgs(c);
+                    break;
+
+                case SwipeArg sw:
+                    sw.ControlMode = ControlMode;
+                    SetArgs(sw);
+                    break;
+
+                case LongPressArg lp:
+                    lp.ControlMode = ControlMode;
+                    SetArgs(lp);
+                    break;
+
+                case DragArg d:
+                    d.ControlMode = ControlMode;
+                    SetArgs(d);
+                    break;
+
+                case VisionScanArgs v: // <-- duy nhất có VisionMode
+                    v.ControlMode = ControlMode;
+                    v.VisionMode = VisionMode;
+                    SetArgs(v);
+                    break;
+
+                case FileArgs f:
+                    // FileArgs không có mode, giữ nguyên
+                    SetArgs(f);
+                    break;
+            }
+        }
         private object? GetNodePayload() => Type switch
         {
             //app 

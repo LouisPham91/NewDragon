@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Dragon.Controller.Controller.GlobalControl.Helper
+namespace Dragon.Controller.GlobalControl.Helper
 {
     public class BCDEditHelper
     {

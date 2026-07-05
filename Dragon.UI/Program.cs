@@ -1,4 +1,6 @@
-﻿using Dragon.Controller.DeviceControl.OTG;
+﻿using Dragon.Controller.DeviceControl;
+using Dragon.Controller.DeviceControl.AIHelper;
+using Dragon.Controller.DeviceControl.OTG;
 using Dragon.Controller.GlobalControl.Property;
 using Dragon.DesignView.FormUI;
 using Dragon.DesignView.Public;
@@ -17,14 +19,15 @@ namespace Dragon
             try
             {
 
-               NativeBootstrap.Init();
+                NativeBootstrap.Init();
 
                 // 1. Ghi log để biết crash ở đâu
                 File.AppendAllText("dragon_startup.log", $"Start {DateTime.Now}\n");
 
                 // 2. SQLite AOT phải init trước
                 SQLitePCL.Batteries_V2.Init();
-
+                ADBInit.LoadADB();
+                ControllerExporter.Run();
                 Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
@@ -41,15 +44,6 @@ namespace Dragon
 
                 File.AppendAllText("dragon_startup.log", "Run FormMain\n");
                 AoaDeviceScanner.Scan(true);
-
-                var portableHome = Path.Combine(AppContext.BaseDirectory, "adb_data");
-                var androidDir = Path.Combine(portableHome, ".android");
-                Directory.CreateDirectory(androidDir);
-
-                Environment.SetEnvironmentVariable("ANDROID_SDK_HOME", portableHome);
-                Environment.SetEnvironmentVariable("HOME", portableHome);
-                Environment.SetEnvironmentVariable("USERPROFILE", portableHome); // Windows hay dùng cái này
-                Environment.SetEnvironmentVariable("ADB_VENDOR_KEYS", androidDir);
 
                 ApplicationConfiguration.Initialize();
 

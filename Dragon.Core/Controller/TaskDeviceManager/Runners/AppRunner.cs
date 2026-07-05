@@ -1,6 +1,6 @@
 ﻿using AdvancedSharpAdbClient;
 using AdvancedSharpAdbClient.Receivers;
-using Dragon.Controller.Controller.DeviceControl.HATX.Core.Model;
+using Dragon.Controller.DeviceControl.HATX.Core.Model;
 using Dragon.Controller.TaskDeviceManager.Core;
 using Dragon.Controller.TaskDeviceManager.Infrastructure;
 using Dragon.Controller.TaskDeviceManager.Model.App;

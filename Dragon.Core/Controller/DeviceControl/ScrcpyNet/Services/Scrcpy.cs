@@ -1,7 +1,7 @@
 ﻿using AdvancedSharpAdbClient;
 using AdvancedSharpAdbClient.Models;
 using AdvancedSharpAdbClient.Receivers;
-using Dragon.Controller.Controller.DeviceControl;
+using Dragon.Controller.DeviceControl;
 using FFmpeg.AutoGen;
 using System.Buffers;
 using System.Buffers.Binary;

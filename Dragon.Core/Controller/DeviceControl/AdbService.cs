@@ -4,7 +4,7 @@ using AdvancedSharpAdbClient.Receivers;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 
-namespace Dragon.Controller.Controller.DeviceControl
+namespace Dragon.Controller.DeviceControl
 {
     public partial class AdbService
     {
@@ -45,7 +45,6 @@ namespace Dragon.Controller.Controller.DeviceControl
             return rot == 1 || rot == 3;
         }
 
-  
         // giữ nguyên hàm cũ của cậu (đã sửa lỗi biến v)
         public static async Task<int> GetRotationAsync(string DeviceID, DeviceData Device, IAdbClient _adb, CancellationToken token = default)
         {
@@ -53,6 +52,7 @@ namespace Dragon.Controller.Controller.DeviceControl
             var m = DigitRegex().Match(output);
             return m.Success && int.TryParse(m.Groups[1].Value, out var v) ? v : -1;
         }
+
         public static async Task RemoveADBForwardsAsync(DeviceData device, IAdbClient adb, CancellationToken ct = default)
         {
             var forwards = await adb.ListForwardAsync(device, ct);
@@ -67,6 +67,7 @@ namespace Dragon.Controller.Controller.DeviceControl
                 }
             }
         }
+
         public static async Task RemoveAtxForwardsAsync(DeviceData device, IAdbClient adb, CancellationToken ct = default)
         {
             var forwards = await adb.ListForwardAsync(device, ct);

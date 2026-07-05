@@ -2,7 +2,7 @@
 using AdvancedSharpAdbClient;
 using AdvancedSharpAdbClient.Models;
 using AdvancedSharpAdbClient.Receivers;
-using Dragon.Controller.Controller.DeviceControl;
+using Dragon.Controller.DeviceControl;
 using Dragon.Controller.Database.Services;
 using Dragon.Controller.DeviceControl.ScrcpyNet.Services;
 using Dragon.Controller.GlobalControl.Property;

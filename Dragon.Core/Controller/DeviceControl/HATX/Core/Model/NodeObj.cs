@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Text.Json.Serialization;
 using System.Xml;
 
-namespace Dragon.Controller.Controller.DeviceControl.HATX.Core.Model
+namespace Dragon.Controller.DeviceControl.HATX.Core.Model
 {
     public class NodeObj
     {

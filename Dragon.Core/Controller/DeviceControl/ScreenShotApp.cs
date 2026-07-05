@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Dragon.Database.Models;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text;
 
-namespace Dragon.Controller.Controller.DeviceControl
+namespace Dragon.Controller.DeviceControl
 {
     /// <summary>
     /// Cách dùng nhanh:
@@ -16,14 +18,48 @@ namespace Dragon.Controller.Controller.DeviceControl
     /// </summary>
     public sealed class ScreenShotApp
     {
-        private ScreenShotApp() { } // chặn new từ ngoài
+        private ScreenShotApp() { }
 
         private static readonly Lazy<ScreenShotApp> _lazy = new(() => new ScreenShotApp());
         public static ScreenShotApp Instance => _lazy.Value;
 
-        private readonly ConcurrentDictionary<string, PhoneConnection> _map = new();
-        public void Add(string ip, int port = 8888) => _map[ip] = new PhoneConnection(ip, port);
-        public PhoneConnection Get(string ip) => _map[ip];
+        private readonly ConcurrentDictionary<string, AppCapture> _map = new();
+        private readonly ConcurrentDictionary<string, string> _deviceToIp = new(StringComparer.OrdinalIgnoreCase);
+
+        // ---- API MỚI cho DLoop ----
+        public bool Add(Phone phone, int port = 8888)
+        {
+            if (phone == null) return false;
+            if (!phone.IsWifimode()) return false; // chỉ wifi
+            if (string.IsNullOrWhiteSpace(phone.Ipv4)) return false;
+            if (!phone.IsPingWifi) return false; // ping ok mới dùng
+
+            _deviceToIp[phone.DeviceID] = phone.Ipv4;
+            _map[phone.Ipv4] = new AppCapture(phone.Ipv4, port);
+            return true;
+        }
+
+        public Task<byte[]> ScreenshotAsync(Phone phone)
+        {
+            if (!_deviceToIp.TryGetValue(phone.DeviceID, out var ip))
+                throw new InvalidOperationException($"Phone {phone.DeviceID} chưa Add vào ScreenShotApp");
+            return ScreenshotAsync(ip);
+        }
+
+        public async Task<Bitmap> ScreenShotByPhone(Phone phone)
+        {
+            var data = await ScreenshotAsync(phone);
+            using var ms = new MemoryStream(data);
+            return (Bitmap)Image.FromStream(ms);
+        }
+
+        public bool Remove(Phone phone)
+        {
+            if (_deviceToIp.TryRemove(phone.DeviceID, out var ip))
+                return Remove(ip);
+            return false;
+        }
+
         // --- thêm 3 hàm này ---
         public bool Remove(string ip)
         {

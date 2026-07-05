@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Dragon.Controller.Controller.DeviceControl.HATX.Core.Model
+namespace Dragon.Controller.DeviceControl.HATX.Core.Model
 {
     public record TouchCmd
     (

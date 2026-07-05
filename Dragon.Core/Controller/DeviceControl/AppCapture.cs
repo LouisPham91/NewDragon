@@ -4,10 +4,10 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dragon.Controller.Controller.DeviceControl
+namespace Dragon.Controller.DeviceControl
 {
     
-    public class PhoneConnection : IAsyncDisposable
+    public class AppCapture : IAsyncDisposable
     {
         private readonly string _ip;
         private readonly int _port;
@@ -17,7 +17,7 @@ namespace Dragon.Controller.Controller.DeviceControl
         private readonly SemaphoreSlim _connectLock = new(1, 1);
         private DateTime _lastUse = DateTime.UtcNow;
 
-        public PhoneConnection(string ip, int port = 8888)
+        public AppCapture(string ip, int port = 8888)
         {
             _ip = ip; _port = port;
         }

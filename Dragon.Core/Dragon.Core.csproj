@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<TargetFramework>net10.0-windows</TargetFramework>
 		<AssemblyName>Dragon.Core</AssemblyName>
-		<RootNamespace>Dragon.Controller</RootNamespace>
+		<RootNamespace>Dragon</RootNamespace>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>

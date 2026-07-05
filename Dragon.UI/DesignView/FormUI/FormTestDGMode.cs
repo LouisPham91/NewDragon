@@ -1,5 +1,5 @@
 ﻿//using AdvancedSharpAdbClient;
-//using Dragon.Controller.Controller.GlobalControl.Helper;
+//using Dragon.Controller.GlobalControl.Helper;
 //using Dragon.Controller.DeviceControl.OTG;
 //using System.Diagnostics;
 

@@ -10,7 +10,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Dragon.Controller.Controller.DeviceControl.HATX.Core
+namespace Dragon.Controller.DeviceControl.HATX.Core
 {
     public static class AtxInit
     {

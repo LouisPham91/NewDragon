@@ -1,4 +1,4 @@
-﻿using Dragon.Controller.Controller.DeviceControl.HATX.Core.Model;
+﻿using Dragon.Controller.DeviceControl.HATX.Core.Model;
 using Dragon.Controller.TaskDeviceManager.Model.Vision;
 using System;
 using System.Collections.Generic;

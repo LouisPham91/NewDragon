@@ -5,10 +5,9 @@ using Dragon.ControlHelper.ScrcpyNet.DesignDevice;
 using Dragon.ControlHelper.ScrcpyNet.Services;
 using Dragon.ControlHelper.SDL2Helper;
 using Dragon.ControlHelper.UIController;
-using Dragon.Controller.Controller.GlobalControl.Helper;
+using Dragon.Controller.GlobalControl.Helper;
 using Dragon.Controller.Database.Services;
 using Dragon.Controller.DeviceControl.Orc;
-using Dragon.Controller.GlobalControl.Helper;
 using Dragon.Controller.GlobalControl.Property;
 using Dragon.Database.Services;
 using Dragon.DesignView.ControlUI.Private;
@@ -106,14 +105,7 @@ namespace Dragon.DesignView.FormUI
             SdlManager.Init();
 
             FFmpeg.AutoGen.ffmpeg.RootPath = scrcpyNetPath;
-            var portableHome = Path.Combine(AppContext.BaseDirectory, "adb_data");
-            var androidDir = Path.Combine(portableHome, ".android");
-            Directory.CreateDirectory(androidDir);
 
-            // ép mọi adb (cả AdbServer lẫn Process) dùng chung thư mục này
-            Environment.SetEnvironmentVariable("ANDROID_SDK_HOME", portableHome);
-            Environment.SetEnvironmentVariable("HOME", portableHome);
-            Environment.SetEnvironmentVariable("ADB_VENDOR_KEYS", androidDir);
             CMD.ExecuteAdb("start-server");
             //Task.Run(() =>
             //{

@@ -1,5 +1,5 @@
 ﻿
-using Dragon.Controller.Controller.GlobalControl.Helper;
+using Dragon.Controller.GlobalControl.Helper;
 using Dragon.Controller.DeviceControl.Orc;
 using Dragon.Controller.GlobalControl.Helper;
 using Dragon.Controller.TaskDeviceManager.Core;

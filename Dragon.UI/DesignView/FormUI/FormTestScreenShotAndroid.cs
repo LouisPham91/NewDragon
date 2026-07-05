@@ -1,6 +1,6 @@
 ﻿using AdvancedSharpAdbClient;
 using AdvancedSharpAdbClient.Models;
-using Dragon.Controller.Controller.DeviceControl;
+using Dragon.Controller.DeviceControl;
 using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;

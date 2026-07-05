@@ -1,8 +1,8 @@
 ﻿//using AdvancedSharpAdbClient;
 //using AdvancedSharpAdbClient.Models;
-//using Dragon.Controller.Controller.DeviceControl;
-//using Dragon.Controller.Controller.DeviceControl.HATX.Core.Model;
-//using Dragon.Controller.Controller.DeviceControl.OTG;
+//using Dragon.Controller.DeviceControl;
+//using Dragon.Controller.DeviceControl.HATX.Core.Model;
+//using Dragon.Controller.DeviceControl.OTG;
 //using Dragon.Controller.Database.Models;
 //using LibUsbDotNet.LibUsb;
 //using Microsoft.Win32;

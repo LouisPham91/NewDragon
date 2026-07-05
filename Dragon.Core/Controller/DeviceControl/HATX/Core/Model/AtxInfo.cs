@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
 
-namespace Dragon.Controller.Controller.DeviceControl.HATX.Core.Model
+namespace Dragon.Controller.DeviceControl.HATX.Core.Model
 {
     public class AtxInfo
     {

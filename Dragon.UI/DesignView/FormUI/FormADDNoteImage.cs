@@ -1,6 +1,6 @@
 ﻿using AdvancedSharpAdbClient.Models;
 using Dragon.ControlHelper.ScrcpyNet.DesignDevice;
-using Dragon.Controller.Controller.DeviceControl.HATX.Core.Model;
+using Dragon.Controller.DeviceControl.HATX.Core.Model;
 using Dragon.Controller.DeviceControl.HATX;
 using Dragon.Controller.GlobalControl.TaskDeviceManager.Runners;
 using Dragon.Controller.TaskDeviceManager.Core;

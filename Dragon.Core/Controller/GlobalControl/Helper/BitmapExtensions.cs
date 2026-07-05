@@ -5,7 +5,7 @@ using SixLabors.ImageSharp.PixelFormats;
 using System.Runtime.InteropServices;
 
 
-namespace Dragon.Controller.Controller.GlobalControl.Helper
+namespace Dragon.Controller.GlobalControl.Helper
 {
    
     public static class BitmapExtensions
