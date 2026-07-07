@@ -19,6 +19,7 @@ namespace Dragon.Controller.TaskDeviceManager.Core
         public bool IsSingleLoop { get; set; } = false; // nếu true, chỉ chạy 1 lần, không lặp lại
         public ControlMode ControlMode { get; set; }
         public VisionMode VisionMode { get; set; }
+        public ConnectionType connectionType { get; set; } = ConnectionType.Auto;
         public string UserGmail { get; set; } = string.Empty; // ví dụ: "dragonfarm@gmail.com"
         public string PhoneModel { get; set; } = string.Empty;
         public NodeType Type { get; set; }

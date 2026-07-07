@@ -142,7 +142,7 @@ namespace Dragon.UI.DesignView.FormUI
 
             if (isConnected)
             {
-                ScreenShotApp.Instance.Remove(ip);
+                AppCaptureManager.Instance.Remove(ip);
                 isConnected = false;
                 lblStatus.Text = "Đã ngắt"; lblStatus.ForeColor = Color.Red;
                 btnConnect.Text = "Kết nối";
@@ -155,9 +155,9 @@ namespace Dragon.UI.DesignView.FormUI
                 btnConnect.Enabled = false;
                 lblStatus.Text = "Đang kết nối..."; lblStatus.ForeColor = Color.Blue;
 
-                ScreenShotApp.Instance.Add(ip, port); // <-- thêm vào pool
+                AppCaptureManager.Instance.Add(ip, port); // <-- thêm vào pool
                                                       // thử chụp 1 phát để test
-                var test = await ScreenShotApp.Instance.ScreenshotAsync(ip);
+                var test = await AppCaptureManager.Instance.ScreenshotAsync(ip);
 
                 isConnected = true;
                 lblStatus.Text = "Đã kết nối"; lblStatus.ForeColor = Color.Green;
@@ -166,7 +166,7 @@ namespace Dragon.UI.DesignView.FormUI
             }
             catch (Exception ex)
             {
-                ScreenShotApp.Instance.Remove(ip);
+                AppCaptureManager.Instance.Remove(ip);
                 lblStatus.Text = "Kết nối thất bại"; lblStatus.ForeColor = Color.Red;
                 MessageBox.Show(ex.Message);
             }
@@ -222,7 +222,7 @@ namespace Dragon.UI.DesignView.FormUI
 
             try
             {
-                byte[] imageData = await ScreenShotApp.Instance.ScreenshotAsync(ip); // <-- đổi
+                byte[] imageData = await AppCaptureManager.Instance.ScreenshotAsync(ip); // <-- đổi
                 using var ms = new MemoryStream(imageData);
                 var img = Image.FromStream(ms);
                 pictureBox.Image?.Dispose();
@@ -246,7 +246,7 @@ namespace Dragon.UI.DesignView.FormUI
             btnDeeplink.Enabled = false;
             try
             {
-                await ScreenShotApp.Instance.DeeplinkAsync(ip, url); // <-- đổi
+                await AppCaptureManager.Instance.DeeplinkAsync(ip, url); // <-- đổi
                 lblStatus.Text = "Đã gửi deeplink"; lblStatus.ForeColor = Color.Green;
             }
             catch (Exception ex)

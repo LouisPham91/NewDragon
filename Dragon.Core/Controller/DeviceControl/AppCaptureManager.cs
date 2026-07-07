@@ -16,16 +16,20 @@ namespace Dragon.Controller.DeviceControl
     /// ScreenShotApp.Instance.Remove("192.168.1.101");
     /// </code>
     /// </summary>
-    public sealed class ScreenShotApp
+    public sealed class AppCaptureManager
     {
-        private ScreenShotApp() { }
+        private AppCaptureManager() { }
 
-        private static readonly Lazy<ScreenShotApp> _lazy = new(() => new ScreenShotApp());
-        public static ScreenShotApp Instance => _lazy.Value;
+        private static readonly Lazy<AppCaptureManager> _lazy = new(() => new AppCaptureManager());
+        public static AppCaptureManager Instance => _lazy.Value;
 
         private readonly ConcurrentDictionary<string, AppCapture> _map = new();
         private readonly ConcurrentDictionary<string, string> _deviceToIp = new(StringComparer.OrdinalIgnoreCase);
 
+        public bool GetIpByDeviceId(string deviceId)
+        {
+            return _deviceToIp.TryGetValue(deviceId, out var ip);
+        }
         // ---- API MỚI cho DLoop ----
         public bool Add(Phone phone, int port = 8888)
         {
