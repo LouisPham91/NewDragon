@@ -205,6 +205,10 @@ namespace Dragon.Controller.TaskDeviceManager.Core
         // Vision
         VisionScanArgs,
         // System
-        Delay
+        Delay,
+        // Enable Deleverlop, USB Debgging
+        EnableDeverlop,
+        DisableDeverlop
+
     }
 }

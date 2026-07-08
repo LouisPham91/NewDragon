@@ -51,7 +51,11 @@ namespace Dragon.Controller.TaskDeviceManager.Infrastructure
                     break;
 
                 case ConnectionType.WifiOnly:
-                    if (hasWifiSerial) chosenConnection = "WIFI";
+                    if (hasWifiSerial)
+                    {
+
+                        chosenConnection = "WIFI";
+                    }
                     else if (isUsbPlugged && aoa != null)
                     {
 
@@ -64,6 +68,9 @@ namespace Dragon.Controller.TaskDeviceManager.Infrastructure
                         }
                         else if (dev == null && aoa.Service?.Equals("WinUSB", StringComparison.OrdinalIgnoreCase) == true)
                         {
+                            // chỗ này phải tạo được 1 hàm custom cũng dùng dloop để mở setting rồi tìm chỗ click 7 lần..
+                            // vì chỗ này bắt buộc là appcapture phải có nên có thể sử dụng để screenshot check như bình thường
+                            // ngoài ra hàm này bị dưới hạm 1 dloop là 15 dloop con thôi nhiều hơn thì ko được
                             var exit = AppCaptureManager.Instance.GetIpByDeviceId(phone.DeviceID);
                             if (exit)
                             {
@@ -71,7 +78,7 @@ namespace Dragon.Controller.TaskDeviceManager.Infrastructure
                                 var checkOff = adb.GetDevices().Any(c => c.Serial == phone.Serial && c.State == DeviceState.Offline);
                                 ChangeTCPIP_USB_To_Wifi(phone, checkOff);
                             }
-                            
+
                         }
                         return false;
                     }

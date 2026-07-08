@@ -121,9 +121,9 @@ namespace Dragon.Controller.DeviceControl.OTG
             }
         }
 
-        public static async Task<bool> RestoreOriginalDriverInternal(string instanceId, bool enableDeverlop = true)
+        public static async Task<bool> RestoreOriginalDriverInternal(AoaDevice aoadevice, bool enableDeverlop = true)
         {
-            var backup = await _repo.FindOneAsync(instanceId);
+            var backup = await _repo.FindOneAsync(aoadevice.DeviceId);
             if (backup == null) return false;
             if (enableDeverlop)
             {
@@ -132,7 +132,7 @@ namespace Dragon.Controller.DeviceControl.OTG
 
             try
             {
-                using var key = Registry.LocalMachine.OpenSubKey($@"SYSTEM\CurrentControlSet\Enum\{instanceId}", true);
+                using var key = Registry.LocalMachine.OpenSubKey($@"SYSTEM\CurrentControlSet\Enum\{aoadevice.DeviceId}", true);
 
                 if (key == null) return false;
 
@@ -146,8 +146,8 @@ namespace Dragon.Controller.DeviceControl.OTG
                 else
                     key.DeleteValue("DeviceInterfaceGUIDs", false);
 
-                await _repo.RemoveAsync(instanceId);
-                await RestartDevice(instanceId);
+                await _repo.RemoveAsync(aoadevice.DeviceId);
+                await RestartDevice(aoadevice.DeviceId);
                 return true;
             }
             catch { return false; }
@@ -302,6 +302,7 @@ namespace Dragon.Controller.DeviceControl.OTG
             }
             return ok;
         }
+  
         public List<NodeObj>? DumpUiNodes(DeviceData deviceData, AdbClient adbClient)
         {
             try
