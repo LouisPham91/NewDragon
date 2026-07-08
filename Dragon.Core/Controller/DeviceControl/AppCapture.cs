@@ -1,4 +1,6 @@
-﻿using System;
+﻿using LibUsbDotNet;
+using System;
+using System.Drawing;
 using System.IO;
 using System.Net.Sockets;
 using System.Text;
@@ -6,10 +8,11 @@ using System.Threading.Tasks;
 
 namespace Dragon.Controller.DeviceControl
 {
-    
+
     public class AppCapture : IAsyncDisposable
     {
-        private readonly string _ip;
+        public string DeviceId { get; }
+        public string Ip { get; }
         private readonly int _port;
         private TcpClient? _client;
         private NetworkStream? _stream;
@@ -17,9 +20,11 @@ namespace Dragon.Controller.DeviceControl
         private readonly SemaphoreSlim _connectLock = new(1, 1);
         private DateTime _lastUse = DateTime.UtcNow;
 
-        public AppCapture(string ip, int port = 8888)
+        public AppCapture(string deviceId, string ip, int port = 8888)
         {
-            _ip = ip; _port = port;
+            DeviceId = deviceId;
+            Ip = ip;
+            _port = port;
         }
 
         private async Task EnsureConnectedAsync()
@@ -32,7 +37,7 @@ namespace Dragon.Controller.DeviceControl
                 _client?.Dispose();
                 _client = new TcpClient { NoDelay = true };
                 using var cts = new CancellationTokenSource(3000);
-                await _client.ConnectAsync(_ip, _port, cts.Token);
+                await _client.ConnectAsync(Ip, _port, cts.Token);
                 _stream = _client.GetStream();
                 _stream.ReadTimeout = 120_000;
                 _stream.WriteTimeout = 5000;
@@ -68,7 +73,13 @@ namespace Dragon.Controller.DeviceControl
             }
             finally { _lock.Release(); }
         }
-
+        public async Task<Bitmap> ScreenshotBitmapAsync(int timeoutMs = 8000)
+        {
+            var data = await ScreenshotAsync(timeoutMs);
+            using var ms = new MemoryStream(data);
+            // Clone để không giữ lock trên MemoryStream
+            return new Bitmap(ms);
+        }
         public async Task SendAsync(string command)
         {
             await _lock.WaitAsync();
@@ -106,7 +117,7 @@ namespace Dragon.Controller.DeviceControl
             try { _client?.Close(); } catch { }
             _stream = null; _client = null;
         }
-       
+
         public ValueTask DisposeAsync() { Dispose(); return ValueTask.CompletedTask; }
     }
 }

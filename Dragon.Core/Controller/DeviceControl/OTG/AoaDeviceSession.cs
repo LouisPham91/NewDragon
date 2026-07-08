@@ -1,13 +1,15 @@
 using AdvancedSharpAdbClient;
 using AdvancedSharpAdbClient.Models;
-using Dragon.Controller.DeviceControl;
-using Dragon.Controller.DeviceControl.HATX.Core.Model;
 using Dragon.Controller.Database;
 using Dragon.Controller.Database.Models;
+using Dragon.Controller.DeviceControl.HATX;
+using Dragon.Controller.DeviceControl.HATX.Core.Model;
+using Dragon.Controller.DeviceControl.Orc;
 using LibUsbDotNet.LibUsb;
 using LibUsbDotNet.Main;
 using Microsoft.Win32;
 using System.Diagnostics;
+using System.Drawing;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -17,7 +19,7 @@ namespace Dragon.Controller.DeviceControl.OTG
     public sealed class AoaDeviceSession : IDisposable
     {
         public AoaDevice Device { get; }
-        public AoaController Controller { get; }
+        public AoaController ctrl { get; }
         private IUsbDevice? _usb;
         private bool _disposed;
 
@@ -31,7 +33,7 @@ namespace Dragon.Controller.DeviceControl.OTG
         public AoaDeviceSession(AoaDevice device)
         {
             Device = device ?? throw new ArgumentNullException(nameof(device));
-            Controller = new AoaController(device);
+            ctrl = new AoaController(device);
         }
 
         // ==== MỞ THIẾT BỊ - DÙNG FIND THAY VÌ LIST ====
@@ -70,7 +72,7 @@ namespace Dragon.Controller.DeviceControl.OTG
                 if (_usb == null) return false;
 
                 Device.UsbDevice = _usb;
-                Controller.Initialize(_usb, true, true);
+                ctrl.Initialize(_usb, true, true);
                 return true;
             }
             catch (Exception)
@@ -121,18 +123,140 @@ namespace Dragon.Controller.DeviceControl.OTG
             }
         }
 
-        public static async Task<bool> RestoreOriginalDriverInternal(AoaDevice aoadevice, bool enableDeverlop = true)
+        public static async Task<Point?> FindTextAsync(AppCapture cap, string[] keywords)
         {
-            var backup = await _repo.FindOneAsync(aoadevice.DeviceId);
-            if (backup == null) return false;
-            if (enableDeverlop)
-            {
-
-            }
-
+            var bmp = await cap.ScreenshotBitmapAsync();
             try
             {
-                using var key = Registry.LocalMachine.OpenSubKey($@"SYSTEM\CurrentControlSet\Enum\{aoadevice.DeviceId}", true);
+                foreach (var k in keywords)
+                {
+                    var pt = OrcImageHelper.GetPointImageByText(bmp, k);
+                    if (pt != null) return pt;
+                }
+                return null;
+            }
+            finally { bmp.Dispose(); }
+        }
+
+        // chờ chữ xuất hiện, chụp mỗi interval
+        public static async Task<Point?> WaitForTextAsync(AppCapture cap, string[] keywords, int timeoutMs = 1500, int intervalMs = 500)
+        {
+            var sw = System.Diagnostics.Stopwatch.StartNew();
+            while (sw.ElapsedMilliseconds < timeoutMs)
+            {
+                var pt = await FindTextAsync(cap, keywords);
+                if (pt != null) return pt;
+                await Task.Delay(intervalMs);
+            }
+            return null;
+        }
+
+        // kéo tới khi thấy chữ
+        public static async Task<Point?> SwipeUntilFoundAsync(AoaController ctrl, AppCapture cap, string[] keywords, int maxSwipes = 8)
+        {
+            for (int i = 0; i < maxSwipes; i++)
+            {
+                var pt = await WaitForTextAsync(cap, keywords, 1500, 500);
+                if (pt != null) return pt;
+
+                // swipe nhanh 50% -> 80%
+                ctrl.SwipePercent(0.5, 0.8, 0.5, 0.3, 100, cap);
+                await Task.Delay(400);
+            }
+            return null;
+        }
+
+        public async Task<bool> RestoreOriginalDriverInternal(bool enableDevelop = true, AppCapture? cap = null)
+        {
+            var backup = await _repo.FindOneAsync(Device.DeviceId);
+            if (backup == null) return false;
+
+            if (enableDevelop && cap != null)
+            {
+                // Lấy session AOA đang mở
+                var session = AoaDeviceManager.Instance.Get(Device.DeviceId);
+                if (session?.IsReady == true)
+                {
+                    var ctrl = session.ctrl;
+
+                    await cap.SendAsync("settings");
+                    await Task.Delay(1500);
+
+                    // helper tìm và click
+                    async Task<Point?> FindText(string[] keys)
+                    {
+                        var bmp = await cap.ScreenshotBitmapAsync();
+                        foreach (var k in keys)
+                        {
+                            var pt = OrcImageHelper.GetPointImageByText(bmp, k);
+                            if (pt != null) return pt;
+                        }
+                        return null;
+                    }
+
+                    // 1. Vào About phone
+                    var aboutPt = await FindText(new[] { "About phone", "Giới thiệu", "Thông tin điện thoại" });
+                    if (aboutPt != null)
+                    {
+                        await ctrl.MoveToAsync(aboutPt.Value.X, aboutPt.Value.Y);
+                        ctrl.MouseClick();
+                        await Task.Delay(800);
+
+                        // 2. Tìm Build number và tap 7 lần
+                        var buildPt = await FindText(new[] { "Build number", "Số hiệu bản dựng", "MIUI version" });
+                        if (buildPt != null)
+                        {
+                            for (int i = 0; i < 7; i++)
+                            {
+                                await ctrl.MoveToAsync(buildPt.Value.X, buildPt.Value.Y);
+                                ctrl.MouseClick();
+                                await Task.Delay(350);
+                            }
+                        }
+                        ctrl.KeyPressBack();
+                        await Task.Delay(600);
+                    }
+
+                    // 3. Vào Developer options
+                    var devPt = await FindText(new[] { "Developer options", "Tùy chọn nhà phát triển" });
+                    if (devPt == null)
+                    {
+                        // thử vào System trước
+                        var sysPt = await FindText(new[] { "System", "Hệ thống" });
+                        if (sysPt != null) { await ctrl.MoveToAsync(sysPt.Value.X, sysPt.Value.Y); ctrl.MouseClick(); await Task.Delay(600); }
+                        devPt = await FindText(new[] { "Developer options", "Tùy chọn nhà phát triển" });
+                    }
+                    if (devPt != null)
+                    {
+                        await ctrl.MoveToAsync(devPt.Value.X, devPt.Value.Y);
+                        ctrl.MouseClick();
+                        await Task.Delay(800);
+
+                        // 4. Bật USB debugging
+                        var usbPt = await FindText(new[] { "USB debugging", "Gỡ lỗi USB" });
+                        if (usbPt == null)
+                        {
+                            // cuộn tìm
+                            for (int s = 0; s < 4; s++) { ctrl.Swipe(500, 1400, 500, 400, 300); await Task.Delay(600); usbPt = await FindText(new[] { "USB debugging", "Gỡ lỗi USB" }); if (usbPt != null) break; }
+                        }
+                        if (usbPt != null)
+                        {
+                            // click toggle bên phải
+                            await ctrl.MoveToAsync(usbPt.Value.X + 300, usbPt.Value.Y);
+                            ctrl.MouseClick();
+                            await Task.Delay(500);
+                            // OK dialog
+                            var okPt = await FindText(new[] { "OK", "Cho phép", "Allow" });
+                            if (okPt != null) { await ctrl.MoveToAsync(okPt.Value.X, okPt.Value.Y); ctrl.MouseClick(); }
+                        }
+                    }
+                }
+            }
+
+            // phần restore driver giữ nguyên...
+            try
+            {
+                using var key = Registry.LocalMachine.OpenSubKey($@"SYSTEM\CurrentControlSet\Enum\{Device.DeviceId}", true);
 
                 if (key == null) return false;
 
@@ -146,11 +270,12 @@ namespace Dragon.Controller.DeviceControl.OTG
                 else
                     key.DeleteValue("DeviceInterfaceGUIDs", false);
 
-                await _repo.RemoveAsync(aoadevice.DeviceId);
-                await RestartDevice(aoadevice.DeviceId);
+                await _repo.RemoveAsync(Device.DeviceId);
+                await RestartDevice(Device.DeviceId);
                 return true;
             }
             catch { return false; }
+
         }
 
         public static async Task RestartDevice(string instanceId)
@@ -179,7 +304,7 @@ namespace Dragon.Controller.DeviceControl.OTG
         {
             if (_disposed) return;
             try { _usb?.Close(); _usb?.Dispose(); } catch { }
-            Controller?.Dispose();
+            ctrl?.Dispose();
             _disposed = true;
         }
 
@@ -302,7 +427,7 @@ namespace Dragon.Controller.DeviceControl.OTG
             }
             return ok;
         }
-  
+
         public List<NodeObj>? DumpUiNodes(DeviceData deviceData, AdbClient adbClient)
         {
             try

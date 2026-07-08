@@ -26,7 +26,7 @@ namespace Dragon.Controller.TaskDeviceManager.Infrastructure
 
         private readonly PhoneFarmHost _host = new();
         private readonly ConcurrentDictionary<string, PhoneSession> _sessions = new();
-        public bool CheckBeforeRun(Phone phone, DLoop root)
+        public async Task<bool> CheckBeforeRun(Phone phone, DLoop root)
         {
             root.Hydrate();
 
@@ -43,20 +43,35 @@ namespace Dragon.Controller.TaskDeviceManager.Infrastructure
             // 2. Áp ConnectionType
             string chosenConnection = null;
 
+            if (root.connectionType == ConnectionType.Auto)
+            {
+                if (isUsbPlugged) root.connectionType = ConnectionType.UsbOnly;
+                else root.connectionType = ConnectionType.WifiOnly;
+            }
+
+            if (root.connectionType == ConnectionType.UsbOnly)
+            {
+                if (!isUsbPlugged) return false;
+            }
+            else if (root.connectionType == ConnectionType.WifiOnly)
+            {
+                if (!hasWifiSerial && aoa == null)
+                    return false;
+            }
+
             switch (root.connectionType)
             {
                 case ConnectionType.UsbOnly:
-                    if (!isUsbPlugged) return false;
+
                     chosenConnection = "USB";
                     break;
 
                 case ConnectionType.WifiOnly:
                     if (hasWifiSerial)
                     {
-
                         chosenConnection = "WIFI";
                     }
-                    else if (isUsbPlugged && aoa != null)
+                    else if (isUsbPlugged && aoa != null && !hasWifiSerial)
                     {
 
                         if (dev != null && string.IsNullOrEmpty(phone.Ipv4) && aoa.Service?.Equals("WinUSB", StringComparison.OrdinalIgnoreCase) == false)
@@ -71,25 +86,16 @@ namespace Dragon.Controller.TaskDeviceManager.Infrastructure
                             // chỗ này phải tạo được 1 hàm custom cũng dùng dloop để mở setting rồi tìm chỗ click 7 lần..
                             // vì chỗ này bắt buộc là appcapture phải có nên có thể sử dụng để screenshot check như bình thường
                             // ngoài ra hàm này bị dưới hạm 1 dloop là 15 dloop con thôi nhiều hơn thì ko được
-                            var exit = AppCaptureManager.Instance.GetIpByDeviceId(phone.DeviceID);
-                            if (exit)
-                            {
-                                // Xây dựng đc hàm bật adb debugging lên rồi sử dụng 2 dòng code dưới để chuyển sang wifi mode
-                                var checkOff = adb.GetDevices().Any(c => c.Serial == phone.Serial && c.State == DeviceState.Offline);
-                                ChangeTCPIP_USB_To_Wifi(phone, checkOff);
-                            }
+                            var appCapture = AppCaptureManager.Instance.GetByDeviceId(phone.DeviceID);
+                            if (appCapture == null) return false;
 
+                            await appCapture.SendAsync("settings");
                         }
-                        return false;
+
                     }
                     else return false; // 2b và 3 như bạn liệt kê
                     break;
 
-                case ConnectionType.Auto:
-                    if (isUsbPlugged) chosenConnection = "USB";
-                    else if (hasWifiSerial) chosenConnection = "WIFI";
-                    else return false;
-                    break;
             }
 
             // 3. Gom nhu cầu từ cây DLoop

@@ -7,83 +7,63 @@ using System.Text;
 
 namespace Dragon.Controller.DeviceControl
 {
-    /// <summary>
-    /// Cách dùng nhanh:
-    /// <code>
-    /// ScreenShotApp.Instance.Add("192.168.1.101");
-    /// var img = await ScreenShotApp.Instance.ScreenshotAsync("192.168.1.101");
-    /// await ScreenShotApp.Instance.DeeplinkAsync("192.168.1.101", "fb://page/123");
-    /// ScreenShotApp.Instance.Remove("192.168.1.101");
-    /// </code>
-    /// </summary>
     public sealed class AppCaptureManager
     {
+        // --- singleton ---
         private AppCaptureManager() { }
-
         private static readonly Lazy<AppCaptureManager> _lazy = new(() => new AppCaptureManager());
         public static AppCaptureManager Instance => _lazy.Value;
 
-        private readonly ConcurrentDictionary<string, AppCapture> _map = new();
-        private readonly ConcurrentDictionary<string, string> _deviceToIp = new(StringComparer.OrdinalIgnoreCase);
+        // --- chỉ 1 map: deviceId -> AppCapture ---
+        private readonly ConcurrentDictionary<string, AppCapture> _byDevice = new(StringComparer.OrdinalIgnoreCase);
 
-        public bool GetIpByDeviceId(string deviceId)
+        // MỚI: lấy thẳng AppCapture
+        public AppCapture? GetByDeviceId(string deviceId)
         {
-            return _deviceToIp.TryGetValue(deviceId, out var ip);
+            _byDevice.TryGetValue(deviceId, out var cap);
+            return cap;
         }
-        // ---- API MỚI cho DLoop ----
+
+        public bool TryGet(string deviceId, out AppCapture? capture)
+            => _byDevice.TryGetValue(deviceId, out capture);
+
+        // Add - đảm bảo 1 device = 1 AppCapture
         public bool Add(Phone phone, int port = 8888)
         {
-            if (phone == null) return false;
-            if (!phone.IsWifimode()) return false; // chỉ wifi
-            if (string.IsNullOrWhiteSpace(phone.Ipv4)) return false;
-            if (!phone.IsPingWifi) return false; // ping ok mới dùng
+            if (phone == null || !phone.IsWifimode() || string.IsNullOrWhiteSpace(phone.Ipv4) || !phone.IsPingWifi)
+                return false;
 
-            _deviceToIp[phone.DeviceID] = phone.Ipv4;
-            _map[phone.Ipv4] = new AppCapture(phone.Ipv4, port);
+            var cap = new AppCapture(phone.DeviceID, phone.Ipv4, port);
+            _byDevice.AddOrUpdate(phone.DeviceID, cap, (_, old) => { old.Dispose(); return cap; });
             return true;
         }
 
-        public Task<byte[]> ScreenshotAsync(Phone phone)
-        {
-            if (!_deviceToIp.TryGetValue(phone.DeviceID, out var ip))
-                throw new InvalidOperationException($"Phone {phone.DeviceID} chưa Add vào ScreenShotApp");
-            return ScreenshotAsync(ip);
-        }
+        // API dùng deviceId trực tiếp
+        public Task<byte[]> ScreenshotAsync(string deviceId) => _byDevice[deviceId].ScreenshotAsync();
+        public Task<byte[]> ScreenshotAsync(Phone phone) => ScreenshotAsync(phone.DeviceID);
 
-        public async Task<Bitmap> ScreenShotByPhone(Phone phone)
-        {
-            var data = await ScreenshotAsync(phone);
-            using var ms = new MemoryStream(data);
-            return (Bitmap)Image.FromStream(ms);
-        }
+        public Task HomeAsync(string deviceId) => _byDevice[deviceId].SendAsync("home");
+        public Task SettingsAsync(string deviceId) => _byDevice[deviceId].SendAsync("settings");
+        public Task WifiAsync(string deviceId) => _byDevice[deviceId].SendAsync("wifi");
+        public Task DeeplinkAsync(string deviceId, string url) => _byDevice[deviceId].DeeplinkAsync(url);
 
-        public bool Remove(Phone phone)
+        public bool Remove(string deviceId)
         {
-            if (_deviceToIp.TryRemove(phone.DeviceID, out var ip))
-                return Remove(ip);
-            return false;
-        }
-
-        // --- thêm 3 hàm này ---
-        public bool Remove(string ip)
-        {
-            if (_map.TryRemove(ip, out var conn))
+            if (_byDevice.TryRemove(deviceId, out var cap))
             {
-                conn.Dispose(); // đóng socket, giải phóng
+                cap.Dispose();
                 return true;
             }
             return false;
         }
+        public bool Remove(Phone phone) => Remove(phone.DeviceID);
+
         public void Clear()
         {
-            foreach (var kv in _map) kv.Value.Dispose();
-            _map.Clear();
+            foreach (var kv in _byDevice) kv.Value.Dispose();
+            _byDevice.Clear();
         }
-        public Task DeeplinkAsync(string ip, string url) => _map[ip].DeeplinkAsync(url);
-        public IEnumerable<string> AllIps => _map.Keys;
-        public Task<byte[]> ScreenshotAsync(string ip) => _map[ip].ScreenshotAsync();
-        public Task HomeAsync(string ip) => _map[ip].SendAsync("home");
-        public Task WifiAsync(string ip) => _map[ip].SendAsync("wifi");
-        public Task SettingsAsync(string ip) => _map[ip].SendAsync("settings");
+
+        public IEnumerable<string> AllDeviceIds => _byDevice.Keys;
     }
 }

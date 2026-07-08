@@ -1,4 +1,5 @@
-﻿using Dragon.Controller.DeviceControl.OTG;
+﻿using Dragon.Controller.DeviceControl.Orc;
+using Dragon.Controller.DeviceControl.OTG;
 using LibUsbDotNet.LibUsb;
 using LibUsbDotNet.Main;
 using System.Diagnostics;
@@ -133,6 +134,30 @@ namespace Dragon.Controller.DeviceControl.OTG
         // MOUSE
         // ============================================================
 
+        async Task<bool> FindAndClick(string[] keywords, int retries = 3, AppCapture? cap = null)
+        {
+            if (cap == null) return false;
+            for (int i = 0; i < retries; i++)
+            {
+                var bmp = await cap.ScreenshotBitmapAsync(); // bạn thêm wrapper này trong AppCapture
+                foreach (var kw in keywords)
+                {
+                    var pt = OrcImageHelper.GetPointImageByText(bmp, kw);
+                    if (pt != null)
+                    {
+                        await MoveToAsync(pt.Value.X, pt.Value.Y);
+                        await Task.Delay(200);
+                        MouseClick();
+                        await Task.Delay(800);
+                        return true;
+                    }
+                }
+                await SwipeAsync(500, 1500, 500, 500, 300);
+                await Task.Delay(800);
+            }
+            return false;
+        }
+
         public void MoveToOrigin(int steps = 50, int delayMs = 10)
         {
             byte[] moveData = new byte[HID_MOUSE_REPORT_SIZE];
@@ -188,18 +213,70 @@ namespace Dragon.Controller.DeviceControl.OTG
             MouseRightClick();
         }
 
-        public void Drag(int fromX, int fromY, int toX, int toY, int durationMs = 300)
+        public void Swipe(int startX, int startY, int endX, int endY, int durationMs = 300)
+        {
+            MoveToOrigin();
+            MoveTo(startX, startY);
+
+            // nhấn xuống
+            SendHidReport(MOUSE_ID, new byte[] { 1, 0, 0 });
+            Thread.Sleep(50); // giữ 50ms
+
+            // kéo
+            MoveTo(endX, endY, durationMs / 10);
+
+            // thả
+            SendHidReport(MOUSE_ID, new byte[] { 0, 0, 0 });
+        }
+        public async Task SwipeAsync(int startX, int startY, int endX, int endY, int durationMs = 300, CancellationToken ct = default)
+        {
+            await MoveToOriginAsync(cancellationToken: ct);
+            await MoveToAsync(startX, startY, cancellationToken: ct);
+
+            // nhấn xuống
+            await SendHidReportAsync(MOUSE_ID, new byte[] { 1, 0, 0 });
+            await Task.Delay(50, ct); // chỉ giữ 50ms
+
+            // kéo
+            await MoveToAsync(endX, endY, durationMs / 10, ct);
+
+            // thả
+            await SendHidReportAsync(MOUSE_ID, new byte[] { 0, 0, 0 });
+        }
+
+        public void DragApp(int fromX, int fromY, int toX, int toY, int holdMs = 1000, int moveMs = 500)
         {
             MoveToOrigin();
             MoveTo(fromX, fromY);
-            Thread.Sleep(100);
 
+            // nhấn và GIỮ
             SendHidReport(MOUSE_ID, new byte[] { 1, 0, 0 });
-            Thread.Sleep(50);
+            Thread.Sleep(holdMs); // <-- 1 giây mặc định
 
-            MoveTo(toX, toY, durationMs / 10);
+            // kéo chậm
+            MoveTo(toX, toY, moveMs / 10);
 
+            // thả
             SendHidReport(MOUSE_ID, new byte[] { 0, 0, 0 });
+            Thread.Sleep(200);
+
+        }
+
+        public async Task DragAppAsync(int fromX, int fromY, int toX, int toY, int holdMs = 1000, int moveMs = 500, CancellationToken ct = default)
+        {
+            await MoveToOriginAsync(cancellationToken: ct);
+            await MoveToAsync(fromX, fromY, cancellationToken: ct);
+
+            // nhấn và GIỮ 1s để app "nổi" lên
+            await SendHidReportAsync(MOUSE_ID, new byte[] { 1, 0, 0 });
+            await Task.Delay(holdMs, ct); // <-- khác biệt chính
+
+            // kéo chậm tới vị trí mới
+            await MoveToAsync(toX, toY, moveMs / 10, ct);
+
+            // thả
+            await SendHidReportAsync(MOUSE_ID, new byte[] { 0, 0, 0 });
+            await Task.Delay(200, ct);
         }
 
         public void MouseMove(int dx, int dy)
