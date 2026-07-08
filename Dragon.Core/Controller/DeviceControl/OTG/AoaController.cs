@@ -54,10 +54,6 @@ namespace Dragon.Controller.DeviceControl.OTG
             _device = device ?? throw new ArgumentNullException(nameof(device));
         }
 
-        // ============================================================
-        // INITIALIZE - NHẬN USB TỪ SESSION
-        // ============================================================
-
         public bool Initialize(IUsbDevice usb, bool registerMouse = true, bool registerKeyboard = true)
         {
             if (_initialized) return true;
@@ -93,11 +89,6 @@ namespace Dragon.Controller.DeviceControl.OTG
             }
         }
 
-
-        // ============================================================
-        // HID REGISTER
-        // ============================================================
-
         private void RegisterHid(int id, byte[] desc)
         {
             if (_d == null) return;
@@ -130,11 +121,7 @@ namespace Dragon.Controller.DeviceControl.OTG
                 Debug.WriteLine($"[AoaHid] SendAsync error: {ex.Message}");
             }
         }
-        // ============================================================
-        // MOUSE
-        // ============================================================
-
-        async Task<bool> FindAndClick(string[] keywords, int retries = 3, AppCapture? cap = null)
+        public async Task<bool> FindAndClick(string[] keywords, int retries = 3, AppCapture? cap = null, int clickTime = 1)
         {
             if (cap == null) return false;
             for (int i = 0; i < retries; i++)
@@ -147,12 +134,15 @@ namespace Dragon.Controller.DeviceControl.OTG
                     {
                         await MoveToAsync(pt.Value.X, pt.Value.Y);
                         await Task.Delay(200);
-                        MouseClick();
+                        for (int j = 0; j < clickTime; j++)
+                        {
+                            MouseClick();
+                            await Task.Delay(300);
+                        }
                         await Task.Delay(800);
                         return true;
                     }
                 }
-                await SwipeAsync(500, 1500, 500, 500, 300);
                 await Task.Delay(800);
             }
             return false;

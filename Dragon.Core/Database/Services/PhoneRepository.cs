@@ -73,7 +73,28 @@ namespace Dragon.Controller.Database.Services
             using var r = cmd.ExecuteReader();
             return r.Read() ? MapPhone(r) : null;
         }
+        public static Phone? FindOneByIp(string ip)
+        {
+            if (string.IsNullOrWhiteSpace(ip)) return null;
 
+            var ipInput = ip.Trim();
+            var ipOnly = ipInput.Contains(':') && !ipInput.Contains("::")
+               ? ipInput.Split(':')[0]
+                : ipInput;
+
+            using var c = AOTSqliteDb.Open();
+            using var cmd = c.CreateCommand();
+            cmd.CommandText = $@"
+        SELECT {COLS} FROM Phones
+        WHERE Ipv4 = @ipOnly
+           OR Ipv4 || ':5555' = @ipInput
+        LIMIT 1";
+            cmd.Parameters.AddWithValue("@ipOnly", ipOnly);
+            cmd.Parameters.AddWithValue("@ipInput", ipInput);
+
+            using var r = cmd.ExecuteReader();
+            return r.Read() ? MapPhone(r) : null;
+        }
         public static List<Phone> LoadAll()
         {
             var list = new List<Phone>();

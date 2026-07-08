@@ -1,7 +1,6 @@
 ﻿
 using Dragon.Controller.GlobalControl.Helper;
 using Dragon.Controller.DeviceControl.Orc;
-using Dragon.Controller.GlobalControl.Helper;
 using Dragon.Controller.TaskDeviceManager.Core;
 using Dragon.Controller.TaskDeviceManager.Infrastructure;
 using Dragon.Controller.TaskDeviceManager.Infrastructure.Services;

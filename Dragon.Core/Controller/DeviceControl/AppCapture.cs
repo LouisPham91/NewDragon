@@ -117,7 +117,6 @@ namespace Dragon.Controller.DeviceControl
             try { _client?.Close(); } catch { }
             _stream = null; _client = null;
         }
-
         public ValueTask DisposeAsync() { Dispose(); return ValueTask.CompletedTask; }
     }
 }

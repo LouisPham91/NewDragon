@@ -185,13 +185,13 @@ namespace Dragon.Controller.TaskDeviceManager.Infrastructure
 
                 case ControlMode.Scrcpy:
                     // giả sử bạn có factory scrcpy
-                    var scrcpy = await ScrcpyServiceFactory.CreateAsync(dd.Serial);
-                    session.Input = scrcpy.Input;
-                    session.Screen = scrcpy.Screen;
+                    //var scrcpy = await ScrcpyServiceFactory.CreateAsync(dd.Serial);
+                    //session.Input = scrcpy.Input;
+                    //session.Screen = scrcpy.Screen;
                     break;
 
                 case ControlMode.HDI:
-                    session.InputUhid = await UhidServiceFactory.CreateAsync(dd.Serial);
+                    //session.InputUhid = await UhidServiceFactory.CreateAsync(dd.Serial);
                     break;
 
                 case ControlMode.OTG:

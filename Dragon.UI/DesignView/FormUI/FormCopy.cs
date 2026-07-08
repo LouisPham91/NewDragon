@@ -78,15 +78,15 @@ namespace Dragon.DesignView.FormUI
         }
 
 
-        private void buttonExportFile_Click(object sender, EventArgs e)
+        public void buttonExportFile_Click(object? sender, EventArgs e)
         {
 
         }
-        private void buttomRound1_Click(object sender, EventArgs e)
+        public void buttomRound1_Click(object? sender, EventArgs e)
         {
 
         }
-        private void FormAndroidExplorer_Load(object sender, EventArgs e)
+        public void FormAndroidExplorer_Load(object? sender, EventArgs e)
         {
 
         }
@@ -201,7 +201,7 @@ namespace Dragon.DesignView.FormUI
             }
 
         }
-        private void PictureBoxCloseForm_Click(object sender, EventArgs e)
+        public void PictureBoxCloseForm_Click(object? sender, EventArgs e)
         {
             this.Close();
         }

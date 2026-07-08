@@ -1,4 +1,7 @@
+using Dragon.Controller.Database.Services;
+using Dragon.Controller.DeviceControl.OTG.Loop;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 
 
 namespace Dragon.Controller.DeviceControl.OTG
@@ -96,5 +99,39 @@ namespace Dragon.Controller.DeviceControl.OTG
 
         public AoaDeviceSession? Get(string deviceId) =>
             _sessions.TryGetValue(deviceId, out var s) ? s : null;
+
+
+
+        // Trong AoaDeviceManager, thêm method này:
+        public async Task<AoaDeviceSession?> StartWithAoaLoopAsync(string deviceId)
+        {
+            var session = await StartByDeviceIdAsync(deviceId);
+            if (session == null) return null;
+
+            var phone = PhoneRepository.FindOneByDeviceID(deviceId);
+            if (phone == null) return session;
+
+            // Tìm AoaLoop phù hợp
+            var loop = await AoaLoopMatcher.FindBestMatchAsync(phone);
+            if (loop == null) return session;
+
+            // Chạy AoaLoop (có thể await hoặc fire-and-forget)
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    var capture = AppCaptureManager.Instance.GetByDeviceId(deviceId);
+                    using var cts = new CancellationTokenSource(TimeSpan.FromMinutes(5));
+
+                    await AoaLoopRunner.RunAsync(loop, session.ctrl, capture, cts.Token);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"[AoaLoop] Error for {deviceId}: {ex.Message}");
+                }
+            });
+
+            return session;
+        }
     }
 }
