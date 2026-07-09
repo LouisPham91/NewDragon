@@ -13,6 +13,8 @@ namespace Dragon.Controller.DeviceControl.OTG.Loop
         public int API { get; set; }
         public string PointCloseApp { get; set; } = string.Empty;
 
+        public int PhysicalWidth { get; set; } = 1080;
+        public int PhysicalHeight{ get; set; } = 1920;
         // === THÊM MỚI ===
         public AoaType Type { get; set; }
 

@@ -913,6 +913,50 @@ namespace Dragon.DesignView.ControlUI.Private
                 DG_IsNoImage = true,
             };
 
+            // Thêm vào sau toolStripRotateTest, trước khi add vào menu
+
+            var toolStripAoaLoopEditor = new MyToolStripMenuItem();
+            toolStripAoaLoopEditor.Text = $"🤖 OTG Loop Editor ({phone.Model})";
+            toolStripAoaLoopEditor.Click += (s, e) =>
+            {
+                var formAoa = FormManager.Instance.formAoaLoopEditor;
+                if (formAoa == null || formAoa.IsDisposed)
+                {
+                    formAoa = new FormAoaLoopEditor(phone);
+                    FormManager.Instance.formAoaLoopEditor = formAoa;
+                }
+
+                if (formAoa == null) return;
+
+                var screen = Screen.PrimaryScreen!.WorkingArea;
+
+                if (formAoa.Width > screen.Width)
+                    formAoa.Width = screen.Width;
+
+                if (formAoa.Height > screen.Height)
+                    formAoa.Height = screen.Height;
+
+                int newX = screen.Right - formAoa.Width;
+                int newY = screen.Top + (screen.Height - formAoa.Height) / 2;
+
+                if (newX < screen.Left) newX = screen.Left;
+                if (newY < screen.Top) newY = screen.Top;
+
+                formAoa.Location = new Point(newX, newY);
+
+                if (!formAoa.Visible)
+                {
+                    formAoa.Show();
+                }
+                else
+                {
+                    formAoa.BringToFront();
+                }
+            };
+
+            // Thêm vào LabelPhoneTagMenuStrip.Items (trước toolStripRotateTest hoặc cuối)
+            LabelPhoneTagMenuStrip.Items.Add(toolStripAoaLoopEditor);
+
             LabelPhoneTagMenuStrip.Show(screenPoint);
         }
 

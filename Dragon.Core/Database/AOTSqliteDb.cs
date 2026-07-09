@@ -230,19 +230,21 @@ public static class AOTSqliteDb
                     OK TEXT
                 );",
 
-                @"CREATE TABLE IF NOT EXISTS AoaLoops (
+               @"CREATE TABLE IF NOT EXISTS AoaLoops (
                 Id INTEGER PRIMARY KEY AUTOINCREMENT,
                 PhoneModel TEXT NOT NULL DEFAULT '',
                 ProcVersion TEXT NOT NULL DEFAULT '',
                 ProcCpuInfo TEXT NOT NULL DEFAULT '',
                 API INTEGER NOT NULL DEFAULT 0,
+                PhysicalWidth INTEGER NOT NULL DEFAULT 0,
+                PhysicalHeight INTEGER NOT NULL DEFAULT 0,
                 PointCloseApp TEXT NOT NULL DEFAULT '',
                 Type INTEGER NOT NULL DEFAULT 0,
                 ArgsJson TEXT NOT NULL DEFAULT '{}',
                 ChildrenJson TEXT NOT NULL DEFAULT '[]'
                 );",
 
-                "CREATE UNIQUE INDEX IF NOT EXISTS IX_AoaLoops_Unique ON AoaLoops(PhoneModel, ProcVersion, ProcCpuInfo, API); ",
+                "CREATE UNIQUE INDEX IF NOT EXISTS IX_AoaLoops_Unique  ON AoaLoops(PhoneModel, ProcVersion, ProcCpuInfo, API); "
 
 
 

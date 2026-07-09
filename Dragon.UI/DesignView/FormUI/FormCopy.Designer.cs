@@ -33,8 +33,9 @@ namespace Dragon.DesignView.FormUI
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormKeybroadSetting));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormCopy));
             panelMain = new Panel();
+            panelWorking = new PanelNormalN();
             panelRoundn1 = new PanelRoundN();
             buttomRound1 = new ButtomRound();
             buttonExportFile = new ButtomRound();
@@ -54,6 +55,7 @@ namespace Dragon.DesignView.FormUI
             // panelMain
             // 
             panelMain.BackColor = Color.WhiteSmoke;
+            panelMain.Controls.Add(panelWorking);
             panelMain.Controls.Add(panelRoundn1);
             panelMain.Controls.Add(panel1);
             panelMain.Dock = DockStyle.Fill;
@@ -62,12 +64,24 @@ namespace Dragon.DesignView.FormUI
             panelMain.Size = new Size(839, 768);
             panelMain.TabIndex = 0;
             // 
+            // panelWorking
+            // 
+            panelWorking.BackColor = Color.FromArgb(40, 40, 40);
+            panelWorking.Dock = DockStyle.Fill;
+            panelWorking.ForeColor = Color.White;
+            panelWorking.Location = new Point(0, 40);
+            panelWorking.Name = "panelWorking";
+            panelWorking.Size = new Size(839, 611);
+            panelWorking.TabIndex = 4;
+            // 
             // panelRoundn1
             // 
+            panelRoundn1.BackColor = Color.FromArgb(40, 40, 40);
             panelRoundn1.Controls.Add(buttomRound1);
             panelRoundn1.Controls.Add(buttonExportFile);
             panelRoundn1.Controls.Add(labelFile);
             panelRoundn1.Dock = DockStyle.Bottom;
+            panelRoundn1.ForeColor = Color.White;
             panelRoundn1.GD_Radius = 15F;
             panelRoundn1.Location = new Point(0, 651);
             panelRoundn1.Name = "panelRoundn1";
@@ -79,8 +93,6 @@ namespace Dragon.DesignView.FormUI
             buttomRound1.BackColor = Color.FromArgb(225, 225, 225);
             buttomRound1.DG_BackColor = Color.FromArgb(225, 225, 225);
             buttomRound1.DG_ForceColor = Color.Empty;
-            buttomRound1.DG_LightenPercent = 0.2F;
-            buttomRound1.DG_SVGString = "";
             buttomRound1.FlatAppearance.BorderSize = 0;
             buttomRound1.FlatAppearance.MouseDownBackColor = Color.Transparent;
             buttomRound1.FlatAppearance.MouseOverBackColor = Color.Transparent;
@@ -104,8 +116,6 @@ namespace Dragon.DesignView.FormUI
             buttonExportFile.BackColor = Color.FromArgb(225, 225, 225);
             buttonExportFile.DG_BackColor = Color.FromArgb(225, 225, 225);
             buttonExportFile.DG_ForceColor = Color.Empty;
-            buttonExportFile.DG_LightenPercent = 0.2F;
-            buttonExportFile.DG_SVGString = "";
             buttonExportFile.FlatAppearance.BorderSize = 0;
             buttonExportFile.FlatAppearance.MouseDownBackColor = Color.Transparent;
             buttonExportFile.FlatAppearance.MouseOverBackColor = Color.Transparent;
@@ -128,14 +138,9 @@ namespace Dragon.DesignView.FormUI
             // 
             labelFile.AutoSize = true;
             labelFile.BackColor = Color.Transparent;
-            labelFile.DG_BackColor = Color.Transparent;
-            labelFile.DG_LightenPercent = 80;
-            labelFile.DG_SVGImageColor = Color.Transparent;
-            labelFile.DG_SVGString = "";
-            labelFile.Font = new Font("Segoe UI", 9.75F);
             labelFile.DG_IsBrightBack = true;
-            labelFile.DG_IsColorMode = false;
-            labelFile.DG_IsGrayImage = false;
+            labelFile.Font = new Font("Segoe UI", 9.75F);
+            labelFile.ForeColor = Color.White;
             labelFile.Location = new Point(22, 14);
             labelFile.Name = "labelFile";
             labelFile.Size = new Size(0, 17);
@@ -143,6 +148,7 @@ namespace Dragon.DesignView.FormUI
             // 
             // panel1
             // 
+            panel1.BackColor = Color.FromArgb(40, 40, 40);
             panel1.Controls.Add(textBoxSearch);
             panel1.Controls.Add(pictureBoxBrightn1);
             panel1.Controls.Add(PictureBoxCloseForm);
@@ -156,10 +162,10 @@ namespace Dragon.DesignView.FormUI
             // textBoxSearch
             // 
             textBoxSearch.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            textBoxSearch.BackColor = SystemColors.Window;
+            textBoxSearch.BackColor = Color.FromArgb(40, 40, 40);
             textBoxSearch.BorderStyle = BorderStyle.FixedSingle;
-            textBoxSearch.DG_BorderThickness = 1;
             textBoxSearch.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            textBoxSearch.ForeColor = Color.White;
             textBoxSearch.Location = new Point(554, 10);
             textBoxSearch.Name = "textBoxSearch";
             textBoxSearch.Size = new Size(224, 23);
@@ -168,65 +174,52 @@ namespace Dragon.DesignView.FormUI
             // pictureBoxBrightn1
             // 
             pictureBoxBrightn1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            pictureBoxBrightn1.DG_ImageColor = SystemColors.ControlText;
+            pictureBoxBrightn1.BackColor = Color.FromArgb(40, 40, 40);
             pictureBoxBrightn1.DG_ImageSize = new Size(18, 18);
             pictureBoxBrightn1.DG_LightenPercent = 50;
+            pictureBoxBrightn1.DG_SVGString = resources.GetString("pictureBoxBrightn1.DG_SVGString");
+            pictureBoxBrightn1.ForeColor = Color.White;
             pictureBoxBrightn1.Image = (Image)resources.GetObject("pictureBoxBrightn1.Image");
-            pictureBoxBrightn1.DG_IsBackTransparent = false;
-            pictureBoxBrightn1.DG_IsBrightBack = true;
-            pictureBoxBrightn1.DG_IsGrayImage = false;
-            pictureBoxBrightn1.DG_IsWhiteImage = false;
             pictureBoxBrightn1.Location = new Point(530, 12);
             pictureBoxBrightn1.Name = "pictureBoxBrightn1";
             pictureBoxBrightn1.Padding = new Padding(2);
             pictureBoxBrightn1.Size = new Size(18, 18);
             pictureBoxBrightn1.SizeMode = PictureBoxSizeMode.Zoom;
-            pictureBoxBrightn1.DG_SVGString = resources.GetString("pictureBoxBrightn1.SVGstring");
             pictureBoxBrightn1.TabIndex = 11;
             pictureBoxBrightn1.TabStop = false;
-            pictureBoxBrightn1.DG_UseMode = UseMode.ThemeMode;
             // 
             // PictureBoxCloseForm
             // 
             PictureBoxCloseForm.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            PictureBoxCloseForm.BackColor = Color.FromArgb(40, 40, 40);
             PictureBoxCloseForm.DG_ImageColor = SystemColors.ControlText;
             PictureBoxCloseForm.DG_ImageSize = new Size(18, 18);
             PictureBoxCloseForm.DG_LightenPercent = 50;
+            PictureBoxCloseForm.DG_SVGString = resources.GetString("PictureBoxCloseForm.DG_SVGString");
+            PictureBoxCloseForm.ForeColor = Color.White;
             PictureBoxCloseForm.Image = (Image)resources.GetObject("PictureBoxCloseForm.Image");
-            PictureBoxCloseForm.DG_IsBackTransparent = false;
-            PictureBoxCloseForm.DG_IsBrightBack = true;
-            PictureBoxCloseForm.DG_IsGrayImage = false;
-            PictureBoxCloseForm.DG_IsWhiteImage = false;
             PictureBoxCloseForm.Location = new Point(801, 10);
             PictureBoxCloseForm.Name = "PictureBoxCloseForm";
             PictureBoxCloseForm.Padding = new Padding(2);
             PictureBoxCloseForm.Size = new Size(18, 18);
             PictureBoxCloseForm.SizeMode = PictureBoxSizeMode.Zoom;
-            PictureBoxCloseForm.DG_SVGString = resources.GetString("PictureBoxCloseForm.SVGstring");
             PictureBoxCloseForm.TabIndex = 8;
             PictureBoxCloseForm.TabStop = false;
-            PictureBoxCloseForm.DG_UseMode = UseMode.ThemeMode;
             PictureBoxCloseForm.Click += PictureBoxCloseForm_Click;
             // 
             // labelNormaln1
             // 
             labelNormaln1.AutoSize = true;
             labelNormaln1.BackColor = Color.Transparent;
-            labelNormaln1.DG_BackColor = Color.Transparent;
-            labelNormaln1.DG_LightenPercent = 80;
-            labelNormaln1.DG_SVGImageColor = Color.Transparent;
-            labelNormaln1.DG_SVGString = "";
             labelNormaln1.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            labelNormaln1.DG_IsBrightBack = false;
-            labelNormaln1.DG_IsColorMode = false;
-            labelNormaln1.DG_IsGrayImage = false;
+            labelNormaln1.ForeColor = Color.White;
             labelNormaln1.Location = new Point(22, 10);
             labelNormaln1.Name = "labelNormaln1";
             labelNormaln1.Size = new Size(156, 20);
             labelNormaln1.TabIndex = 0;
             labelNormaln1.Text = "Android Explorer File";
             // 
-            // FormKeybroadSetting
+            // FormCopy
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -234,7 +227,7 @@ namespace Dragon.DesignView.FormUI
             ClientSize = new Size(841, 770);
             Controls.Add(panelMain);
             FormBorderStyle = FormBorderStyle.None;
-            Name = "FormKeybroadSetting";
+            Name = "FormCopy";
             Opacity = 0.97D;
             Padding = new Padding(1);
             Text = "FormInstallAPK";
@@ -261,5 +254,7 @@ namespace Dragon.DesignView.FormUI
         private ButtomRound buttomRound1;
         private TextBoxNoborberN textBoxSearch;
         private PictureBoxBrightN pictureBoxBrightn1;
+        private PanelNormalN panelWorking;
+        
     }
 }

@@ -9,8 +9,7 @@ namespace Dragon.Controller.Database.Services
     public static class AoaLoopRepository
     {
         private const string TABLE = "AoaLoops";
-        private const string COLS = "Id, PhoneModel, ProcVersion, ProcCpuInfo, API, PointCloseApp, Type, ArgsJson, ChildrenJson";
-
+        private const string COLS = "Id, PhoneModel, ProcVersion, ProcCpuInfo, API, PhysicalWidth, PhysicalHeight, PointCloseApp, Type, ArgsJson, ChildrenJson";
         // ==================== MAPPER ====================
         private static AoaLoop Map(SqliteDataReader r)
         {
@@ -21,13 +20,15 @@ namespace Dragon.Controller.Database.Services
                 ProcVersion = r.IsDBNull(2) ? "" : r.GetString(2),
                 ProcCpuInfo = r.IsDBNull(3) ? "" : r.GetString(3),
                 API = r.IsDBNull(4) ? 0 : r.GetInt32(4),
-                PointCloseApp = r.IsDBNull(5) ? "" : r.GetString(5),
-                Type = (AoaType)(r.IsDBNull(6) ? 0 : r.GetInt32(6)),
-                ArgsJson = r.IsDBNull(7) ? "{}" : r.GetString(7),
+                PhysicalWidth = r.IsDBNull(5) ? 0 : r.GetInt32(5),   // MỚI
+                PhysicalHeight = r.IsDBNull(6) ? 0 : r.GetInt32(6),  // MỚI
+                PointCloseApp = r.IsDBNull(7) ? "" : r.GetString(7),
+                Type = (AoaType)(r.IsDBNull(8) ? 0 : r.GetInt32(8)),
+                ArgsJson = r.IsDBNull(9) ? "{}" : r.GetString(9),
             };
 
             // Deserialize Children
-            string childrenJson = r.IsDBNull(8) ? "[]" : r.GetString(8);
+            string childrenJson = r.IsDBNull(10) ? "[]" : r.GetString(10);
             if (!string.IsNullOrEmpty(childrenJson) && childrenJson != "[]")
             {
                 try
@@ -109,11 +110,11 @@ namespace Dragon.Controller.Database.Services
             using var c = AOTSqliteDb.Open();
             using var cmd = c.CreateCommand();
             cmd.CommandText = $@"
-                INSERT INTO {TABLE} 
-                (PhoneModel, ProcVersion, ProcCpuInfo, API, PointCloseApp, Type, ArgsJson, ChildrenJson)
-                VALUES 
-                (@m, @pv, @pc, @api, @pca, @type, @args, @children);
-                SELECT last_insert_rowid();";
+            INSERT INTO {TABLE} 
+            (PhoneModel, ProcVersion, ProcCpuInfo, API, PhysicalWidth, PhysicalHeight, PointCloseApp, Type, ArgsJson, ChildrenJson)
+            VALUES 
+            (@m, @pv, @pc, @api, @pw, @ph, @pca, @type, @args, @children);
+            SELECT last_insert_rowid();";
 
             AddParameters(cmd, item);
 
@@ -141,16 +142,18 @@ namespace Dragon.Controller.Database.Services
             using var c = AOTSqliteDb.Open();
             using var cmd = c.CreateCommand();
             cmd.CommandText = $@"
-                UPDATE {TABLE} SET 
-                    PhoneModel = @m,
-                    ProcVersion = @pv,
-                    ProcCpuInfo = @pc,
-                    API = @api,
-                    PointCloseApp = @pca,
-                    Type = @type,
-                    ArgsJson = @args,
-                    ChildrenJson = @children
-                WHERE Id = @id";
+            UPDATE {TABLE} SET 
+                PhoneModel = @m,
+                ProcVersion = @pv,
+                ProcCpuInfo = @pc,
+                API = @api,
+                PhysicalWidth = @pw,
+                PhysicalHeight = @ph,
+                PointCloseApp = @pca,
+                Type = @type,
+                ArgsJson = @args,
+                ChildrenJson = @children
+            WHERE Id = @id";
 
             AddParameters(cmd, item);
             cmd.Parameters.AddWithValue("@id", item.Id);
@@ -283,6 +286,8 @@ namespace Dragon.Controller.Database.Services
             cmd.Parameters.AddWithValue("@pv", item.ProcVersion ?? "");
             cmd.Parameters.AddWithValue("@pc", item.ProcCpuInfo ?? "");
             cmd.Parameters.AddWithValue("@api", item.API);
+            cmd.Parameters.AddWithValue("@pw", item.PhysicalWidth);   // MỚI
+            cmd.Parameters.AddWithValue("@ph", item.PhysicalHeight);  // MỚI
             cmd.Parameters.AddWithValue("@pca", item.PointCloseApp ?? "");
             cmd.Parameters.AddWithValue("@type", (int)item.Type);
 
