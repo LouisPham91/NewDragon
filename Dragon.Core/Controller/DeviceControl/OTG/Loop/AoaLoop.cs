@@ -11,10 +11,11 @@ namespace Dragon.Controller.DeviceControl.OTG.Loop
         public string ProcVersion { get; set; } = string.Empty;
         public string ProcCpuInfo { get; set; } = string.Empty;
         public int API { get; set; }
-        public string PointCloseApp { get; set; } = string.Empty;
-
+        public string PointCloseApp { get; set; } = "50,90"; // percent
         public int PhysicalWidth { get; set; } = 1080;
-        public int PhysicalHeight{ get; set; } = 1920;
+        public int PhysicalHeight { get; set; } = 1920;
+        public bool IsAppCaptureConnected { get; set; } = false;
+
         // === THÊM MỚI ===
         public AoaType Type { get; set; }
 
@@ -75,5 +76,6 @@ namespace Dragon.Controller.DeviceControl.OTG.Loop
                     child.HydrateTree();
             }
         }
+
     }
 }

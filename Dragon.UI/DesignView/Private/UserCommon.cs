@@ -922,7 +922,7 @@ namespace Dragon.DesignView.ControlUI.Private
                 var formAoa = FormManager.Instance.formAoaLoopEditor;
                 if (formAoa == null || formAoa.IsDisposed)
                 {
-                    formAoa = new FormAoaLoopEditor(phone);
+                    formAoa = new FormOTGLoopEditor(phone);
                     FormManager.Instance.formAoaLoopEditor = formAoa;
                 }
 

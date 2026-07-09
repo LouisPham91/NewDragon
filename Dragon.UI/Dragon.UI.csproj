@@ -128,7 +128,7 @@
 
 	<!-- SubType cho Designer - giữ nguyên của cậu -->
 	<ItemGroup>
-		<Compile Update="DesignView\FormUI\FormAoaLoopEditor.cs">
+		<Compile Update="DesignView\FormUI\FormOTGLoopEditor.cs">
 		  <SubType>Form</SubType>
 		</Compile>
 		<Compile Update="DesignView\Private\UserPhoneSwitch.cs">

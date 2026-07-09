@@ -31,7 +31,7 @@ namespace Dragon.ControlHelper.UIController
         public FormSettings? formSettings { get; private set; }
         public VirtualFlowHelper? virtualFlowHelper { get; private set; }
         public FormMain? formMain { get; private set; }
-        public FormAoaLoopEditor? formAoaLoopEditor { get; set; }
+        public FormOTGLoopEditor? formAoaLoopEditor { get; set; }
         public Bitmap dragonArt = new Bitmap(Path.Combine(AppContext.BaseDirectory, "Extension", "Gif", "dragonArt.jpg"));
 
         // Khởi tạo form chính

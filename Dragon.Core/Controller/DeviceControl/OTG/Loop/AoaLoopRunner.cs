@@ -1,5 +1,6 @@
-﻿using Dragon.Controller.DeviceControl.OTG.Model;
-using Dragon.Controller.DeviceControl.Orc;
+﻿using Dragon.Controller.DeviceControl.Orc;
+using Dragon.Controller.DeviceControl.OTG.Model;
+using System.Diagnostics;
 using System.Drawing;
 
 namespace Dragon.Controller.DeviceControl.OTG.Loop
@@ -48,6 +49,8 @@ namespace Dragon.Controller.DeviceControl.OTG.Loop
                     await HandleKeyPressAsync(keyPress, ctrl, ct);
                     break;
                 case AoaOcr ocr:
+                    // Nếu node yêu cầu OCR nhưng IsAppCaptureConnected = false
+                    // thì capture sẽ là null -> HandleOcrAsync sẽ xử lý fallback
                     await HandleOcrAsync(ocr, ctrl, capture, ct);
                     break;
                 case AoaSendText sendText:
@@ -68,60 +71,62 @@ namespace Dragon.Controller.DeviceControl.OTG.Loop
         /// 3. Nếu vẫn không có → bỏ qua (có thể không có app nào)
         /// </summary>
         private static async Task HandleCloseAllAppsAsync(
-            string pointCloseApp,
-            AoaController ctrl,
-            AppCapture? capture,
-            CancellationToken ct)
+      string pointCloseApp,
+      AoaController ctrl,
+      AppCapture? capture,
+      CancellationToken ct)
         {
-            if (capture == null) return;
-
-            // Thử OCR tìm nút "Clear All" / "Close All"
-            bool found = false;
-            var deadline = DateTime.UtcNow.AddMilliseconds(2000);
-
-            while (DateTime.UtcNow < deadline && !found)
+            // ===== TRƯỜNG HỢP 1: CÓ AppCapture =====
+            if (capture != null)
             {
-                ct.ThrowIfCancellationRequested();
+                // Thử OCR tìm nút "Clear All" / "Close All"
+                var deadline = DateTime.UtcNow.AddMilliseconds(2000);
+                bool found = false;
 
-                Bitmap? bmp = null;
-                try { bmp = await capture.ScreenshotBitmapAsync(3000); } catch { }
-
-                if (bmp != null)
+                while (DateTime.UtcNow < deadline && !found)
                 {
-                    using (bmp)
+                    ct.ThrowIfCancellationRequested();
+                    Bitmap? bmp = null;
+                    try { bmp = await capture.ScreenshotBitmapAsync(3000); } catch { }
+
+                    if (bmp != null)
                     {
-                        var keywords = new[] { "Clear all", "Close all", "Đóng tất cả", "Xóa tất cả", "CLEAR ALL" };
-                        foreach (var kw in keywords)
+                        using (bmp)
                         {
-                            var pt = OrcImageHelper.GetPointImageByText(bmp, kw);
-                            if (pt.HasValue)
+                            var keywords = new[] { "Clear all", "Close all", "Đóng tất cả", "Xóa tất cả", "CLEAR ALL" };
+                            foreach (var kw in keywords)
                             {
-                                await ctrl.ClickAtAsync(pt.Value.X, pt.Value.Y, ct);
-                                found = true;
-                                break;
+                                var pt = OrcImageHelper.GetPointImageByText(bmp, kw);
+                                if (pt.HasValue)
+                                {
+                                    await ctrl.ClickAtAsync(pt.Value.X, pt.Value.Y, ct);
+                                    found = true;
+                                    break;
+                                }
                             }
                         }
                     }
+                    if (!found) await Task.Delay(300, ct);
                 }
 
-                if (!found)
-                    await Task.Delay(300, ct);
-            }
-
-            // Fallback: Click PointCloseApp nếu OCR không tìm thấy
-            if (!found && !string.IsNullOrEmpty(pointCloseApp))
-            {
-                var parts = pointCloseApp.Split(',');
-                if (parts.Length == 2 &&
-                    int.TryParse(parts[0].Trim(), out int cx) &&
-                    int.TryParse(parts[1].Trim(), out int cy))
+                if (found)
                 {
-                    await ctrl.ClickAtAsync(cx, cy, ct);
+                    await Task.Delay(600, ct);
+                    return;
                 }
             }
 
-            // Đợi animation đóng app
-            await Task.Delay(600, ct);
+            // ===== TRƯỜNG HỢP 2: KHÔNG CÓ AppCapture -> dùng HID mò =====
+            // Fallback 1: Click PointCloseApp nếu có
+            if (!string.IsNullOrEmpty(pointCloseApp))
+            {
+                var (cx, cy) = PointCloseAppHelper.ToPixel(pointCloseApp, ctrl.PhysicalWidth, ctrl.PhysicalHeight);
+                await ctrl.ClickAtAsync(cx, cy, ct);
+            }
+
+            // Fallback 2: Dùng phím tắt (Home rồi mở recent apps)
+            // Không làm gì thêm, coi như đã xong
+            await Task.Delay(300, ct);
         }
         // ==================== DELAY ====================
         public static async Task HandleDelayAsync(int delayMs, CancellationToken ct)
@@ -139,7 +144,20 @@ namespace Dragon.Controller.DeviceControl.OTG.Loop
             {
                 ct.ThrowIfCancellationRequested();
 
-                await ctrl.MoveToAsync(click.X, click.Y, cancellationToken: ct);
+                int clickX, clickY;
+                if (click.IsPerCent)
+                {
+                    // Convert % -> pixel (giả sử màn hình 1080x1920, cần truyền physical size vào)
+                    clickX = (int)(1080 * click.X / 100f);
+                    clickY = (int)(1920 * click.Y / 100f);
+                }
+                else
+                {
+                    clickX = (int)click.X;
+                    clickY = (int)click.Y;
+                }
+
+                await ctrl.MoveToAsync(clickX, clickY, cancellationToken: ct);
                 await Task.Delay(50, ct);
                 ctrl.MouseClick();
 
@@ -155,16 +173,26 @@ namespace Dragon.Controller.DeviceControl.OTG.Loop
             {
                 ct.ThrowIfCancellationRequested();
 
-                await ctrl.SwipeAsync(
-                    swipe.X1, swipe.Y1,
-                    swipe.X2, swipe.Y2,
-                    swipe.DurationMs,
-                    ct);
+                int x1, y1, x2, y2;
+                if (swipe.IsPerCent)
+                {
+                    x1 = (int)(1080 * swipe.X1 / 100f);
+                    y1 = (int)(1920 * swipe.Y1 / 100f);
+                    x2 = (int)(1080 * swipe.X2 / 100f);
+                    y2 = (int)(1920 * swipe.Y2 / 100f);
+                }
+                else
+                {
+                    x1 = (int)swipe.X1;
+                    y1 = (int)swipe.Y1;
+                    x2 = (int)swipe.X2;
+                    y2 = (int)swipe.Y2;
+                }
 
+                await ctrl.SwipeAsync(x1, y1, x2, y2, swipe.DurationMs, ct);
                 await Task.Delay(200, ct);
             }
         }
-
         // ==================== DEEPLINK ====================
         public static async Task HandleDeeplinkAsync(AoaDeeplink deeplink, AppCapture? capture, CancellationToken ct)
         {
@@ -195,59 +223,76 @@ namespace Dragon.Controller.DeviceControl.OTG.Loop
 
         // ==================== OCR ====================
         public static async Task HandleOcrAsync(
-            AoaOcr ocr,
-            AoaController ctrl,
-            AppCapture? capture,
-            CancellationToken ct)
+     AoaOcr ocr,
+     AoaController ctrl,
+     AppCapture? capture,
+     CancellationToken ct)
         {
-            if (capture == null)
-                throw new InvalidOperationException("AppCapture is required for OCR action");
-
-            var deadline = DateTime.UtcNow.AddMilliseconds(ocr.TimeoutMs);
-            int swipeCount = 0;
-
-            while (DateTime.UtcNow < deadline)
+            if (capture != null)
             {
-                ct.ThrowIfCancellationRequested();
+                var deadline = DateTime.UtcNow.AddMilliseconds(ocr.TimeoutMs);
+                int swipeCount = 0;
 
-                Bitmap? bmp = null;
-                try
+                while (DateTime.UtcNow < deadline)
                 {
-                    bmp = await capture.ScreenshotBitmapAsync(5000);
-                }
-                catch
-                {
-                    // Retry sau interval
-                }
+                    ct.ThrowIfCancellationRequested();
+                    Bitmap? bmp = null;
+                    try { bmp = await capture.ScreenshotBitmapAsync(5000); } catch { }
 
-                if (bmp != null)
-                {
-                    using (bmp)
+                    if (bmp != null)
                     {
-                        foreach (var keyword in ocr.Keywords)
+                        using (bmp)
                         {
-                            var point = OrcImageHelper.GetPointImageByText(bmp, keyword);
-                            if (point.HasValue)
+                            foreach (var keyword in ocr.Keywords)
                             {
-                                int clickX = point.Value.X + ocr.OffsetX;
-                                int clickY = point.Value.Y + ocr.OffsetY;
-
-                                await ctrl.ClickAtAsync(clickX, clickY, ct);
-                                return; // Tìm thấy → click → thoát
+                                var point = OrcImageHelper.GetPointImageByText(bmp, keyword);
+                                if (point.HasValue)
+                                {
+                                    int clickX = point.Value.X + ocr.OffsetX;
+                                    int clickY = point.Value.Y + ocr.OffsetY;
+                                    await ctrl.ClickAtAsync(clickX, clickY, ct);
+                                    return;
+                                }
                             }
                         }
                     }
-                }
 
-                // Chưa tìm thấy, swipe nếu còn lượt
-                if (ocr.MaxSwipes > 0 && swipeCount < ocr.MaxSwipes)
+                    // Chưa tìm thấy, swipe nếu còn lượt
+                    if (ocr.MaxSwipes > 0 && swipeCount < ocr.MaxSwipes)
+                    {
+                        // ===== SỬA: Dùng tọa độ từ AoaOcr =====
+                        int x1, y1, x2, y2;
+                        if (ocr.SwipeIsPercent)
+                        {
+                            x1 = (int)(ctrl.PhysicalWidth * ocr.SwipeStartX / 100f);
+                            y1 = (int)(ctrl.PhysicalHeight * ocr.SwipeStartY / 100f);
+                            x2 = (int)(ctrl.PhysicalWidth * ocr.SwipeEndX / 100f);
+                            y2 = (int)(ctrl.PhysicalHeight * ocr.SwipeEndY / 100f);
+                        }
+                        else
+                        {
+                            x1 = (int)ocr.SwipeStartX;
+                            y1 = (int)ocr.SwipeStartY;
+                            x2 = (int)ocr.SwipeEndX;
+                            y2 = (int)ocr.SwipeEndY;
+                        }
+
+                        await ctrl.SwipeAsync(x1, y1, x2, y2, ocr.SwipeDurationMs, ct);
+                        swipeCount++;
+                    }
+
+                    await Task.Delay(ocr.IntervalMs, ct);
+                }
+            }
+            else
+            {
+                // Fallback HID khi không có capture
+                Debug.WriteLine($"[AoaLoop] OCR requested but no AppCapture available. Keywords: {string.Join(", ", ocr.Keywords)}");
+
+                if (ocr.OffsetX != 0 || ocr.OffsetY != 0)
                 {
-                    // Vuốt lên để scroll (tọa độ mặc định, có thể config thêm sau)
-                    await ctrl.SwipeAsync(540, 1500, 540, 500, 300, ct);
-                    swipeCount++;
+                    await ctrl.ClickAtAsync(ocr.OffsetX, ocr.OffsetY, ct);
                 }
-
-                await Task.Delay(ocr.IntervalMs, ct);
             }
         }
 

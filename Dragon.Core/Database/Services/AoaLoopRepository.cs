@@ -9,8 +9,8 @@ namespace Dragon.Controller.Database.Services
     public static class AoaLoopRepository
     {
         private const string TABLE = "AoaLoops";
-        private const string COLS = "Id, PhoneModel, ProcVersion, ProcCpuInfo, API, PhysicalWidth, PhysicalHeight, PointCloseApp, Type, ArgsJson, ChildrenJson";
-        // ==================== MAPPER ====================
+        private const string COLS = "Id, PhoneModel, ProcVersion, ProcCpuInfo, API, PhysicalWidth, PhysicalHeight, PointCloseApp, IsAppCaptureConnected, Type, ArgsJson, ChildrenJson";
+
         private static AoaLoop Map(SqliteDataReader r)
         {
             var loop = new AoaLoop
@@ -20,15 +20,16 @@ namespace Dragon.Controller.Database.Services
                 ProcVersion = r.IsDBNull(2) ? "" : r.GetString(2),
                 ProcCpuInfo = r.IsDBNull(3) ? "" : r.GetString(3),
                 API = r.IsDBNull(4) ? 0 : r.GetInt32(4),
-                PhysicalWidth = r.IsDBNull(5) ? 0 : r.GetInt32(5),   // MỚI
-                PhysicalHeight = r.IsDBNull(6) ? 0 : r.GetInt32(6),  // MỚI
+                PhysicalWidth = r.IsDBNull(5) ? 0 : r.GetInt32(5),
+                PhysicalHeight = r.IsDBNull(6) ? 0 : r.GetInt32(6),
                 PointCloseApp = r.IsDBNull(7) ? "" : r.GetString(7),
-                Type = (AoaType)(r.IsDBNull(8) ? 0 : r.GetInt32(8)),
-                ArgsJson = r.IsDBNull(9) ? "{}" : r.GetString(9),
+                IsAppCaptureConnected = r.IsDBNull(8) ? false : r.GetInt32(8) == 1,  // <-- THÊM
+                Type = (AoaType)(r.IsDBNull(9) ? 0 : r.GetInt32(9)),
+                ArgsJson = r.IsDBNull(10) ? "{}" : r.GetString(10),
             };
 
             // Deserialize Children
-            string childrenJson = r.IsDBNull(10) ? "[]" : r.GetString(10);
+            string childrenJson = r.IsDBNull(11) ? "[]" : r.GetString(11);
             if (!string.IsNullOrEmpty(childrenJson) && childrenJson != "[]")
             {
                 try
@@ -50,7 +51,7 @@ namespace Dragon.Controller.Database.Services
         /// <summary>
         /// Kiểm tra xem đã tồn tại bản ghi với 4 trường unique chưa
         /// </summary>
-        public static bool Exists(string phoneModel, string procVersion, string procCpuInfo, int api, int? excludeId = null)
+        public static bool Exists(string phoneModel, string procVersion, string procCpuInfo, int api, bool isAppCaptureConnected, int? excludeId = null)
         {
             using var c = AOTSqliteDb.Open();
             using var cmd = c.CreateCommand();
@@ -58,30 +59,33 @@ namespace Dragon.Controller.Database.Services
             if (excludeId.HasValue)
             {
                 cmd.CommandText = $@"
-                    SELECT COUNT(1) FROM {TABLE} 
-                    WHERE PhoneModel = @m 
-                      AND ProcVersion = @pv 
-                      AND ProcCpuInfo = @pc 
-                      AND API = @api 
-                      AND Id != @exId 
-                    LIMIT 1";
+            SELECT COUNT(1) FROM {TABLE} 
+            WHERE PhoneModel = @m 
+              AND ProcVersion = @pv 
+              AND ProcCpuInfo = @pc 
+              AND API = @api 
+              AND IsAppCaptureConnected = @isCap
+              AND Id != @exId 
+            LIMIT 1";
                 cmd.Parameters.AddWithValue("@exId", excludeId.Value);
             }
             else
             {
                 cmd.CommandText = $@"
-                    SELECT COUNT(1) FROM {TABLE} 
-                    WHERE PhoneModel = @m 
-                      AND ProcVersion = @pv 
-                      AND ProcCpuInfo = @pc 
-                      AND API = @api 
-                    LIMIT 1";
+            SELECT COUNT(1) FROM {TABLE} 
+            WHERE PhoneModel = @m 
+              AND ProcVersion = @pv 
+              AND ProcCpuInfo = @pc 
+              AND API = @api 
+              AND IsAppCaptureConnected = @isCap
+            LIMIT 1";
             }
 
             cmd.Parameters.AddWithValue("@m", phoneModel ?? "");
             cmd.Parameters.AddWithValue("@pv", procVersion ?? "");
             cmd.Parameters.AddWithValue("@pc", procCpuInfo ?? "");
             cmd.Parameters.AddWithValue("@api", api);
+            cmd.Parameters.AddWithValue("@isCap", isAppCaptureConnected ? 1 : 0);
 
             return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
         }
@@ -92,7 +96,7 @@ namespace Dragon.Controller.Database.Services
         public static bool Exists(AoaLoop item)
         {
             if (item == null) return false;
-            return Exists(item.PhoneModel, item.ProcVersion, item.ProcCpuInfo, item.API, item.Id);
+            return Exists(item.PhoneModel, item.ProcVersion, item.ProcCpuInfo, item.API, item.IsAppCaptureConnected, item.Id);
         }
 
         // ==================== ADD ====================
@@ -103,17 +107,17 @@ namespace Dragon.Controller.Database.Services
         {
             if (item == null) return false;
 
-            // Check trùng
-            if (Exists(item.PhoneModel, item.ProcVersion, item.ProcCpuInfo, item.API))
+            // Check trùng với 5 trường unique
+            if (Exists(item.PhoneModel, item.ProcVersion, item.ProcCpuInfo, item.API, item.IsAppCaptureConnected))
                 return false;
 
             using var c = AOTSqliteDb.Open();
             using var cmd = c.CreateCommand();
             cmd.CommandText = $@"
             INSERT INTO {TABLE} 
-            (PhoneModel, ProcVersion, ProcCpuInfo, API, PhysicalWidth, PhysicalHeight, PointCloseApp, Type, ArgsJson, ChildrenJson)
+            (PhoneModel, ProcVersion, ProcCpuInfo, API, PhysicalWidth, PhysicalHeight, PointCloseApp, IsAppCaptureConnected, Type, ArgsJson, ChildrenJson)
             VALUES 
-            (@m, @pv, @pc, @api, @pw, @ph, @pca, @type, @args, @children);
+            (@m, @pv, @pc, @api, @pw, @ph, @pca, @isCapture, @type, @args, @children);
             SELECT last_insert_rowid();";
 
             AddParameters(cmd, item);
@@ -135,8 +139,8 @@ namespace Dragon.Controller.Database.Services
         {
             if (item == null || item.Id <= 0) return false;
 
-            // Check trùng với bản ghi KHÁC (exclude chính nó)
-            if (Exists(item.PhoneModel, item.ProcVersion, item.ProcCpuInfo, item.API, item.Id))
+            // Check trùng với bản ghi KHÁC (5 trường unique, exclude chính nó)
+            if (Exists(item.PhoneModel, item.ProcVersion, item.ProcCpuInfo, item.API, item.IsAppCaptureConnected, item.Id))
                 return false;
 
             using var c = AOTSqliteDb.Open();
@@ -150,6 +154,7 @@ namespace Dragon.Controller.Database.Services
                 PhysicalWidth = @pw,
                 PhysicalHeight = @ph,
                 PointCloseApp = @pca,
+                IsAppCaptureConnected = @isCapture,
                 Type = @type,
                 ArgsJson = @args,
                 ChildrenJson = @children
@@ -169,8 +174,8 @@ namespace Dragon.Controller.Database.Services
         {
             if (item == null) return false;
 
-            // Tìm theo unique key
-            var existing = FindOneByUnique(item.PhoneModel, item.ProcVersion, item.ProcCpuInfo, item.API);
+            // Tìm theo 5 trường unique key
+            var existing = FindOneByUnique(item.PhoneModel, item.ProcVersion, item.ProcCpuInfo, item.API, item.IsAppCaptureConnected);
             if (existing != null)
             {
                 item.Id = existing.Id;
@@ -189,9 +194,9 @@ namespace Dragon.Controller.Database.Services
             return cmd.ExecuteNonQuery() > 0;
         }
 
-        public static bool DeleteByUnique(string phoneModel, string procVersion, string procCpuInfo, int api)
+        public static bool DeleteByUnique(string phoneModel, string procVersion, string procCpuInfo, int api, bool isAppCaptureConnected)
         {
-            var item = FindOneByUnique(phoneModel, procVersion, procCpuInfo, api);
+            var item = FindOneByUnique(phoneModel, procVersion, procCpuInfo, api, isAppCaptureConnected);
             if (item == null) return false;
             return Delete(item.Id);
         }
@@ -207,21 +212,23 @@ namespace Dragon.Controller.Database.Services
             return r.Read() ? Map(r) : null;
         }
 
-        public static AoaLoop? FindOneByUnique(string phoneModel, string procVersion, string procCpuInfo, int api)
+        public static AoaLoop? FindOneByUnique(string phoneModel, string procVersion, string procCpuInfo, int api, bool isAppCaptureConnected)
         {
             using var c = AOTSqliteDb.Open();
             using var cmd = c.CreateCommand();
             cmd.CommandText = $@"
-                SELECT {COLS} FROM {TABLE} 
-                WHERE PhoneModel = @m 
-                  AND ProcVersion = @pv 
-                  AND ProcCpuInfo = @pc 
-                  AND API = @api 
-                LIMIT 1";
+            SELECT {COLS} FROM {TABLE} 
+            WHERE PhoneModel = @m 
+              AND ProcVersion = @pv 
+              AND ProcCpuInfo = @pc 
+              AND API = @api 
+              AND IsAppCaptureConnected = @isCap
+            LIMIT 1";
             cmd.Parameters.AddWithValue("@m", phoneModel ?? "");
             cmd.Parameters.AddWithValue("@pv", procVersion ?? "");
             cmd.Parameters.AddWithValue("@pc", procCpuInfo ?? "");
             cmd.Parameters.AddWithValue("@api", api);
+            cmd.Parameters.AddWithValue("@isCap", isAppCaptureConnected ? 1 : 0);
             using var r = cmd.ExecuteReader();
             return r.Read() ? Map(r) : null;
         }
@@ -233,6 +240,18 @@ namespace Dragon.Controller.Database.Services
             using var cmd = c.CreateCommand();
             cmd.CommandText = $"SELECT {COLS} FROM {TABLE} WHERE PhoneModel = @m ORDER BY Id";
             cmd.Parameters.AddWithValue("@m", phoneModel ?? "");
+            using var r = cmd.ExecuteReader();
+            while (r.Read()) list.Add(Map(r));
+            return list;
+        }
+        public static List<AoaLoop> FindByPhoneModel(string phoneModel, bool isAppCaptureConnected)
+        {
+            var list = new List<AoaLoop>();
+            using var c = AOTSqliteDb.Open();
+            using var cmd = c.CreateCommand();
+            cmd.CommandText = $"SELECT {COLS} FROM {TABLE} WHERE PhoneModel = @m AND IsAppCaptureConnected = @isCap ORDER BY Id";
+            cmd.Parameters.AddWithValue("@m", phoneModel ?? "");
+            cmd.Parameters.AddWithValue("@isCap", isAppCaptureConnected ? 1 : 0);
             using var r = cmd.ExecuteReader();
             while (r.Read()) list.Add(Map(r));
             return list;
@@ -286,12 +305,12 @@ namespace Dragon.Controller.Database.Services
             cmd.Parameters.AddWithValue("@pv", item.ProcVersion ?? "");
             cmd.Parameters.AddWithValue("@pc", item.ProcCpuInfo ?? "");
             cmd.Parameters.AddWithValue("@api", item.API);
-            cmd.Parameters.AddWithValue("@pw", item.PhysicalWidth);   // MỚI
-            cmd.Parameters.AddWithValue("@ph", item.PhysicalHeight);  // MỚI
+            cmd.Parameters.AddWithValue("@pw", item.PhysicalWidth);
+            cmd.Parameters.AddWithValue("@ph", item.PhysicalHeight);
             cmd.Parameters.AddWithValue("@pca", item.PointCloseApp ?? "");
+            cmd.Parameters.AddWithValue("@isCapture", item.IsAppCaptureConnected ? 1 : 0);  // <-- THÊM
             cmd.Parameters.AddWithValue("@type", (int)item.Type);
 
-            // Serialize Payload -> ArgsJson nếu Payload khác null
             if (item.Payload != null)
             {
                 item.ArgsJson = JsonSerializer.Serialize(
@@ -301,7 +320,6 @@ namespace Dragon.Controller.Database.Services
             }
             cmd.Parameters.AddWithValue("@args", item.ArgsJson ?? "{}");
 
-            // Serialize Children -> JSON
             string childrenJson = "[]";
             if (item.Children?.Count > 0)
             {

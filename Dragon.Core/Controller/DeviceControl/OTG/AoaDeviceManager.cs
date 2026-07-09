@@ -21,19 +21,19 @@ namespace Dragon.Controller.DeviceControl.OTG
         {
             if (string.IsNullOrWhiteSpace(deviceId)) return null;
 
-            // 1. Lấy thông tin tươi từ scanner (chính là FindByDeviceID bạn đã có)
+            // 1. Lấy thông tin tươi từ scanner
             var dev = AoaDeviceScanner.FindByDeviceID(deviceId,
                 autoScanMissing: true,
                 refreshExisting: forceRefresh,
                 withRelations: true);
 
             if (dev == null || string.IsNullOrEmpty(dev.InstanceId))
-                return null; // không cắm hoặc không phải Android
+                return null;
 
             // 2. Tạo hoặc lấy session hiện có
             var session = _sessions.GetOrAdd(dev.DeviceId, id => new AoaDeviceSession(dev));
 
-            // 3. Update thông tin mới nhất (tránh mất UsbDevice đang mở)
+            // 3. Update thông tin mới nhất
             session.Device.UpdateFromScan(dev);
 
             // 4. Mở nếu chưa ready
@@ -42,12 +42,29 @@ namespace Dragon.Controller.DeviceControl.OTG
                 var ok = await session.Open();
                 if (!ok)
                 {
-                    // mở lỗi -> dọn để lần sau thử lại sạch
                     _sessions.TryRemove(dev.DeviceId, out _);
                     session.Dispose();
                     return null;
                 }
             }
+
+            // ===== THÊM: Cập nhật size từ nhiều nguồn =====
+            _ = Task.Run(async () =>
+            {
+                // Ưu tiên 1: Thử update từ ADB
+                bool updatedFromADB = await session.TryUpdateSizeFromADB();
+
+                // Ưu tiên 2: Nếu không có ADB, thử từ Phone database
+                if (!updatedFromADB)
+                {
+                    var phone = PhoneRepository.FindOneByDeviceID(deviceId);
+                    if (phone != null && phone.PhysicalWidth > 0 && phone.PhysicalHeight > 0)
+                    {
+                        session.UpdateSizeFromPhone(phone.PhysicalWidth, phone.PhysicalHeight);
+                    }
+                }
+            });
+
             return session;
         }
 
@@ -111,18 +128,19 @@ namespace Dragon.Controller.DeviceControl.OTG
             var phone = PhoneRepository.FindOneByDeviceID(deviceId);
             if (phone == null) return session;
 
-            // Tìm AoaLoop phù hợp
-            var loop = await AoaLoopMatcher.FindBestMatchAsync(phone);
+            // Lấy capture (có thể null)
+            var capture = AppCaptureManager.Instance.GetByDeviceId(deviceId);
+            bool hasCapture = capture != null;
+
+            // Tìm loop phù hợp với trạng thái capture
+            var loop = await AoaLoopMatcher.FindBestMatchAsync(phone, hasCapture);
             if (loop == null) return session;
 
-            // Chạy AoaLoop (có thể await hoặc fire-and-forget)
             _ = Task.Run(async () =>
             {
                 try
                 {
-                    var capture = AppCaptureManager.Instance.GetByDeviceId(deviceId);
                     using var cts = new CancellationTokenSource(TimeSpan.FromMinutes(5));
-
                     await AoaLoopRunner.RunAsync(loop, session.ctrl, capture, cts.Token);
                 }
                 catch (Exception ex)

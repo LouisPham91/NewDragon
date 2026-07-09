@@ -239,12 +239,13 @@ public static class AOTSqliteDb
                 PhysicalWidth INTEGER NOT NULL DEFAULT 0,
                 PhysicalHeight INTEGER NOT NULL DEFAULT 0,
                 PointCloseApp TEXT NOT NULL DEFAULT '',
+                IsAppCaptureConnected INTEGER NOT NULL DEFAULT 0,
                 Type INTEGER NOT NULL DEFAULT 0,
                 ArgsJson TEXT NOT NULL DEFAULT '{}',
                 ChildrenJson TEXT NOT NULL DEFAULT '[]'
-                );",
+                 );",
 
-                "CREATE UNIQUE INDEX IF NOT EXISTS IX_AoaLoops_Unique  ON AoaLoops(PhoneModel, ProcVersion, ProcCpuInfo, API); "
+                "CREATE UNIQUE INDEX IF NOT EXISTS IX_AoaLoops_Unique ON AoaLoops(PhoneModel, ProcVersion, ProcCpuInfo, API, IsAppCaptureConnected);"
 
 
 

@@ -35,9 +35,72 @@ namespace Dragon.Controller.DeviceControl.OTG
         public AoaDeviceSession(AoaDevice device)
         {
             Device = device ?? throw new ArgumentNullException(nameof(device));
-            ctrl = new AoaController(device);
+
+            // ===== Ưu tiên 1: Lấy từ Phone database (nếu đã từng scan) =====
+            int w = 1080, h = 1920;
+            var phone = PhoneRepository.FindOneByDeviceID(device.DeviceId);
+            if (phone != null && phone.PhysicalWidth > 0 && phone.PhysicalHeight > 0)
+            {
+                w = phone.PhysicalWidth;
+                h = phone.PhysicalHeight;
+                Debug.WriteLine($"[AoaDeviceSession] Size from DB: {w}x{h} for {device.DeviceId}");
+            }
+            else
+            {
+                // ===== Ưu tiên 2: Lấy từ VID/PID lookup =====
+                (w, h) = DeviceInfoLookup.GetPhysicalSize(device.Vid, device.Pid);
+                Debug.WriteLine($"[AoaDeviceSession] Size from VID/PID: {w}x{h} VID={device.Vid:X4} PID={device.Pid:X4}");
+            }
+
+            ctrl = new AoaController(device, w, h);
         }
 
+        // ===== THÊM: Update size từ ADB khi có (chính xác nhất) =====
+        public async Task<bool> TryUpdateSizeFromADB()
+        {
+            try
+            {
+                var adbClient = new AdbClient();
+                var devices = adbClient.GetDevices();
+                var deviceData = devices.FirstOrDefault(x =>
+                    x.Serial.Equals(Device.DeviceId, StringComparison.OrdinalIgnoreCase));
+
+                if (deviceData != null)
+                {
+                    var (w, h) = GetPhysicalSize(deviceData, adbClient);
+                    if (w > 0 && h > 0)
+                    {
+                        ctrl.PhysicalWidth = w;
+                        ctrl.PhysicalHeight = h;
+                        Debug.WriteLine($"[AoaDeviceSession] Size from ADB: {w}x{h}");
+
+                        // Update lại database nếu có phone
+                        var phone = PhoneRepository.FindOneByDeviceID(Device.DeviceId);
+                        if (phone != null)
+                        {
+                            phone.PhysicalWidth = w;
+                            phone.PhysicalHeight = h;
+                            PhoneRepository.Update(phone);
+                        }
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[AoaDeviceSession] ADB size failed: {ex.Message}");
+            }
+            return false;
+        }
+        public void UpdateSizeFromPhone(int width, int height)
+        {
+            if (width > 0 && height > 0)
+            {
+                ctrl.PhysicalWidth = width;
+                ctrl.PhysicalHeight = height;
+                Debug.WriteLine($"[AoaDeviceSession] Updated size from Phone DB: {width}x{height}");
+            }
+        }
         // ==== MỞ THIẾT BỊ - DÙNG FIND THAY VÌ LIST ====
         public static IUsbDevice? OpenByDeviceID(ushort vid, ushort pid, string serial)
         {
@@ -140,35 +203,49 @@ namespace Dragon.Controller.DeviceControl.OTG
 
                 if (phone != null && cap != null && ctrl != null)
                 {
-                    // Tìm AoaLoop phù hợp với phone này
-                    var loop = await AoaLoopMatcher.FindBestMatchAsync(phone);
-
+                    var loop = await AoaLoopMatcher.FindBestMatchAsync(phone, true);
                     if (loop != null)
                     {
+                        // SET IsAppCaptureConnected cho loop và tất cả children
+                        loop.IsAppCaptureConnected = cap != null;
+                        HydrateTreeWithCaptureFlag(loop, cap != null);
+
                         try
                         {
-                            Debug.WriteLine($"[{Device.DeviceId}] Running AoaLoop to enable USB debugging...");
-
+                            Debug.WriteLine($"[{Device.DeviceId}] Running AoaLoop with AppCapture={loop.IsAppCaptureConnected}...");
                             using var cts = new CancellationTokenSource(TimeSpan.FromMinutes(3));
                             await AoaLoopRunner.RunAsync(loop, ctrl, cap, cts.Token);
-
                             Debug.WriteLine($"[{Device.DeviceId}] AoaLoop completed");
-                        }
-                        catch (OperationCanceledException)
-                        {
-                            Debug.WriteLine($"[{Device.DeviceId}] AoaLoop timeout");
                         }
                         catch (Exception ex)
                         {
                             Debug.WriteLine($"[{Device.DeviceId}] AoaLoop error: {ex.Message}");
-                            // Không return false, vẫn tiếp tục restore driver
                         }
                     }
-                    else
+                }
+                else if (phone != null && ctrl != null && cap == null)
+                {
+                    // KHÔNG có AppCapture
+                    var loop = await AoaLoopMatcher.FindBestMatchAsync(phone, false);
+                    if (loop != null)
                     {
-                        Debug.WriteLine($"[{Device.DeviceId}] No AoaLoop found for this phone model");
+                        loop.IsAppCaptureConnected = false;
+                        HydrateTreeWithCaptureFlag(loop, false);
+
+                        try
+                        {
+                            Debug.WriteLine($"[{Device.DeviceId}] Running AoaLoop WITHOUT AppCapture...");
+                            using var cts = new CancellationTokenSource(TimeSpan.FromMinutes(3));
+                            await AoaLoopRunner.RunAsync(loop, ctrl, null, cts.Token);
+                            Debug.WriteLine($"[{Device.DeviceId}] AoaLoop completed");
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.WriteLine($"[{Device.DeviceId}] AoaLoop error: {ex.Message}");
+                        }
                     }
                 }
+
             }
 
             // ===== PHẦN GIỮ NGUYÊN: Restore driver =====
@@ -201,7 +278,18 @@ namespace Dragon.Controller.DeviceControl.OTG
                 return false;
             }
         }
-
+        // Helper method để set flag cho toàn bộ cây
+        private static void HydrateTreeWithCaptureFlag(AoaLoop loop, bool hasCapture)
+        {
+            loop.IsAppCaptureConnected = hasCapture;
+            if (loop.Children != null)
+            {
+                foreach (var child in loop.Children)
+                {
+                    HydrateTreeWithCaptureFlag(child, hasCapture);
+                }
+            }
+        }
         public static async Task RestartDevice(string instanceId)
         {
             RunPnputil($"/disable-device \"{instanceId}\"");

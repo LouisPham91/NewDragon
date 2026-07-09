@@ -36,7 +36,7 @@ namespace Dragon.Controller.DeviceControl.AIHelper
 
         private static void CreateMasterFile(string outputRoot, string sourceRoot, string prefix)
         {
-            const int MAX_WORDS = 12000;
+            const int MAX_WORDS = 10000;
             var files = Directory.GetFiles(sourceRoot, "*.cs", SearchOption.AllDirectories).OrderBy(f => f);
 
             int part = 1, cur = 0;

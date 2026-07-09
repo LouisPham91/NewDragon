@@ -10,19 +10,24 @@ using System.Runtime.InteropServices;
 
 namespace Dragon.DesignView.FormUI
 {
-    public partial class FormAoaLoopEditor : Form
+    public partial class FormOTGLoopEditor : Form
     {
         private Phone? _phone;
         private AoaLoop? _currentLoop;
         private List<AoaLoop> _allLoops = new();
         private AntdUI.TreeItem? _selectedNode;
+        private bool _isCaptureConnected = false; // Mặc định KHÔNG connect
 
-
-
-        public FormAoaLoopEditor(Phone? phone = null)
+        public FormOTGLoopEditor(Phone? phone = null)
         {
             InitializeComponent();
             _phone = phone;
+
+            treeActions.NodeMouseClick += TreeActions_NodeMouseClick;
+            treeActions.MouseDown += TreeActions_MouseDown;
+            treeActions.MouseMove += TreeActions_MouseMove;
+            treeActions.MouseUp += TreeActions_MouseUp;
+            treeActions.Paint += TreeActions_Paint;
 
             // Khởi tạo drag timer
             dragTimer = new System.Windows.Forms.Timer();
@@ -39,6 +44,8 @@ namespace Dragon.DesignView.FormUI
                 }
             };
 
+            InitCaptureConnectedSelect();
+
             PopulateActionTypes();
 
             if (_phone != null)
@@ -51,6 +58,9 @@ namespace Dragon.DesignView.FormUI
 
             EnableFormDrag(panel1);
             EnableFormDrag(panelRoundn1);
+
+
+            StartPosition = FormStartPosition.CenterScreen;
             this.FormClosing += FormAoaLoopEditor_FormClosing;
         }
 
@@ -68,6 +78,46 @@ namespace Dragon.DesignView.FormUI
 
             dragTimer?.Stop();
             dragTimer?.Dispose();
+        }
+        private void InitCaptureConnectedSelect()
+        {
+            selectCaptureConnected.Items.Clear();
+            selectCaptureConnected.Items.Add(new AntdUI.SelectItem("📱 Capture Connected (WiFi + AppCapture)", "true"));
+            selectCaptureConnected.Items.Add(new AntdUI.SelectItem("🔌 No Capture (USB HID Only)", "false"));
+
+            // Mặc định chọn "No Capture"
+            selectCaptureConnected.SelectedIndex = 1; // Index 1 = "false"
+            _isCaptureConnected = false;
+
+            selectCaptureConnected.SelectedValueChanged += SelectCaptureConnected_Changed;
+        }
+
+        private void SelectCaptureConnected_Changed(object? sender, AntdUI.ObjectNEventArgs e)
+        {
+            var value = e.Value?.ToString();
+            _isCaptureConnected = value == "true";
+
+            // Cập nhật label trạng thái
+            labelFile.Text = _isCaptureConnected
+                ? "📱 Mode: Capture Connected (WiFi + AppCapture)"
+                : "🔌 Mode: No Capture (USB HID Only)";
+
+            // ===== THÊM: Cập nhật lại danh sách action types =====
+            PopulateActionTypes();
+
+            // Reset selected node về None
+            _selectedNode = null;
+            labelSelectedNode.Text = "Selected: None";
+            labelAddAction.Text = "Add: Click";
+
+            // Clear panel params
+            panelParams.Controls.Clear();
+
+            // Reload loops cho mode capture tương ứng
+            if (_phone != null)
+            {
+                LoadLoopsForPhone(_isCaptureConnected);
+            }
         }
         #region Theme
 
@@ -88,9 +138,9 @@ namespace Dragon.DesignView.FormUI
             panelWorking.ForeColor = ThemeHelper.ForeNormalFirst;
             panelRoundn1.BackColor = ThemeHelper.BackNormalFirst;
             panel1.BackColor = ThemeHelper.BackNormalFirst;
-
+            panelRight.BackColor = ThemeHelper.BackNormalFirst;
             PictureBoxCloseForm.ApplyTheme();
-
+            panelParams.Back = ThemeHelper.BackNormalFirst;
             treeActions.BackColor = ThemeHelper.BackNormalFirst;
             treeActions.ForeColor = ThemeHelper.ForeNormalFirst;
 
@@ -122,33 +172,38 @@ namespace Dragon.DesignView.FormUI
         private Dictionary<string, int> _actionTypeIndexMap = new();
         private void PopulateActionTypes()
         {
-            var items = new (string Value, string Display)[]
-            {
-                ("CloseAllApps", "🧹 Close All Apps"),
-                ("Click", "👆 Click"),
-                ("Swipe", "👈 Swipe"),
-                ("KeyPress", "⌨️ Key Press"),
-                ("Deeplink", "🔗 Deeplink"),
-                ("SendText", "📝 Send Text"),
-                ("Ocr", "🔍 OCR (Find & Click)"),
-                ("Delay", "⏱️ Delay (ms)")
-            };
-
             selectActionType.Items.Clear();
             _actionTypeIndexMap.Clear();
+
+            // ===== SỬA: Tạo danh sách dựa vào _isCaptureConnected =====
+            var items = new List<(string Value, string Display)>();
+
+            // Actions LUÔN có (cho cả 2 mode)
+            items.Add(("CloseAllApps", "🧹 Close All Apps"));
+            items.Add(("Click", "👆 Click"));
+            items.Add(("Swipe", "👈 Swipe"));
+            items.Add(("KeyPress", "⌨️ Key Press"));
+            items.Add(("SendText", "📝 Send Text"));
+            items.Add(("Delay", "⏱️ Delay (ms)"));
+
+            // Actions CHỈ có khi capture connected
+            if (_isCaptureConnected)
+            {
+                items.Add(("Deeplink", "🔗 Deeplink"));
+                items.Add(("Ocr", "🔍 OCR (Find & Click)"));
+            }
 
             int idx = 0;
             foreach (var (value, display) in items)
             {
-                // Cách đúng: tạo SelectItem với Tag là value string
-                var item = new AntdUI.SelectItem(display, value);  // text=display, tag=value
+                var item = new AntdUI.SelectItem(display, value);
                 selectActionType.Items.Add(item);
                 _actionTypeIndexMap[value] = idx;
                 idx++;
             }
 
             if (selectActionType.Items.Count > 0)
-                selectActionType.SelectedIndex = 1;
+                selectActionType.SelectedIndex = 1; // Chọn Click làm default
         }
 
         private void UpdatePhoneInfo()
@@ -159,8 +214,10 @@ namespace Dragon.DesignView.FormUI
                 return;
             }
 
+            string captureMode = _isCaptureConnected ? "📱 WiFi+Capture" : "🔌 USB HID";
+
             labelPhoneInfo.Text = $"📱 {_phone.Model}\n" +
-                                  $"API: {_phone.API} | " +
+                                  $"API: {_phone.API} | Mode: {captureMode}\n" +
                                   $"CPU: {(_phone.ProcCpuInfo?.Length > 25 ? _phone.ProcCpuInfo[..25] + "..." : _phone.ProcCpuInfo)}";
         }
 
@@ -181,7 +238,7 @@ namespace Dragon.DesignView.FormUI
             {
                 _phone = phone;
                 UpdatePhoneInfo();
-                LoadLoopsForPhone();
+                LoadLoopsForPhone(_isCaptureConnected); // ===== SỬA =====
             }
         }
 
@@ -201,7 +258,7 @@ namespace Dragon.DesignView.FormUI
 
         private void BtnLoad_Click(object? sender, EventArgs e)
         {
-            LoadLoopsForPhone();
+            LoadLoopsForPhone(_isCaptureConnected);
         }
 
         private void BtnNewTemplate_Click(object? sender, EventArgs e)
@@ -212,11 +269,12 @@ namespace Dragon.DesignView.FormUI
                 return;
             }
 
-            _currentLoop = AoaLoopMatcher.CreateDefaultForPhone(_phone);
+            // ===== SỬA: Truyền isCaptureConnected =====
+            _currentLoop = AoaLoopMatcher.CreateDefaultForPhone(_phone, _isCaptureConnected);
             if (_currentLoop != null)
                 PopulateTreeFromLoop(_currentLoop);
 
-            AntdUI.Message.info(this, "Default template created!");
+            AntdUI.Message.info(this, $"Default template created! (Capture={_isCaptureConnected})");
         }
 
         private void BtnAddNode_Click(object? sender, EventArgs e)
@@ -250,6 +308,7 @@ namespace Dragon.DesignView.FormUI
                     ProcVersion = _phone?.ProcVersion ?? "",
                     ProcCpuInfo = _phone?.ProcCpuInfo ?? "",
                     API = _phone?.API ?? 0,
+                   
                 };
             }
             _currentLoop.Children ??= new List<AoaLoop>();
@@ -318,12 +377,26 @@ namespace Dragon.DesignView.FormUI
             _currentLoop.API = _phone.API;
             _currentLoop.PhysicalHeight = _phone.PhysicalHeight;
             _currentLoop.PhysicalWidth = _phone.PhysicalWidth;
+            _currentLoop.IsAppCaptureConnected = _isCaptureConnected;
+
+            // ===== THÊM: Nếu đang sửa PointCloseApp, update cả 2 loop =====
+            string currentPointClose = _currentLoop.PointCloseApp;
 
             bool saved = AoaLoopRepository.Save(_currentLoop);
 
             if (saved)
             {
-                labelFile.Text = "✅ Saved successfully!";
+                // Update PointCloseApp cho loop còn lại (mode capture ngược lại)
+                var otherLoop = AoaLoopRepository.FindOneByUnique(
+                    _phone.Model, _phone.ProcVersion, _phone.ProcCpuInfo, _phone.API, !_isCaptureConnected);
+
+                if (otherLoop != null)
+                {
+                    otherLoop.PointCloseApp = currentPointClose;
+                    AoaLoopRepository.Update(otherLoop);
+                }
+
+                labelFile.Text = $"✅ Saved successfully! (Capture={_isCaptureConnected})";
                 AntdUI.Message.info(this, "Saved successfully!");
             }
             else
@@ -357,11 +430,21 @@ namespace Dragon.DesignView.FormUI
                     return;
                 }
 
-                var capture = AppCaptureManager.Instance.GetByDeviceId(_phone.DeviceID);
+                // ===== SỬA: Chỉ lấy capture nếu _isCaptureConnected = true =====
+                AppCapture? capture = null;
+                if (_isCaptureConnected)
+                {
+                    capture = AppCaptureManager.Instance.GetByDeviceId(_phone.DeviceID);
+                    if (capture == null)
+                    {
+                        labelFile.Text = "⚠️ Capture mode ON but no AppCapture found! Running without OCR...";
+                    }
+                }
+
                 using var cts = new CancellationTokenSource(TimeSpan.FromMinutes(5));
 
                 btnTest.Text = "⏳ Running...";
-                labelFile.Text = "▶ Running AOA Loop...";
+                labelFile.Text = $"▶ Running AOA Loop (Capture={_isCaptureConnected})...";
 
                 await Task.Run(async () =>
                 {
@@ -390,32 +473,37 @@ namespace Dragon.DesignView.FormUI
         // Biến trạng thái
         private AntdUI.TreeItem? draggedItem;
         private AntdUI.TreeItem? dropTarget;
-        private AntdUI.TreeItem? treeItemSeleted;
+        private AntdUI.TreeItem? treeItemSelected;
         private AntdUI.TreeItem? originalParent;
         private int originalIndex;
         private bool isDragging = false;
+        private bool _isDragStarted = false; // ===== THÊM: phân biệt click vs drag =====
         private System.Windows.Forms.Timer dragTimer;
         private Point currentMousePos;
+        private Point _mouseDownPos; // ===== THÊM: vị trí chuột lúc nhấn =====
 
-        // Enum xác định vị trí drop
         private enum DropPosition
         {
             None,
-            Child,      // Thả vào giữa → làm con
-            After       // Thả vào mép dưới → đứng sau
+            Child,
+            After
         }
         private DropPosition _dropPosition = DropPosition.None;
 
         // MouseDown: reset trạng thái và khởi động timer
         private void TreeActions_MouseDown(object? sender, MouseEventArgs e)
         {
-            treeItemSeleted = null;
-            treeItemSeleted = FindNodeAt(treeActions, e.Location);
-            if (treeItemSeleted == null) return;
-            // Không cho drag root node
-            if (treeItemSeleted.ParentItem == null) return;
+            if (e.Button != MouseButtons.Left) return;
 
+            treeItemSelected = null;
+            treeItemSelected = FindNodeAt(treeActions, e.Location);
+            if (treeItemSelected == null) return;
+            // Không cho drag root node
+            if (treeItemSelected.ParentItem == null) return;
+
+            _mouseDownPos = e.Location;
             isDragging = false;
+            _isDragStarted = false;
             draggedItem = null;
             dropTarget = null;
             originalParent = null;
@@ -428,67 +516,66 @@ namespace Dragon.DesignView.FormUI
         private void DragTimer_Tick(object? sender, EventArgs e)
         {
             dragTimer.Stop();
-            if (treeItemSeleted != null && !isDragging)
+            if (treeItemSelected != null && !isDragging)
             {
-                draggedItem = treeItemSeleted;
+                draggedItem = treeItemSelected;
                 isDragging = true;
+                _isDragStarted = true; // ===== THÊM =====
 
                 // Lưu vị trí cũ
                 originalParent = draggedItem.ParentItem;
                 originalIndex = draggedItem.Index;
+
+                treeActions.Cursor = Cursors.Hand;
             }
         }
 
         // MouseMove: cập nhật vị trí chuột và highlight node target
         private void TreeActions_MouseMove(object? sender, MouseEventArgs e)
         {
-            if (isDragging && draggedItem != null)
+            if (!isDragging || draggedItem == null) return;
+
+            currentMousePos = e.Location;
+
+            var newTarget = FindNodeAt(treeActions, e.Location);
+
+            // Không cho drop vào chính nó hoặc con của chính nó
+            if (newTarget == draggedItem || IsChildOf(draggedItem, newTarget))
             {
-                currentMousePos = e.Location;
+                newTarget = null;
+            }
 
-                var newTarget = FindNodeAt(treeActions, e.Location);
+            // Clear highlight cũ
+            if (dropTarget != null && dropTarget != newTarget)
+            {
+                dropTarget.Back = null;
+            }
 
-                // Không cho drop vào chính nó
-                if (newTarget == draggedItem)
+            dropTarget = newTarget;
+
+            if (dropTarget != null)
+            {
+                var nodeRect = GetNodeRect(dropTarget);
+                int mouseYInNode = e.Location.Y - nodeRect.Y;
+                int nodeHeight = nodeRect.Height;
+
+                if (mouseYInNode < nodeHeight / 3)
                 {
-                    newTarget = null;
-                }
-
-                // Clear highlight cũ
-                if (dropTarget != null && dropTarget != newTarget)
-                {
-                    dropTarget.Back = null;
-                }
-
-                dropTarget = newTarget;
-
-                if (dropTarget != null)
-                {
-                    // Xác định vị trí drop dựa vào vị trí chuột trong node
-                    var nodeRect = GetNodeRect(dropTarget);
-                    int mouseYInNode = e.Location.Y - nodeRect.Y;
-                    int nodeHeight = nodeRect.Height;
-
-                    if (mouseYInNode < nodeHeight / 3)
-                    {
-                        // Top 1/3 → Drop làm con
-                        _dropPosition = DropPosition.Child;
-                        dropTarget.Back = Color.FromArgb(100, 180, 255); // Xanh nhạt - làm con
-                    }
-                    else
-                    {
-                        // Bottom 2/3 → Drop đứng sau
-                        _dropPosition = DropPosition.After;
-                        dropTarget.Back = Color.FromArgb(255, 200, 100); // Cam nhạt - đứng sau
-                    }
+                    _dropPosition = DropPosition.Child;
+                    dropTarget.Back = Color.FromArgb(100, 180, 255);
                 }
                 else
                 {
-                    _dropPosition = DropPosition.None;
+                    _dropPosition = DropPosition.After;
+                    dropTarget.Back = Color.FromArgb(255, 200, 100);
                 }
-
-                treeActions.Invalidate();
             }
+            else
+            {
+                _dropPosition = DropPosition.None;
+            }
+
+            treeActions.Invalidate();
         }
 
         // Paint: vẽ ghost node + indicator line
@@ -515,7 +602,6 @@ namespace Dragon.DesignView.FormUI
                         pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
                         e.Graphics.DrawLine(pen, nodeRect.X + 20, lineY, nodeRect.Right - 10, lineY);
                     }
-                    // Vẽ mũi tên nhỏ
                     e.Graphics.FillPolygon(Brushes.OrangeRed, new Point[]
                     {
                 new Point(nodeRect.X + 20, lineY - 5),
@@ -538,10 +624,11 @@ namespace Dragon.DesignView.FormUI
             }
         }
 
-        // MouseUp: hoàn tất drag & drop
+        // MouseUp: hoàn tất drag & drop hoặc select node
         private void TreeActions_MouseUp(object? sender, MouseEventArgs e)
         {
             dragTimer.Stop();
+            treeActions.Cursor = Cursors.Default;
 
             if (isDragging && draggedItem != null && dropTarget != null)
             {
@@ -557,7 +644,6 @@ namespace Dragon.DesignView.FormUI
 
                 if (_dropPosition == DropPosition.Child)
                 {
-                    // === CHẾ ĐỘ 1: LÀM CON ===
                     var targetLoop = dropTarget.Tag as AoaLoop;
                     if (targetLoop != null)
                     {
@@ -568,7 +654,6 @@ namespace Dragon.DesignView.FormUI
                 }
                 else if (_dropPosition == DropPosition.After)
                 {
-                    // === CHẾ ĐỘ 2: ĐỨNG SAU (cùng cấp) ===
                     var targetParentItem = dropTarget.ParentItem;
                     var targetLoop = dropTarget.Tag as AoaLoop;
                     var targetParentLoop = targetParentItem?.Tag as AoaLoop;
@@ -578,7 +663,6 @@ namespace Dragon.DesignView.FormUI
                         int targetIndex = targetParentLoop.Children.IndexOf(targetLoop);
                         if (targetIndex >= 0)
                         {
-                            // Chèn vào sau targetIndex
                             targetParentLoop.Children.Insert(targetIndex + 1, draggedLoop);
                         }
                         else
@@ -589,7 +673,6 @@ namespace Dragon.DesignView.FormUI
                     }
                     else if (targetParentItem == null)
                     {
-                        // Drop target là root → thêm vào children của root
                         var rootLoop = dropTarget.Tag as AoaLoop;
                         if (rootLoop?.Children != null && targetLoop != null)
                         {
@@ -627,7 +710,19 @@ namespace Dragon.DesignView.FormUI
             treeActions.Invalidate();
         }
 
-        // Lấy vị trí của node trong tree control
+        // ===== THÊM: Kiểm tra node có phải con của node khác không =====
+        private bool IsChildOf(AntdUI.TreeItem? parent, AntdUI.TreeItem? child)
+        {
+            if (parent == null || child == null) return false;
+            var current = child.ParentItem;
+            while (current != null)
+            {
+                if (current == parent) return true;
+                current = current.ParentItem;
+            }
+            return false;
+        }
+
         private Rectangle GetNodeRect(AntdUI.TreeItem node)
         {
             int sx = treeActions.ScrollBar.ValueX;
@@ -635,7 +730,6 @@ namespace Dragon.DesignView.FormUI
             return node.Rect("", sx, sy);
         }
 
-        // Hàm phụ: tìm node tại vị trí chuột
         private AntdUI.TreeItem? FindNodeAt(AntdUI.Tree tree, Point location)
         {
             int sx = tree.ScrollBar.ValueX;
@@ -655,7 +749,6 @@ namespace Dragon.DesignView.FormUI
             return null;
         }
 
-        // Lấy tất cả sub items đệ quy
         private IEnumerable<AntdUI.TreeItem> GetAllSubItems(AntdUI.TreeItem parent)
         {
             if (parent.Sub == null || parent.Sub.Count == 0)
@@ -674,9 +767,11 @@ namespace Dragon.DesignView.FormUI
 
         #region Tree Events
 
+        // ===== SỬA: Chỉ select khi KHÔNG drag =====
         private void TreeActions_NodeMouseClick(object? sender, AntdUI.TreeSelectEventArgs e)
         {
-            if (isDragging) return;
+            // Nếu đang drag hoặc vừa drag xong thì bỏ qua
+            if (isDragging || _isDragStarted) return;
 
             _selectedNode = e.Item;
             var loop = e.Item?.Tag as AoaLoop;
@@ -684,7 +779,6 @@ namespace Dragon.DesignView.FormUI
             {
                 labelSelectedNode.Text = $"Selected: {loop.Type}";
 
-                // Chuẩn hóa: luôn dùng tên enum chính xác
                 var typeStr = loop.Type.ToString();
 
                 if (_actionTypeIndexMap.TryGetValue(typeStr, out int idx))
@@ -741,30 +835,41 @@ namespace Dragon.DesignView.FormUI
 
         #region Data Methods
 
-        private void LoadLoopsForPhone()
+        // ===== SỬA: Thêm tham số isCaptureConnected =====
+        private void LoadLoopsForPhone(bool? isCaptureConnected = null)
         {
             if (_phone == null) return;
 
-            _allLoops = AoaLoopRepository.FindByPhoneModel(_phone.Model);
+            bool filterCapture = isCaptureConnected ?? _isCaptureConnected;
+
+            // Lọc theo IsAppCaptureConnected
+            _allLoops = AoaLoopRepository.FindByPhoneModel(_phone.Model, filterCapture);
+
             treeActions.Items.Clear();
 
             if (_allLoops.Count > 0)
             {
+                // Tìm exact match với 5 trường unique
                 _currentLoop = _allLoops.FirstOrDefault(
-                    l => l.API == _phone.API && l.ProcCpuInfo == _phone.ProcCpuInfo)
+                    l => l.PhoneModel == _phone.Model
+                      && l.ProcVersion == _phone.ProcVersion
+                      && l.ProcCpuInfo == _phone.ProcCpuInfo
+                      && l.API == _phone.API
+                      && l.IsAppCaptureConnected == filterCapture)
                     ?? _allLoops.First();
 
                 _currentLoop.HydrateTree();
                 PopulateTreeFromLoop(_currentLoop);
-                labelFile.Text = $"Loaded {_allLoops.Count} loop(s) for {_phone.Model}";
+                labelFile.Text = $"Loaded {_allLoops.Count} loop(s) for {_phone.Model} (Capture={filterCapture})";
             }
             else
             {
-                _currentLoop = AoaLoopMatcher.CreateDefaultForPhone(_phone);
+                // ===== SỬA: Truyền isCaptureConnected =====
+                _currentLoop = AoaLoopMatcher.CreateDefaultForPhone(_phone, filterCapture);
                 if (_currentLoop != null)
                 {
                     PopulateTreeFromLoop(_currentLoop);
-                    labelFile.Text = $"Created default template for {_phone.Model}";
+                    labelFile.Text = $"Created default template for {_phone.Model} (Capture={filterCapture})";
                 }
                 else
                 {
@@ -787,7 +892,10 @@ namespace Dragon.DesignView.FormUI
         {
             treeActions.Items.Clear();
 
-            var rootNode = new AntdUI.TreeItem($"📱 {loop.PhoneModel} (API {loop.API})")
+            string captureIcon = loop.IsAppCaptureConnected ? "📱" : "🔌";
+            string captureText = loop.IsAppCaptureConnected ? "WiFi+Capture" : "USB HID";
+
+            var rootNode = new AntdUI.TreeItem($"{captureIcon} {loop.PhoneModel} (API {loop.API}) [{captureText}]")
             {
                 Tag = loop
             };
@@ -811,16 +919,21 @@ namespace Dragon.DesignView.FormUI
                 AoaType.CloseAllApps => "🧹",
                 AoaType.Click => "👆",
                 AoaType.Swipe => "👈",
-                AoaType.KeyPress => "⌨️",
+                AoaType.KeyPress => "⌨",
                 AoaType.Deeplink => "🔗",
                 AoaType.SendText => "📝",
                 AoaType.Ocr => "🔍",
-                AoaType.Delay => "⏱️",
+                AoaType.Delay => "⏱",
                 _ => "📌"
             };
 
             string summary = GetLoopSummary(loop);
-            var node = new AntdUI.TreeItem($"{index}. {icon} [{loop.Type}] {summary}")
+            var text = $"{index}. {icon} [{loop.Type}] {summary}";
+
+            // ===== THÊM: Strip variation selectors =====
+            text = text.Replace("\uFE0F", "").Replace("\u200D", "");
+
+            var node = new AntdUI.TreeItem(text)
             {
                 Tag = loop
             };
@@ -866,8 +979,12 @@ namespace Dragon.DesignView.FormUI
         private AntdUI.Input? _inputSendText, _inputSendDelay;
         private AntdUI.Input? _inputOcrKeywords, _inputOcrTimeout, _inputOcrInterval, _inputOcrMaxSwipes, _inputOcrOffsetX, _inputOcrOffsetY;
         private AntdUI.Input? _inputClosePoint;
-        private System.Windows.Forms.RichTextBox? _rtbOcrKeywords;
+        private System.Windows.Forms.TextBox? _rtbOcrKeywords;
         private AntdUI.Select? _selectKeyPress;
+        private AntdUI.Switch? _switchClickIsPercent;
+        private AntdUI.Switch? _switchSwipeIsPercent;
+        // Thêm vào phần khai báo biến:
+        private AntdUI.Input? _inputOcrSwipeX1, _inputOcrSwipeY1, _inputOcrSwipeX2, _inputOcrSwipeY2, _inputOcrSwipeDuration;
 
         private void BuildParamsPanel(string actionType)
         {
@@ -890,23 +1007,45 @@ namespace Dragon.DesignView.FormUI
             switch (actionType)
             {
                 case "CloseAllApps":
-                    AddInput(panelParams, "Close Point (x,y):", "Tọa độ nút 'Close All' trên màn hình (pixel)", ref _inputClosePoint, "945,1437", ref y);
+                    AddInput(panelParams, "Close Point (%,%):", "Tọa độ nút 'Close All' theo % màn hình (vd: 50,90)", ref _inputClosePoint, "50,90", ref y);
                     break;
 
                 case "Click":
-                    AddInput(panelParams, "X (pixel):", "Tọa độ X trên màn hình điện thoại", ref _inputClickX, "540", ref y);
-                    AddInput(panelParams, "Y (pixel):", "Tọa độ Y trên màn hình điện thoại", ref _inputClickY, "960", ref y);
+                    AddInput(panelParams, "X (%):", "Tọa độ X theo % màn hình (0-100)", ref _inputClickX, "50", ref y);
+                    AddInput(panelParams, "Y (%):", "Tọa độ Y theo % màn hình (0-100)", ref _inputClickY, "50", ref y);
                     AddInput(panelParams, "Count:", "Số lần click liên tiếp", ref _inputClickCount, "1", ref y);
                     AddInput(panelParams, "Delay (ms):", "Thời gian nghỉ giữa các lần click", ref _inputClickDelay, "300", ref y);
+
+                    // ===== THÊM: Toggle IsPercent =====
+                    AddLabel(panelParams, "Use Percent (%):", ref y);
+                    _switchClickIsPercent = new AntdUI.Switch
+                    {
+                        Location = new Point(5, y),
+                        Size = new Size(50, 24),
+                        Checked = true
+                    };
+                    panelParams.Controls.Add(_switchClickIsPercent);
+                    y += 30;
                     break;
 
                 case "Swipe":
-                    AddInput(panelParams, "Start X:", "Tọa độ X bắt đầu (pixel)", ref _inputSwipeX1, "540", ref y);
-                    AddInput(panelParams, "Start Y:", "Tọa độ Y bắt đầu (pixel)", ref _inputSwipeY1, "1500", ref y);
-                    AddInput(panelParams, "End X:", "Tọa độ X kết thúc (pixel)", ref _inputSwipeX2, "540", ref y);
-                    AddInput(panelParams, "End Y:", "Tọa độ Y kết thúc (pixel)", ref _inputSwipeY2, "400", ref y);
+                    AddInput(panelParams, "Start X (%):", "Tọa độ X bắt đầu theo %", ref _inputSwipeX1, "50", ref y);
+                    AddInput(panelParams, "Start Y (%):", "Tọa độ Y bắt đầu theo %", ref _inputSwipeY1, "80", ref y);
+                    AddInput(panelParams, "End X (%):", "Tọa độ X kết thúc theo %", ref _inputSwipeX2, "50", ref y);
+                    AddInput(panelParams, "End Y (%):", "Tọa độ Y kết thúc theo %", ref _inputSwipeY2, "40", ref y);
                     AddInput(panelParams, "Duration (ms):", "Thời gian vuốt (ms)", ref _inputSwipeDuration, "300", ref y);
                     AddInput(panelParams, "Count:", "Số lần vuốt", ref _inputSwipeCount, "1", ref y);
+
+                    // ===== THÊM: Toggle IsPercent =====
+                    AddLabel(panelParams, "Use Percent (%):", ref y);
+                    _switchSwipeIsPercent = new AntdUI.Switch
+                    {
+                        Location = new Point(5, y),
+                        Size = new Size(50, 24),
+                        Checked = true
+                    };
+                    panelParams.Controls.Add(_switchSwipeIsPercent);
+                    y += 30;
                     break;
 
                 case "KeyPress":
@@ -943,36 +1082,40 @@ namespace Dragon.DesignView.FormUI
                     break;
 
                 case "Ocr":
-                    // Keywords - Dùng RichTextBox
-                    System.Diagnostics.Debug.WriteLine("BuildParamsPanel: OCR case entered");
                     AddLabel(panelParams, "Keywords (mỗi dòng 1 từ khóa):", ref y);
-                    _rtbOcrKeywords = new System.Windows.Forms.RichTextBox
+                    _rtbOcrKeywords = new System.Windows.Forms.TextBox
                     {
                         Location = new Point(5, y),
-                        Size = new Size(230, 80),
+                        Size = new Size(230, 60),
                         Text = "Settings\nAbout\nGiới thiệu\nCài đặt",
                         Font = new Font("Segoe UI", 9f),
                         BorderStyle = BorderStyle.FixedSingle,
-                        BackColor = Color.FromArgb(30, 30, 30),
-                        ForeColor = Color.White
+                        BackColor = ThemeHelper.BackNormalFirst,
+                        ForeColor = ThemeHelper.ForeNormalFirst,
+                        Multiline = true,
                     };
-                    System.Diagnostics.Debug.WriteLine($"_rtbOcrKeywords created: {_rtbOcrKeywords != null}");
                     panelParams.Controls.Add(_rtbOcrKeywords);
-                    y += 88;
+                    y += 68;
 
-                    AddInput(panelParams, "Timeout (ms):", "Thời gian tối đa tìm kiếm (ms)", ref _inputOcrTimeout, "5000", ref y);
-                    AddInput(panelParams, "Interval (ms):", "Thời gian giữa các lần thử lại (ms)", ref _inputOcrInterval, "500", ref y);
-                    AddInput(panelParams, "Max Swipes:", "Số lần vuốt tối đa nếu chưa tìm thấy", ref _inputOcrMaxSwipes, "3", ref y);
+                    AddInput(panelParams, "Timeout (ms):", "Thời gian tối đa tìm kiếm", ref _inputOcrTimeout, "5000", ref y);
+                    AddInput(panelParams, "Interval (ms):", "Thời gian giữa các lần thử", ref _inputOcrInterval, "500", ref y);
+                    AddInput(panelParams, "Max Swipes:", "Số lần vuốt tối đa", ref _inputOcrMaxSwipes, "5", ref y);
 
-                    // Offset X, Y - Hiển thị kèm thông tin physical size
-                    string physicalInfo = _phone != null
-                        ? $" (Physical: {_phone.PhysicalWidth}x{_phone.PhysicalHeight})"
-                        : "";
-                    AddInput(panelParams, $"Offset X{physicalInfo}:", "Click lệch X (pixel physical) so với vị trí tìm thấy", ref _inputOcrOffsetX, "0", ref y);
-                    AddInput(panelParams, $"Offset Y{physicalInfo}:", "Click lệch Y (pixel physical) so với vị trí tìm thấy", ref _inputOcrOffsetY, "0", ref y);
+                    // ===== THÊM: Tọa độ swipe =====
+                    AddLabel(panelParams, "Swipe Config:", ref y);
+                    AddInput(panelParams, "  Start X (%):", "Tọa độ X bắt đầu vuốt", ref _inputOcrSwipeX1, "50", ref y);
+                    AddInput(panelParams, "  Start Y (%):", "Tọa độ Y bắt đầu vuốt (thường ở dưới)", ref _inputOcrSwipeY1, "80", ref y);
+                    AddInput(panelParams, "  End X (%):", "Tọa độ X kết thúc vuốt", ref _inputOcrSwipeX2, "50", ref y);
+                    AddInput(panelParams, "  End Y (%):", "Tọa độ Y kết thúc vuốt (thường ở trên)", ref _inputOcrSwipeY2, "40", ref y);
+                    AddInput(panelParams, "  Swipe Duration (ms):", "Thời gian vuốt", ref _inputOcrSwipeDuration, "300", ref y);
+
+                    // Offset X, Y
+                    string physicalInfo = _phone != null ? $" (Physical: {_phone.PhysicalWidth}x{_phone.PhysicalHeight})" : "";
+                    AddInput(panelParams, $"Offset X{physicalInfo}:", "Click lệch X (pixel)", ref _inputOcrOffsetX, "0", ref y);
+                    AddInput(panelParams, $"Offset Y{physicalInfo}:", "Click lệch Y (pixel)", ref _inputOcrOffsetY, "0", ref y);
                     break;
 
-        
+
                 case "Delay":
                     AddInput(panelParams, "Delay (ms):", "Thời gian chờ (ms)", ref _inputDelayMs, "1000", ref y);
                     break;
@@ -980,14 +1123,14 @@ namespace Dragon.DesignView.FormUI
         }
 
         // Helper mới: Chỉ thêm Label không có Input
-        private void AddLabel(System.Windows.Forms.Panel parent, string labelText, ref int y)
+        private void AddLabel(Control parent, string labelText, ref int y)
         {
             var lbl = new System.Windows.Forms.Label
             {
                 Location = new Point(5, y),
                 Size = new Size(230, 18),
                 Text = labelText,
-                ForeColor = Color.White,
+                ForeColor = ThemeHelper.ForeNormalFirst,
                 Font = new Font("Segoe UI", 8.5f, FontStyle.Regular),
                 BackColor = Color.Transparent
             };
@@ -996,14 +1139,14 @@ namespace Dragon.DesignView.FormUI
         }
 
 
-        private void AddInput(System.Windows.Forms.Panel parent, string labelText, string hint, ref AntdUI.Input? input, string defaultValue, ref int y)
+        private void AddInput(Control parent, string labelText, string hint, ref AntdUI.Input? input, string defaultValue, ref int y)
         {
             var lbl = new System.Windows.Forms.Label
             {
                 Location = new Point(5, y),
                 Size = new Size(230, 18),
                 Text = labelText,
-                ForeColor = Color.White,
+                ForeColor = ThemeHelper.ForeNormalFirst,
                 Font = new Font("Segoe UI", 8.5f, FontStyle.Regular),
                 BackColor = Color.Transparent
             };
@@ -1025,17 +1168,22 @@ namespace Dragon.DesignView.FormUI
         {
             return typeStr switch
             {
-                "CloseAllApps" => new AoaLoop { Type = AoaType.CloseAllApps, Payload = null },
+                "CloseAllApps" => new AoaLoop
+                {
+                    Type = AoaType.CloseAllApps,
+                    PointCloseApp = _inputClosePoint?.Text ?? "50,90"  // Lưu thẳng string percent
+                },
 
                 "Click" => new AoaLoop
                 {
                     Type = AoaType.Click,
                     Payload = new AoaClick
                     {
-                        X = int.TryParse(_inputClickX?.Text, out var cx) ? cx : 540,
-                        Y = int.TryParse(_inputClickY?.Text, out var cy) ? cy : 960,
+                        X = float.TryParse(_inputClickX?.Text, out var cx) ? cx : 50,
+                        Y = float.TryParse(_inputClickY?.Text, out var cy) ? cy : 50,
                         NumClicks = int.TryParse(_inputClickCount?.Text, out var cc) ? cc : 1,
-                        DelayBetweenMs = int.TryParse(_inputClickDelay?.Text, out var cd) ? cd : 300
+                        DelayBetweenMs = int.TryParse(_inputClickDelay?.Text, out var cd) ? cd : 300,
+                        IsPerCent = _switchClickIsPercent?.Checked ?? true  // ===== SỬA =====
                     }
                 },
 
@@ -1044,12 +1192,13 @@ namespace Dragon.DesignView.FormUI
                     Type = AoaType.Swipe,
                     Payload = new AoaSwipe
                     {
-                        X1 = int.TryParse(_inputSwipeX1?.Text, out var s1) ? s1 : 540,
-                        Y1 = int.TryParse(_inputSwipeY1?.Text, out var s2) ? s2 : 1500,
-                        X2 = int.TryParse(_inputSwipeX2?.Text, out var s3) ? s3 : 540,
-                        Y2 = int.TryParse(_inputSwipeY2?.Text, out var s4) ? s4 : 400,
+                        X1 = float.TryParse(_inputSwipeX1?.Text, out var s1) ? s1 : 50,
+                        Y1 = float.TryParse(_inputSwipeY1?.Text, out var s2) ? s2 : 80,
+                        X2 = float.TryParse(_inputSwipeX2?.Text, out var s3) ? s3 : 50,
+                        Y2 = float.TryParse(_inputSwipeY2?.Text, out var s4) ? s4 : 40,
                         DurationMs = int.TryParse(_inputSwipeDuration?.Text, out var s5) ? s5 : 300,
-                        NumSwipe = int.TryParse(_inputSwipeCount?.Text, out var s6) ? s6 : 1
+                        NumSwipe = int.TryParse(_inputSwipeCount?.Text, out var s6) ? s6 : 1,
+                        IsPerCent = _switchSwipeIsPercent?.Checked ?? true  // ===== SỬA =====
                     }
                 },
 
@@ -1089,14 +1238,19 @@ namespace Dragon.DesignView.FormUI
                     Type = AoaType.Ocr,
                     Payload = new AoaOcr
                     {
-                        // Đọc từ RichTextBox - mỗi dòng 1 keyword
                         Keywords = _rtbOcrKeywords?.Lines
-                            .Where(line => !string.IsNullOrWhiteSpace(line))
-                            .Select(line => line.Trim())
-                            .ToArray() ?? new[] { "Settings" },
+                        .Where(line => !string.IsNullOrWhiteSpace(line))
+                        .Select(line => line.Trim())
+                        .ToArray() ?? new[] { "Settings" },
                         TimeoutMs = int.TryParse(_inputOcrTimeout?.Text, out var o1) ? o1 : 5000,
                         IntervalMs = int.TryParse(_inputOcrInterval?.Text, out var o2) ? o2 : 500,
-                        MaxSwipes = int.TryParse(_inputOcrMaxSwipes?.Text, out var o3) ? o3 : 3,
+                        MaxSwipes = int.TryParse(_inputOcrMaxSwipes?.Text, out var o3) ? o3 : 5,
+                        SwipeStartX = float.TryParse(_inputOcrSwipeX1?.Text, out var sx1) ? sx1 : 50,
+                        SwipeStartY = float.TryParse(_inputOcrSwipeY1?.Text, out var sy1) ? sy1 : 80,
+                        SwipeEndX = float.TryParse(_inputOcrSwipeX2?.Text, out var sx2) ? sx2 : 50,
+                        SwipeEndY = float.TryParse(_inputOcrSwipeY2?.Text, out var sy2) ? sy2 : 40,
+                        SwipeDurationMs = int.TryParse(_inputOcrSwipeDuration?.Text, out var sd) ? sd : 300,
+                        SwipeIsPercent = true,
                         OffsetX = int.TryParse(_inputOcrOffsetX?.Text, out var o4) ? o4 : 0,
                         OffsetY = int.TryParse(_inputOcrOffsetY?.Text, out var o5) ? o5 : 0
                     }
@@ -1115,6 +1269,13 @@ namespace Dragon.DesignView.FormUI
         private void LoadParamsFromLoop(AoaLoop loop)
         {
             loop.HydratePayload();
+
+            if (loop.Type == AoaType.CloseAllApps)
+            {
+                if (_inputClosePoint != null) _inputClosePoint.Text = loop.PointCloseApp;
+                return;
+            }
+
 
             switch (loop.Payload)
             {
@@ -1153,16 +1314,17 @@ namespace Dragon.DesignView.FormUI
                     break;
 
                 case AoaOcr o:
-                    System.Diagnostics.Debug.WriteLine($"LoadParamsFromLoop: AoaOcr, _rtbOcrKeywords is null? {_rtbOcrKeywords == null}");
-                    // Đọc keywords vào RichTextBox - mỗi keyword 1 dòng
                     if (_rtbOcrKeywords != null)
-                    {
                         _rtbOcrKeywords.Text = string.Join(Environment.NewLine, o.Keywords);
-                        System.Diagnostics.Debug.WriteLine($"Set Keywords: {string.Join(", ", o.Keywords)}");
-                    }
                     if (_inputOcrTimeout != null) _inputOcrTimeout.Text = o.TimeoutMs.ToString();
                     if (_inputOcrInterval != null) _inputOcrInterval.Text = o.IntervalMs.ToString();
                     if (_inputOcrMaxSwipes != null) _inputOcrMaxSwipes.Text = o.MaxSwipes.ToString();
+                    // ===== THÊM =====
+                    if (_inputOcrSwipeX1 != null) _inputOcrSwipeX1.Text = o.SwipeStartX.ToString();
+                    if (_inputOcrSwipeY1 != null) _inputOcrSwipeY1.Text = o.SwipeStartY.ToString();
+                    if (_inputOcrSwipeX2 != null) _inputOcrSwipeX2.Text = o.SwipeEndX.ToString();
+                    if (_inputOcrSwipeY2 != null) _inputOcrSwipeY2.Text = o.SwipeEndY.ToString();
+                    if (_inputOcrSwipeDuration != null) _inputOcrSwipeDuration.Text = o.SwipeDurationMs.ToString();
                     if (_inputOcrOffsetX != null) _inputOcrOffsetX.Text = o.OffsetX.ToString();
                     if (_inputOcrOffsetY != null) _inputOcrOffsetY.Text = o.OffsetY.ToString();
                     break;
@@ -1181,14 +1343,27 @@ namespace Dragon.DesignView.FormUI
             _currentLoop.ProcVersion = _phone.ProcVersion;
             _currentLoop.ProcCpuInfo = _phone.ProcCpuInfo;
             _currentLoop.API = _phone.API;
-            _currentLoop.PhysicalWidth = _phone.PhysicalWidth;   // THÊM
-            _currentLoop.PhysicalHeight = _phone.PhysicalHeight; // THÊM
+            _currentLoop.PhysicalWidth = _phone.PhysicalWidth;
+            _currentLoop.PhysicalHeight = _phone.PhysicalHeight;
+            _currentLoop.IsAppCaptureConnected = _isCaptureConnected;
+
+            string currentPointClose = _currentLoop.PointCloseApp;
 
             bool saved = AoaLoopRepository.Save(_currentLoop);
 
             if (saved)
             {
-                labelFile.Text = "✅ Saved successfully!";
+                // Update PointCloseApp cho loop còn lại
+                var otherLoop = AoaLoopRepository.FindOneByUnique(
+                    _phone.Model, _phone.ProcVersion, _phone.ProcCpuInfo, _phone.API, !_isCaptureConnected);
+
+                if (otherLoop != null)
+                {
+                    otherLoop.PointCloseApp = currentPointClose;
+                    AoaLoopRepository.Update(otherLoop);
+                }
+
+                labelFile.Text = $"✅ Saved successfully! (Capture={_isCaptureConnected})";
                 AntdUI.Message.info(this, "Saved successfully!");
             }
             else
@@ -1199,6 +1374,53 @@ namespace Dragon.DesignView.FormUI
         }
         #endregion
 
+        #region PointCloseApp
+        // Trong FormOTGLoopEditor, khi save PointCloseApp:
+        private void SavePointCloseAppForAllModes(string pointCloseApp)
+        {
+            if (_phone == null) return;
+
+            // Tìm cả 2 loop (capture=true và capture=false)
+            var loopWithCapture = AoaLoopRepository.FindOneByUnique(
+                _phone.Model, _phone.ProcVersion, _phone.ProcCpuInfo, _phone.API, true);
+            var loopWithoutCapture = AoaLoopRepository.FindOneByUnique(
+                _phone.Model, _phone.ProcVersion, _phone.ProcCpuInfo, _phone.API, false);
+
+            // Update cả 2
+            if (loopWithCapture != null)
+            {
+                loopWithCapture.PointCloseApp = pointCloseApp;
+                AoaLoopRepository.Update(loopWithCapture);
+            }
+
+            if (loopWithoutCapture != null)
+            {
+                loopWithoutCapture.PointCloseApp = pointCloseApp;
+                AoaLoopRepository.Update(loopWithoutCapture);
+            }
+        }
+        // Lấy từ loop capture=true (ưu tiên) hoặc loop capture=false
+        public static string GetPointCloseApp(Phone phone)
+        {
+            // Ưu tiên loop có capture=true trước
+            var loop = AoaLoopRepository.FindOneByUnique(
+                phone.Model, phone.ProcVersion, phone.ProcCpuInfo, phone.API, true);
+
+            if (loop != null && !string.IsNullOrEmpty(loop.PointCloseApp))
+                return loop.PointCloseApp;
+
+            // Fallback: loop capture=false
+            loop = AoaLoopRepository.FindOneByUnique(
+                phone.Model, phone.ProcVersion, phone.ProcCpuInfo, phone.API, false);
+
+            if (loop != null && !string.IsNullOrEmpty(loop.PointCloseApp))
+                return loop.PointCloseApp;
+
+            // Default
+            return "50,90";
+        }
+
+        #endregion
         #region Form Drag
 
         [DllImport("user32.dll")]

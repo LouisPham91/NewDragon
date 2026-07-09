@@ -26,6 +26,9 @@ namespace Dragon.Controller.DeviceControl.OTG
         private const int MAX_DELTA = 127;
         private const int HID_MOUSE_REPORT_SIZE = 4;
 
+        public int PhysicalWidth = 1080;
+        public int PhysicalHeight = 1920;
+
         private static readonly byte[] MouseDesc = new byte[]
         {
             0x05, 0x01, 0x09, 0x02, 0xA1, 0x01, 0x09, 0x01, 0xA1, 0x00,
@@ -49,9 +52,11 @@ namespace Dragon.Controller.DeviceControl.OTG
         public bool IsMouseRegistered { get; private set; }
         public bool IsKeyboardRegistered { get; private set; }
 
-        public AoaController(AoaDevice device)
+        public AoaController(AoaDevice device, int physicalWidth = 1080, int physicalHeight = 1920)
         {
             _device = device ?? throw new ArgumentNullException(nameof(device));
+            PhysicalWidth = physicalWidth;
+            PhysicalHeight = physicalHeight;
         }
 
         public bool Initialize(IUsbDevice usb, bool registerMouse = true, bool registerKeyboard = true)
