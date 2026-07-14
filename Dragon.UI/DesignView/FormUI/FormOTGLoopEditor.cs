@@ -1,6 +1,7 @@
 ﻿using AntdUI;
 using Dragon.Controller.Database.Services;
 using Dragon.Controller.DeviceControl;
+using Dragon.Controller.DeviceControl.Orc;
 using Dragon.Controller.DeviceControl.OTG;
 using Dragon.Controller.DeviceControl.OTG.Loop;
 using Dragon.Controller.DeviceControl.OTG.Model;
@@ -40,6 +41,13 @@ namespace Dragon.DesignView.FormUI
                 if (e.Control && e.KeyCode == Keys.S)
                 {
                     _ = SaveCurrentLoop();
+                    e.Handled = true;
+                }
+
+                // ===== THÊM DÒNG NÀY =====
+                if (e.KeyCode == Keys.Delete)
+                {
+                    DeleteSelectedNode();
                     e.Handled = true;
                 }
             };
@@ -248,6 +256,9 @@ namespace Dragon.DesignView.FormUI
             if (!string.IsNullOrEmpty(type))
             {
                 labelAddAction.Text = $"Add: {type}";
+
+                // ===== THÊM: Nếu đổi type khi đang có node selected, tự động apply =====
+                // Chỉ build panel mới, KHÔNG apply vì user có thể đang xem
                 BuildParamsPanel(type);
             }
         }
@@ -466,6 +477,122 @@ namespace Dragon.DesignView.FormUI
             }
         }
 
+        private Bitmap? _currentScreenshot;
+
+        private async void BtnCaptureScreenshot_Click(object? sender, EventArgs e)
+        {
+            if (_phone == null)
+            {
+                AntdUI.Message.info(this, "No phone selected!");
+                return;
+            }
+
+            try
+            {
+                btnCaptureScreenshot.Text = "⏳...";
+                btnCaptureScreenshot.Enabled = false;
+
+                // Lấy screenshot từ AppCapture nếu có, hoặc ADB
+                if (_isCaptureConnected)
+                {
+                    var capture = AppCaptureManager.Instance.GetByDeviceId(_phone.DeviceID);
+                    if (capture != null)
+                    {
+                        _currentScreenshot = await capture.ScreenshotBitmapAsync();
+                    }
+                }
+
+                if (_currentScreenshot == null)
+                {
+                    var adbClient = new AdvancedSharpAdbClient.AdbClient();
+                    var devices = adbClient.GetDevices();
+                    var deviceData = devices.FirstOrDefault(d =>
+                        d.Serial == _phone.DeviceID || d.Serial == _phone.Ipv4 + ":5555");
+
+                    if (deviceData != null)
+                    {
+                        await Task.Run(() =>
+                        {
+                            var fb = adbClient.GetFrameBuffer(deviceData);
+                            _currentScreenshot = fb.ToImage();
+                        });
+                    }
+                }
+
+                if (_currentScreenshot != null)
+                {
+                    picScreenshot.Image = _currentScreenshot;
+                    labelFile.Text = "📸 Screenshot captured!";
+                }
+            }
+            catch (Exception ex)
+            {
+                AntdUI.Message.info(this, $"Screenshot error: {ex.Message}");
+            }
+            finally
+            {
+                btnCaptureScreenshot.Text = "📷 Capture";
+                btnCaptureScreenshot.Enabled = true;
+            }
+        }
+
+        private void PicScreenshot_MouseClick(object? sender, MouseEventArgs e)
+        {
+            if (_currentScreenshot == null || picScreenshot.Image == null) return;
+
+            // Tính % từ vị trí click
+            var displayRect = GetImageDisplayRect(picScreenshot);
+            if (displayRect == Rectangle.Empty) return;
+
+            float ratioX = (float)picScreenshot.Image.Width / displayRect.Width;
+            float ratioY = (float)picScreenshot.Image.Height / displayRect.Height;
+
+            int imgX = (int)((e.X - displayRect.X) * ratioX);
+            int imgY = (int)((e.Y - displayRect.Y) * ratioY);
+
+            imgX = Math.Max(0, Math.Min(picScreenshot.Image.Width - 1, imgX));
+            imgY = Math.Max(0, Math.Min(picScreenshot.Image.Height - 1, imgY));
+
+            float pctX = (float)imgX / picScreenshot.Image.Width * 100f;
+            float pctY = (float)imgY / picScreenshot.Image.Height * 100f;
+
+            string coordText = $"{pctX:F2},{pctY:F2}";
+            labelCoordinates.Text = $"📋 {coordText} (copied)";
+
+            Clipboard.SetText(coordText);
+
+            // Auto fill vào Click params nếu đang chọn Click
+            if (_inputClickX != null && _inputClickY != null)
+            {
+                _inputClickX.Text = pctX.ToString("F2");
+                _inputClickY.Text = pctY.ToString("F2");
+            }
+
+            // Auto fill vào Close Point nếu đang chọn CloseAllApps
+            if (_inputClosePoint != null)
+            {
+                _inputClosePoint.Text = coordText;
+            }
+        }
+
+        private Rectangle GetImageDisplayRect(PictureBox pic)
+        {
+            if (pic.Image == null) return Rectangle.Empty;
+
+            int imgW = pic.Image.Width;
+            int imgH = pic.Image.Height;
+            int boxW = pic.ClientSize.Width;
+            int boxH = pic.ClientSize.Height;
+
+            float ratio = Math.Min((float)boxW / imgW, (float)boxH / imgH);
+            int scaledW = (int)Math.Round(imgW * ratio);
+            int scaledH = (int)Math.Round(imgH * ratio);
+            int offsetX = (boxW - scaledW) / 2;
+            int offsetY = (boxH - scaledH) / 2;
+
+            return new Rectangle(offsetX, offsetY, scaledW, scaledH);
+        }
+
         #endregion
 
         #region Drag & Drop Tree (2 chế độ: Insert Child / Insert After)
@@ -635,6 +762,7 @@ namespace Dragon.DesignView.FormUI
                 var draggedLoop = draggedItem.Tag as AoaLoop;
                 if (draggedLoop == null) goto Cleanup;
 
+                // ===== 1. CẬP NHẬT DATA MODEL =====
                 // Remove khỏi parent cũ
                 var oldParentLoop = originalParent?.Tag as AoaLoop;
                 if (oldParentLoop?.Children != null)
@@ -649,52 +777,37 @@ namespace Dragon.DesignView.FormUI
                     {
                         targetLoop.Children ??= new List<AoaLoop>();
                         targetLoop.Children.Add(draggedLoop);
-                        labelFile.Text = $"↘️ Moved '{draggedItem.Text}' → child of '{dropTarget.Text}'";
+                        labelFile.Text = $"↘️ Moved → child of '{dropTarget.Text}'";
                     }
                 }
                 else if (_dropPosition == DropPosition.After)
                 {
                     var targetParentItem = dropTarget.ParentItem;
                     var targetLoop = dropTarget.Tag as AoaLoop;
-                    var targetParentLoop = targetParentItem?.Tag as AoaLoop;
+                    var targetParentLoop = targetParentItem?.Tag as AoaLoop ?? _currentLoop;
 
                     if (targetParentLoop?.Children != null && targetLoop != null)
                     {
                         int targetIndex = targetParentLoop.Children.IndexOf(targetLoop);
                         if (targetIndex >= 0)
-                        {
                             targetParentLoop.Children.Insert(targetIndex + 1, draggedLoop);
-                        }
                         else
-                        {
                             targetParentLoop.Children.Add(draggedLoop);
-                        }
-                        labelFile.Text = $"↔️ Moved '{draggedItem.Text}' → after '{dropTarget.Text}'";
                     }
-                    else if (targetParentItem == null)
-                    {
-                        var rootLoop = dropTarget.Tag as AoaLoop;
-                        if (rootLoop?.Children != null && targetLoop != null)
-                        {
-                            int targetIndex = rootLoop.Children.IndexOf(targetLoop);
-                            if (targetIndex >= 0)
-                            {
-                                rootLoop.Children.Insert(targetIndex + 1, draggedLoop);
-                            }
-                            else
-                            {
-                                rootLoop.Children.Add(draggedLoop);
-                            }
-                            labelFile.Text = $"↔️ Moved '{draggedItem.Text}' → after '{dropTarget.Text}'";
-                        }
-                    }
+                    labelFile.Text = $"↔️ Moved → after '{dropTarget.Text}'";
                 }
 
+                // ===== 2. LƯU SCROLL =====
+                int scrollY = treeActions.ScrollBar.ValueY;
+
+                // ===== 3. REBUILD TREE =====
                 RebuildTree();
+
+                // ===== 4. KHÔI PHỤC SCROLL =====
+                treeActions.ScrollBar.ValueY = Math.Min(scrollY, treeActions.ScrollBar.MaxY);
             }
 
         Cleanup:
-            // Clear highlight
             if (dropTarget != null)
             {
                 dropTarget.Back = null;
@@ -709,7 +822,35 @@ namespace Dragon.DesignView.FormUI
             treeActions.Refresh();
             treeActions.Invalidate();
         }
+        private void UpdateNodeTexts(AntdUI.TreeItem parent)
+        {
+            for (int i = 0; i < parent.Sub.Count; i++)
+            {
+                var child = parent.Sub[i];
+                var loop = child.Tag as AoaLoop;
+                if (loop == null) continue;
 
+                string icon = loop.Type switch
+                {
+                    AoaType.CloseAllApps => "🧹",
+                    AoaType.Click => "👆",
+                    AoaType.Swipe => "👈",
+                    AoaType.KeyPress => "⌨",
+                    AoaType.Deeplink => "🔗",
+                    AoaType.SendText => "📝",
+                    AoaType.Ocr => "🔍",
+                    AoaType.Delay => "⏱",
+                    _ => "📌"
+                };
+
+                string summary = GetLoopSummary(loop);
+                child.Text = $"{i + 1}. {icon} [{loop.Type}] {summary}";
+                child.Text = child.Text.Replace("\uFE0F", "").Replace("\u200D", "");
+
+                // Đệ quy cho children
+                UpdateNodeTexts(child);
+            }
+        }
         // ===== THÊM: Kiểm tra node có phải con của node khác không =====
         private bool IsChildOf(AntdUI.TreeItem? parent, AntdUI.TreeItem? child)
         {
@@ -770,8 +911,14 @@ namespace Dragon.DesignView.FormUI
         // ===== SỬA: Chỉ select khi KHÔNG drag =====
         private void TreeActions_NodeMouseClick(object? sender, AntdUI.TreeSelectEventArgs e)
         {
-            // Nếu đang drag hoặc vừa drag xong thì bỏ qua
             if (isDragging || _isDragStarted) return;
+
+            // ===== THIẾU DÒNG NÀY =====
+            // Apply changes cho node cũ trước khi chọn node mới
+            if (_selectedNode != null && _selectedNode != e.Item)
+            {
+                ApplyCurrentParamsToSelectedNode();
+            }
 
             _selectedNode = e.Item;
             var loop = e.Item?.Tag as AoaLoop;
@@ -780,7 +927,6 @@ namespace Dragon.DesignView.FormUI
                 labelSelectedNode.Text = $"Selected: {loop.Type}";
 
                 var typeStr = loop.Type.ToString();
-
                 if (_actionTypeIndexMap.TryGetValue(typeStr, out int idx))
                 {
                     selectActionType.SelectedIndex = idx;
@@ -797,26 +943,53 @@ namespace Dragon.DesignView.FormUI
 
         private void RebuildTree()
         {
-            if (_currentLoop != null)
-            {
-                // Giữ trạng thái expand/collapse
-                var expandedPaths = GetExpandedPaths();
-                PopulateTreeFromLoop(_currentLoop);
-                RestoreExpandedPaths(expandedPaths);
-            }
+            if (_currentLoop == null) return;
+
+            // ===== LƯU TRẠNG THÁI EXPAND =====
+            var expandedPaths = GetExpandedPaths();
+
+            // ===== REBUILD =====
+            PopulateTreeFromLoop(_currentLoop);
+
+            // ===== KHÔI PHỤC EXPAND (không ExpandAll) =====
+            RestoreExpandedPaths(expandedPaths);
         }
 
         private HashSet<string> GetExpandedPaths()
         {
             var paths = new HashSet<string>();
-            // TODO: Lưu trạng thái expand
+            if (treeActions.Items.Count > 0)
+            {
+                CollectExpandedPaths(treeActions.Items[0], "", paths);
+            }
             return paths;
         }
+        private void CollectExpandedPaths(AntdUI.TreeItem? node, string path, HashSet<string> paths)
+        {
+            if (node == null || paths == null) return;
 
+            string nodeText = node.Text ?? "";
+            string currentPath = string.IsNullOrEmpty(path) ? nodeText : $"{path}/{nodeText}";
+
+            if (node.Expand)
+                paths.Add(currentPath);
+
+            if (node.Sub != null)
+            {
+                foreach (AntdUI.TreeItem child in node.Sub)
+                {
+                    CollectExpandedPaths(child, currentPath, paths);
+                }
+            }
+        }
         private void RestoreExpandedPaths(HashSet<string> paths)
         {
-            // TODO: Khôi phục trạng thái expand
-            treeActions.ExpandAll();
+            if (paths.Count == 0)
+            {
+                treeActions.ExpandAll();
+                return;
+            }
+            // Nếu có paths đã lưu thì không làm gì, giữ nguyên
         }
 
         private AoaLoop? FindParentLoop(AntdUI.TreeItem node)
@@ -927,7 +1100,7 @@ namespace Dragon.DesignView.FormUI
                 _ => "📌"
             };
 
-            string summary = GetLoopSummary(loop);
+            string summary = GetLoopSummary(loop);  // <-- Đã gọi hàm mới
             var text = $"{index}. {icon} [{loop.Type}] {summary}";
 
             // ===== THÊM: Strip variation selectors =====
@@ -953,18 +1126,32 @@ namespace Dragon.DesignView.FormUI
         {
             loop.HydratePayload();
 
-            return loop.Payload switch
+            string summary = loop.Payload switch
             {
                 AoaClick c => $"({c.X},{c.Y}) x{c.NumClicks}",
-                AoaSwipe s => $"({s.X1},{s.Y1})→({s.X2},{s.Y2}) {s.DurationMs}ms",
+                AoaSwipe s => $"({s.X1},{s.Y1})→({s.X2},{s.Y2}) {s.DurationMs}ms x{s.NumSwipe}",  // <-- SỬA
                 AoaKeyPress k => $"'{k.Key}' x{k.Repeat}",
                 AoaDeeplink d => d.Url.Length > 25 ? d.Url[..25] + "..." : d.Url,
                 AoaSendText t => t.Text.Length > 20 ? t.Text[..20] + "..." : t.Text,
-                AoaOcr o => $"'{string.Join(",", o.Keywords)}' ({o.TimeoutMs}ms)",
+                AoaOcr o => $"'{string.Join(",", o.Keywords)}' ({o.TimeoutMs}ms) x{o.MaxSwipes} swipes",  // <-- SỬA
                 int delay => $"{delay}ms",
                 string point when loop.Type == AoaType.CloseAllApps => $"Close at: {point}",
                 _ => "(no params)"
             };
+
+            // Thêm Title vào sau summary nếu có
+            string title = loop.Payload switch
+            {
+                AoaClick c => c.Tilte,
+                AoaSwipe s => s.Tilte,
+                AoaOcr o => o.Title,
+                _ => ""
+            };
+
+            if (!string.IsNullOrEmpty(title))
+                return $"{summary} - {title}";
+
+            return summary;
         }
 
         #endregion
@@ -977,9 +1164,12 @@ namespace Dragon.DesignView.FormUI
         private AntdUI.Input? _inputKey, _inputKeyRepeat, _inputKeyDelay;
         private AntdUI.Input? _inputDeeplinkUrl, _inputDeeplinkWait;
         private AntdUI.Input? _inputSendText, _inputSendDelay;
-        private AntdUI.Input? _inputOcrKeywords, _inputOcrTimeout, _inputOcrInterval, _inputOcrMaxSwipes, _inputOcrOffsetX, _inputOcrOffsetY;
+        private AntdUI.Input?  _inputOcrKeywords, _inputOcrTimeout, _inputOcrInterval, _inputOcrMaxSwipes, _inputOcrOffsetX, _inputOcrOffsetY;
         private AntdUI.Input? _inputClosePoint;
         private System.Windows.Forms.TextBox? _rtbOcrKeywords;
+        private AntdUI.Input? _inputClickTitle;
+        private AntdUI.Input? _inputSwipeTitle;
+        private AntdUI.Input? _inputOcrTitle;
         private AntdUI.Select? _selectKeyPress;
         private AntdUI.Switch? _switchClickIsPercent;
         private AntdUI.Switch? _switchSwipeIsPercent;
@@ -1011,6 +1201,7 @@ namespace Dragon.DesignView.FormUI
                     break;
 
                 case "Click":
+                    AddInput(panelParams, "Title:", "Tên mô tả cho action này", ref _inputClickTitle, "Click Action", ref y);
                     AddInput(panelParams, "X (%):", "Tọa độ X theo % màn hình (0-100)", ref _inputClickX, "50", ref y);
                     AddInput(panelParams, "Y (%):", "Tọa độ Y theo % màn hình (0-100)", ref _inputClickY, "50", ref y);
                     AddInput(panelParams, "Count:", "Số lần click liên tiếp", ref _inputClickCount, "1", ref y);
@@ -1029,6 +1220,7 @@ namespace Dragon.DesignView.FormUI
                     break;
 
                 case "Swipe":
+                    AddInput(panelParams, "Title:", "Tên mô tả cho action này", ref _inputSwipeTitle, "Swipe Action", ref y);
                     AddInput(panelParams, "Start X (%):", "Tọa độ X bắt đầu theo %", ref _inputSwipeX1, "50", ref y);
                     AddInput(panelParams, "Start Y (%):", "Tọa độ Y bắt đầu theo %", ref _inputSwipeY1, "80", ref y);
                     AddInput(panelParams, "End X (%):", "Tọa độ X kết thúc theo %", ref _inputSwipeX2, "50", ref y);
@@ -1082,6 +1274,7 @@ namespace Dragon.DesignView.FormUI
                     break;
 
                 case "Ocr":
+                    AddInput(panelParams, "Title:", "Tên mô tả cho action này", ref _inputOcrTitle, "OCR Action", ref y);
                     AddLabel(panelParams, "Keywords (mỗi dòng 1 từ khóa):", ref y);
                     _rtbOcrKeywords = new System.Windows.Forms.TextBox
                     {
@@ -1179,11 +1372,12 @@ namespace Dragon.DesignView.FormUI
                     Type = AoaType.Click,
                     Payload = new AoaClick
                     {
+                        Tilte = _inputClickTitle?.Text ?? "Click",  // <-- THÊM
                         X = float.TryParse(_inputClickX?.Text, out var cx) ? cx : 50,
                         Y = float.TryParse(_inputClickY?.Text, out var cy) ? cy : 50,
                         NumClicks = int.TryParse(_inputClickCount?.Text, out var cc) ? cc : 1,
                         DelayBetweenMs = int.TryParse(_inputClickDelay?.Text, out var cd) ? cd : 300,
-                        IsPerCent = _switchClickIsPercent?.Checked ?? true  // ===== SỬA =====
+                        IsPerCent = _switchClickIsPercent?.Checked ?? true
                     }
                 },
 
@@ -1192,6 +1386,7 @@ namespace Dragon.DesignView.FormUI
                     Type = AoaType.Swipe,
                     Payload = new AoaSwipe
                     {
+                        Tilte = _inputSwipeTitle?.Text ?? "Swipe",  // <-- THÊM
                         X1 = float.TryParse(_inputSwipeX1?.Text, out var s1) ? s1 : 50,
                         Y1 = float.TryParse(_inputSwipeY1?.Text, out var s2) ? s2 : 80,
                         X2 = float.TryParse(_inputSwipeX2?.Text, out var s3) ? s3 : 50,
@@ -1238,6 +1433,7 @@ namespace Dragon.DesignView.FormUI
                     Type = AoaType.Ocr,
                     Payload = new AoaOcr
                     {
+                        Title = _inputOcrTitle?.Text ?? "OCR",  // <-- THÊM
                         Keywords = _rtbOcrKeywords?.Lines
                         .Where(line => !string.IsNullOrWhiteSpace(line))
                         .Select(line => line.Trim())
@@ -1280,6 +1476,7 @@ namespace Dragon.DesignView.FormUI
             switch (loop.Payload)
             {
                 case AoaClick c:
+                    if (_inputClickTitle != null) _inputClickTitle.Text = c.Tilte;  // <-- THÊM
                     if (_inputClickX != null) _inputClickX.Text = c.X.ToString();
                     if (_inputClickY != null) _inputClickY.Text = c.Y.ToString();
                     if (_inputClickCount != null) _inputClickCount.Text = c.NumClicks.ToString();
@@ -1287,6 +1484,7 @@ namespace Dragon.DesignView.FormUI
                     break;
 
                 case AoaSwipe s:
+                    if (_inputSwipeTitle != null) _inputSwipeTitle.Text = s.Tilte;  // <-- THÊM
                     if (_inputSwipeX1 != null) _inputSwipeX1.Text = s.X1.ToString();
                     if (_inputSwipeY1 != null) _inputSwipeY1.Text = s.Y1.ToString();
                     if (_inputSwipeX2 != null) _inputSwipeX2.Text = s.X2.ToString();
@@ -1314,6 +1512,7 @@ namespace Dragon.DesignView.FormUI
                     break;
 
                 case AoaOcr o:
+                    if (_inputOcrTitle != null) _inputOcrTitle.Text = o.Title;  // <-- THÊM
                     if (_rtbOcrKeywords != null)
                         _rtbOcrKeywords.Text = string.Join(Environment.NewLine, o.Keywords);
                     if (_inputOcrTimeout != null) _inputOcrTimeout.Text = o.TimeoutMs.ToString();
@@ -1371,6 +1570,108 @@ namespace Dragon.DesignView.FormUI
                 labelFile.Text = "❌ Save failed!";
                 AntdUI.Message.info(this, "Save failed!");
             }
+        }
+        private void DeleteSelectedNode()
+        {
+            if (_selectedNode == null)
+            {
+                AntdUI.Modal.open(this, "Delete Node", "Please select a node to delete!", TType.Warn);
+                return;
+            }
+
+            var nodeText = _selectedNode.Text;
+
+            var result = AntdUI.Modal.open(
+                this,
+                "Confirm Delete",
+                $"Delete:\n\n'{nodeText}'?\n\nThis action cannot be undone.",
+                TType.Warn);
+
+            if (result == DialogResult.OK)
+            {
+                var loopToDelete = _selectedNode.Tag as AoaLoop;
+                if (loopToDelete == null) return;
+
+                // ===== 1. XÓA KHỎI DATA MODEL =====
+                var parentLoop = FindParentLoop(_selectedNode);
+                if (parentLoop?.Children != null)
+                {
+                    parentLoop.Children.Remove(loopToDelete);
+                }
+
+                // ===== 2. LƯU VỊ TRÍ SCROLL =====
+                int scrollY = treeActions.ScrollBar.ValueY;
+
+                // ===== 3. REBUILD TREE TỪ DATA MODEL =====
+                RebuildTree();
+
+                // ===== 4. KHÔI PHỤC SCROLL =====
+                treeActions.ScrollBar.ValueY = Math.Min(scrollY, treeActions.ScrollBar.MaxY);
+
+                _selectedNode = null;
+                labelSelectedNode.Text = "Selected: None";
+                labelFile.Text = $"🗑️ Deleted: {nodeText}";
+            }
+        }
+        private void ApplyCurrentParamsToSelectedNode()
+        {
+            if (_selectedNode == null) return;
+
+            var loop = _selectedNode.Tag as AoaLoop;
+            if (loop == null) return;
+
+            var typeStr = selectActionType.SelectedValue?.ToString();
+            if (string.IsNullOrEmpty(typeStr)) return;
+
+            var updatedLoop = CreateLoopFromParams(typeStr);
+            if (updatedLoop == null) return;
+
+            // Copy giá trị mới vào loop cũ
+            loop.Type = updatedLoop.Type;
+            loop.Payload = updatedLoop.Payload;
+            loop.PointCloseApp = updatedLoop.PointCloseApp;
+
+            // Cập nhật text trên tree
+            int idx = GetNodeIndex(_selectedNode);
+            string icon = loop.Type switch
+            {
+                AoaType.CloseAllApps => "🧹",
+                AoaType.Click => "👆",
+                AoaType.Swipe => "👈",
+                AoaType.KeyPress => "⌨",
+                AoaType.Deeplink => "🔗",
+                AoaType.SendText => "📝",
+                AoaType.Ocr => "🔍",
+                AoaType.Delay => "⏱",
+                _ => "📌"
+            };
+
+            string summary = GetLoopSummary(loop); // <-- Gọi hàm đã sửa ở trên
+
+            _selectedNode.Text = $"{idx}. {icon} [{loop.Type}] {summary}";
+            _selectedNode.Text = _selectedNode.Text.Replace("\uFE0F", "").Replace("\u200D", "");
+
+            labelFile.Text = $"✅ Updated: {summary}";
+        }
+        private int GetNodeIndex(AntdUI.TreeItem node)
+        {
+            if (node == null) return 0;
+
+            var parent = node.ParentItem;
+
+            // Nếu là root node (không có parent)
+            if (parent == null)
+            {
+                if (treeActions.Items.Contains(node))
+                    return treeActions.Items.IndexOf(node) + 1;
+                return 0;
+            }
+
+            // Tìm trong sub của parent
+            if (parent.Sub != null && parent.Sub.Contains(node))
+                return parent.Sub.IndexOf(node) + 1;
+
+            return 0;
         }
         #endregion
 

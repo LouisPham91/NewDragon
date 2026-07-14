@@ -6,6 +6,7 @@ namespace Dragon.Controller.DeviceControl.OTG.Model
 {
     public class AoaClick
     {
+        public string Tilte { get; set; } = "";
         public int NumClicks { get; set; } = 1;
         public float X {  get; set; }
         public float Y { get; set; }

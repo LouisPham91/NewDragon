@@ -2,6 +2,7 @@
 {
     public class AoaOcr
     {
+        public string Title { get; set; } = "";
         public string[] Keywords { get; set; } = Array.Empty<string>();
         public int TimeoutMs { get; set; } = 1500;
         public int IntervalMs { get; set; } = 500;

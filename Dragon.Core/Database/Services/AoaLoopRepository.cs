@@ -308,9 +308,10 @@ namespace Dragon.Controller.Database.Services
             cmd.Parameters.AddWithValue("@pw", item.PhysicalWidth);
             cmd.Parameters.AddWithValue("@ph", item.PhysicalHeight);
             cmd.Parameters.AddWithValue("@pca", item.PointCloseApp ?? "");
-            cmd.Parameters.AddWithValue("@isCapture", item.IsAppCaptureConnected ? 1 : 0);  // <-- THÊM
+            cmd.Parameters.AddWithValue("@isCapture", item.IsAppCaptureConnected ? 1 : 0);
             cmd.Parameters.AddWithValue("@type", (int)item.Type);
 
+            // ===== SỬA: Serialize Payload → ArgsJson CHO ROOT =====
             if (item.Payload != null)
             {
                 item.ArgsJson = JsonSerializer.Serialize(
@@ -320,6 +321,13 @@ namespace Dragon.Controller.Database.Services
             }
             cmd.Parameters.AddWithValue("@args", item.ArgsJson ?? "{}");
 
+            // ===== SỬA: Serialize Payload → ArgsJson CHO TỪNG CHILD TRƯỚC =====
+            if (item.Children?.Count > 0)
+            {
+                SerializeChildrenPayloads(item.Children);
+            }
+
+            // Sau đó mới serialize Children thành JSON
             string childrenJson = "[]";
             if (item.Children?.Count > 0)
             {
@@ -328,6 +336,28 @@ namespace Dragon.Controller.Database.Services
                     AoaLoopJsonContext.Default.ListAoaLoop);
             }
             cmd.Parameters.AddWithValue("@children", childrenJson);
+        }
+        private static void SerializeChildrenPayloads(List<AoaLoop> children)
+        {
+            if (children == null) return;
+
+            foreach (var child in children)
+            {
+                // Serialize Payload → ArgsJson
+                if (child.Payload != null)
+                {
+                    child.ArgsJson = JsonSerializer.Serialize(
+                        child.Payload,
+                        child.Payload.GetType(),
+                        AoaLoopJsonContext.Default);
+                }
+
+                // Đệ quy cho children của child
+                if (child.Children?.Count > 0)
+                {
+                    SerializeChildrenPayloads(child.Children);
+                }
+            }
         }
     }
 }

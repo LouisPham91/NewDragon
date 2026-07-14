@@ -37,6 +37,11 @@ namespace Dragon.DesignView.FormUI
             btnAddNode = new ButtomFlatRound();
             btnDeleteNode = new ButtomFlatRound();
             labelAddAction = new LabelNormalN();
+            panelScreenshot = new System.Windows.Forms.Panel();
+            labelScreenshot = new LabelNormalN();
+            btnCaptureScreenshot = new ButtomFlatRound();
+            picScreenshot = new PictureBox();
+            labelCoordinates = new LabelNormalN();
             panelRoundn1 = new PanelRoundN();
             btnSave = new ButtomFlatRound();
             btnTest = new ButtomFlatRound();
@@ -54,6 +59,8 @@ namespace Dragon.DesignView.FormUI
             panelWorking.SuspendLayout();
             panelCaptureConnected.SuspendLayout();
             panelLeft.SuspendLayout();
+            panelScreenshot.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)picScreenshot).BeginInit();
             panelRoundn1.SuspendLayout();
             panelRight.SuspendLayout();
             panel1.SuspendLayout();
@@ -132,6 +139,7 @@ namespace Dragon.DesignView.FormUI
             panelLeft.Controls.Add(btnAddNode);
             panelLeft.Controls.Add(btnDeleteNode);
             panelLeft.Controls.Add(labelAddAction);
+            panelLeft.Controls.Add(panelScreenshot);
             panelLeft.Dock = DockStyle.Left;
             panelLeft.Location = new Point(0, 0);
             panelLeft.Name = "panelLeft";
@@ -274,6 +282,72 @@ namespace Dragon.DesignView.FormUI
             labelAddAction.TabIndex = 9;
             labelAddAction.Text = "Add: Click";
             // 
+            // panelScreenshot
+            // 
+            panelScreenshot.BackColor = Color.Transparent;
+            panelScreenshot.Controls.Add(labelScreenshot);
+            panelScreenshot.Controls.Add(btnCaptureScreenshot);
+            panelScreenshot.Controls.Add(picScreenshot);
+            panelScreenshot.Controls.Add(labelCoordinates);
+            panelScreenshot.Location = new Point(5, 275);
+            panelScreenshot.Name = "panelScreenshot";
+            panelScreenshot.Size = new Size(250, 376);
+            panelScreenshot.TabIndex = 10;
+            // 
+            // labelScreenshot
+            // 
+            labelScreenshot.BackColor = Color.Transparent;
+            labelScreenshot.DG_IsBrightBack = true;
+            labelScreenshot.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            labelScreenshot.ForeColor = Color.Cyan;
+            labelScreenshot.Location = new Point(0, 0);
+            labelScreenshot.Name = "labelScreenshot";
+            labelScreenshot.Size = new Size(150, 22);
+            labelScreenshot.TabIndex = 0;
+            labelScreenshot.Text = "📸 Screenshot";
+            // 
+            // btnCaptureScreenshot
+            // 
+            btnCaptureScreenshot.BackColor = Color.White;
+            btnCaptureScreenshot.DG_BackColor = Color.White;
+            btnCaptureScreenshot.DG_ForeColor = Color.Black;
+            btnCaptureScreenshot.DG_Padding = 6;
+            btnCaptureScreenshot.FlatAppearance.BorderSize = 0;
+            btnCaptureScreenshot.FlatStyle = FlatStyle.Flat;
+            btnCaptureScreenshot.Font = new Font("Segoe UI", 8.5F);
+            btnCaptureScreenshot.ForeColor = Color.Black;
+            btnCaptureScreenshot.Location = new Point(155, 0);
+            btnCaptureScreenshot.Name = "btnCaptureScreenshot";
+            btnCaptureScreenshot.Size = new Size(95, 22);
+            btnCaptureScreenshot.TabIndex = 1;
+            btnCaptureScreenshot.Text = "📷 Capture";
+            btnCaptureScreenshot.UseVisualStyleBackColor = false;
+            btnCaptureScreenshot.Click += BtnCaptureScreenshot_Click;
+            // 
+            // picScreenshot
+            // 
+            picScreenshot.BackColor = Color.Black;
+            picScreenshot.BorderStyle = BorderStyle.FixedSingle;
+            picScreenshot.Location = new Point(0, 25);
+            picScreenshot.Name = "picScreenshot";
+            picScreenshot.Size = new Size(250, 310);
+            picScreenshot.SizeMode = PictureBoxSizeMode.Zoom;
+            picScreenshot.TabIndex = 2;
+            picScreenshot.TabStop = false;
+            picScreenshot.MouseClick += PicScreenshot_MouseClick;
+            // 
+            // labelCoordinates
+            // 
+            labelCoordinates.BackColor = Color.Transparent;
+            labelCoordinates.DG_IsBrightBack = true;
+            labelCoordinates.Font = new Font("Segoe UI", 8.5F);
+            labelCoordinates.ForeColor = Color.LightGreen;
+            labelCoordinates.Location = new Point(0, 351);
+            labelCoordinates.Name = "labelCoordinates";
+            labelCoordinates.Size = new Size(250, 25);
+            labelCoordinates.TabIndex = 3;
+            labelCoordinates.Text = "📋 Click image to get % coordinates";
+            // 
             // panelRoundn1
             // 
             panelRoundn1.BackColor = Color.FromArgb(40, 40, 40);
@@ -397,10 +471,10 @@ namespace Dragon.DesignView.FormUI
             // textBoxSearch
             // 
             textBoxSearch.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            textBoxSearch.BackColor = Color.FromArgb(245, 245, 245);
+            textBoxSearch.BackColor = Color.FromArgb(40, 40, 40);
             textBoxSearch.BorderStyle = BorderStyle.FixedSingle;
             textBoxSearch.Font = new Font("Segoe UI", 9F);
-            textBoxSearch.ForeColor = Color.Black;
+            textBoxSearch.ForeColor = Color.White;
             textBoxSearch.Location = new Point(983, 10);
             textBoxSearch.Name = "textBoxSearch";
             textBoxSearch.Size = new Size(224, 23);
@@ -465,6 +539,8 @@ namespace Dragon.DesignView.FormUI
             panelWorking.ResumeLayout(false);
             panelCaptureConnected.ResumeLayout(false);
             panelLeft.ResumeLayout(false);
+            panelScreenshot.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)picScreenshot).EndInit();
             panelRoundn1.ResumeLayout(false);
             panelRight.ResumeLayout(false);
             panel1.ResumeLayout(false);
@@ -506,5 +582,12 @@ namespace Dragon.DesignView.FormUI
         private ButtomFlatRound btnDeleteNode;
         private LabelNormalN labelAddAction;
         private AntdUI.Panel panelParams;
+
+        // Thêm vào cuối file Designer.cs (trong class FormOTGLoopEditor):
+        private System.Windows.Forms.Panel panelScreenshot;
+        private LabelNormalN labelScreenshot;
+        private ButtomFlatRound btnCaptureScreenshot;
+        private System.Windows.Forms.PictureBox picScreenshot;
+        private LabelNormalN labelCoordinates;
     }
 }

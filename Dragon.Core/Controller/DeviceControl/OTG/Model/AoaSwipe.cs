@@ -6,6 +6,7 @@ namespace Dragon.Controller.DeviceControl.OTG.Model
 {
     public class AoaSwipe
     {
+        public string Tilte { get; set; } = "";
         public int NumSwipe { get; set; } = 1;
         public float X1 { get; set; }
         public float Y1 { get; set; }
