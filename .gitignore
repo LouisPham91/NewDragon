@@ -17,7 +17,6 @@ x86/
 # === File nặng không đẩy ===
 *.exe
 *.pdb
-*.apk
 *.dll
 
 # === Thư mục extension nặng ===
