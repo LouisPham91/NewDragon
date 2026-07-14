@@ -1,5 +1,6 @@
 ﻿using LibUsbDotNet;
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Net.Sockets;
@@ -53,7 +54,7 @@ namespace Dragon.Controller.DeviceControl
                 await EnsureConnectedAsync();
                 _lastUse = DateTime.UtcNow;
 
-                var cmd = Encoding.ASCII.GetBytes("screenshot\n");
+                var cmd = Encoding.ASCII.GetBytes("screenshot\n"); // ✅ Thêm \n
                 await _stream!.WriteAsync(cmd, 0, cmd.Length);
 
                 var sizeBuf = new byte[4];
@@ -73,13 +74,89 @@ namespace Dragon.Controller.DeviceControl
             }
             finally { _lock.Release(); }
         }
-        public async Task<Bitmap> ScreenshotBitmapAsync(int timeoutMs = 8000)
+        public async Task<Bitmap?> ScreenshotBitmapAsync(int timeoutMs = 8000)
         {
-            var data = await ScreenshotAsync(timeoutMs);
-            using var ms = new MemoryStream(data);
-            // Clone để không giữ lock trên MemoryStream
-            return new Bitmap(ms);
+            try
+            {
+                var data = await ScreenshotAsync(timeoutMs);
+
+                // Check null hoặc empty
+                if (data == null || data.Length == 0)
+                {
+                    Debug.WriteLine("Screenshot data is null or empty");
+                    return null;
+                }
+
+                // Check minimum JPEG size (header + minimal data)
+                if (data.Length < 100) // JPEG ít nhất phải có header
+                {
+                    Debug.WriteLine($"Screenshot data too small: {data.Length} bytes");
+                    return null;
+                }
+
+                try
+                {
+                    using var ms = new MemoryStream(data);
+
+                    // Validate đây là ảnh hợp lệ trước khi tạo Bitmap
+                    if (!IsValidImage(ms))
+                    {
+                        Debug.WriteLine("Invalid image data received");
+                        return null;
+                    }
+
+                    ms.Position = 0; // Reset position sau khi validate
+
+                    // Clone để không giữ lock trên MemoryStream
+                    // Dùng Image.FromStream thay vì new Bitmap(ms) để có error handling tốt hơn
+                    using var tempBitmap = Image.FromStream(ms, false, false);
+                    var bitmap = new Bitmap(tempBitmap); // Clone
+                    return bitmap;
+                }
+                catch (OutOfMemoryException ex)
+                {
+                    Debug.WriteLine($"Out of memory loading screenshot: {ex.Message}");
+                    // Force GC để cleanup
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+                    return null;
+                }
+                catch (ArgumentException ex) // Invalid parameters (corrupt image)
+                {
+                    Debug.WriteLine($"Invalid image data: {ex.Message}");
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"ScreenshotBitmapAsync error: {ex.Message}");
+                return null; // Return null thay vì throw để caller dễ handle
+            }
         }
+
+        // Helper method để validate ảnh
+        private bool IsValidImage(Stream stream)
+        {
+            try
+            {
+                long originalPosition = stream.Position;
+                stream.Position = 0;
+
+                // Check JPEG header (FF D8)
+                byte[] header = new byte[2];
+                if (stream.Read(header, 0, 2) != 2)
+                    return false;
+
+                bool isValid = header[0] == 0xFF && header[1] == 0xD8;
+                stream.Position = originalPosition;
+                return isValid;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+       
         public async Task SendAsync(string command)
         {
             await _lock.WaitAsync();
@@ -119,4 +196,5 @@ namespace Dragon.Controller.DeviceControl
         }
         public ValueTask DisposeAsync() { Dispose(); return ValueTask.CompletedTask; }
     }
+
 }

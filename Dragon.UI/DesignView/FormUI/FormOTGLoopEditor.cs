@@ -8,6 +8,7 @@ using Dragon.Controller.DeviceControl.OTG.Model;
 using Dragon.Database.Models;
 using Dragon.DesignView.Public;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 
 namespace Dragon.DesignView.FormUI
 {
@@ -233,7 +234,7 @@ namespace Dragon.DesignView.FormUI
 
         #region Select Events
 
-        private void SelectPhoneModel_Changed(object? sender, AntdUI.ObjectNEventArgs e)
+        private async void SelectPhoneModel_Changed(object? sender, AntdUI.ObjectNEventArgs e)
         {
             var model = e.Value?.ToString();
             if (string.IsNullOrEmpty(model)) return;
@@ -246,7 +247,17 @@ namespace Dragon.DesignView.FormUI
             {
                 _phone = phone;
                 UpdatePhoneInfo();
-                LoadLoopsForPhone(_isCaptureConnected); // ===== SỬA =====
+                LoadLoopsForPhone(_isCaptureConnected);
+                var capture = await AppCaptureManager.Instance.GetByDeviceId(_phone.DeviceID);
+                if (capture != null)
+                {
+                    var bitmap = capture.ScreenshotBitmapAsync();
+                    if (bitmap != null)
+                    {
+                        _isCaptureConnected = true;
+                    }
+                }
+
             }
         }
 
@@ -445,7 +456,7 @@ namespace Dragon.DesignView.FormUI
                 AppCapture? capture = null;
                 if (_isCaptureConnected)
                 {
-                    capture = AppCaptureManager.Instance.GetByDeviceId(_phone.DeviceID);
+                    capture = await AppCaptureManager.Instance.GetByDeviceId(_phone.DeviceID);
                     if (capture == null)
                     {
                         labelFile.Text = "⚠️ Capture mode ON but no AppCapture found! Running without OCR...";
@@ -493,16 +504,18 @@ namespace Dragon.DesignView.FormUI
                 btnCaptureScreenshot.Enabled = false;
 
                 // Lấy screenshot từ AppCapture nếu có, hoặc ADB
-                if (_isCaptureConnected)
+                var capture = await AppCaptureManager.Instance.GetByDeviceId(_phone.DeviceID);
+                if (capture != null)
                 {
-                    var capture = AppCaptureManager.Instance.GetByDeviceId(_phone.DeviceID);
-                    if (capture != null)
+                    _currentScreenshot = null;
+                    _currentScreenshot = await capture.ScreenshotBitmapAsync();
+                    if (_currentScreenshot != null)
                     {
-                        _currentScreenshot = await capture.ScreenshotBitmapAsync();
+                        _isCaptureConnected = true;
                     }
                 }
 
-                if (_currentScreenshot == null)
+                if (_currentScreenshot == null || _isCaptureConnected == false)
                 {
                     var adbClient = new AdvancedSharpAdbClient.AdbClient();
                     var devices = adbClient.GetDevices();
@@ -1161,10 +1174,10 @@ namespace Dragon.DesignView.FormUI
         private AntdUI.Input? _inputClickX, _inputClickY, _inputClickCount, _inputClickDelay;
         private AntdUI.Input? _inputSwipeX1, _inputSwipeY1, _inputSwipeX2, _inputSwipeY2, _inputSwipeDuration, _inputSwipeCount;
         private AntdUI.Input? _inputDelayMs;
-        private AntdUI.Input? _inputKey, _inputKeyRepeat, _inputKeyDelay;
+        private AntdUI.Input?  _inputKeyRepeat, _inputKeyDelay/*, _inputKey*/;
         private AntdUI.Input? _inputDeeplinkUrl, _inputDeeplinkWait;
         private AntdUI.Input? _inputSendText, _inputSendDelay;
-        private AntdUI.Input?  _inputOcrKeywords, _inputOcrTimeout, _inputOcrInterval, _inputOcrMaxSwipes, _inputOcrOffsetX, _inputOcrOffsetY;
+        private AntdUI.Input?  /*_inputOcrKeywords,*/ _inputOcrTimeout, _inputOcrInterval, _inputOcrMaxSwipes, _inputOcrOffsetX, _inputOcrOffsetY;
         private AntdUI.Input? _inputClosePoint;
         private System.Windows.Forms.TextBox? _rtbOcrKeywords;
         private AntdUI.Input? _inputClickTitle;

@@ -134,6 +134,7 @@ namespace Dragon.Controller.DeviceControl.OTG
                 var bmp = await cap.ScreenshotBitmapAsync(); // bạn thêm wrapper này trong AppCapture
                 foreach (var kw in keywords)
                 {
+                    if (bmp == null) continue;
                     var pt = OrcImageHelper.GetPointImageByText(bmp, kw);
                     if (pt != null)
                     {

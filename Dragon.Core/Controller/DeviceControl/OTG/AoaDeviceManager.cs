@@ -129,7 +129,7 @@ namespace Dragon.Controller.DeviceControl.OTG
             if (phone == null) return session;
 
             // Lấy capture (có thể null)
-            var capture = AppCaptureManager.Instance.GetByDeviceId(deviceId);
+            var capture = await AppCaptureManager.Instance.GetByDeviceId(deviceId);
             bool hasCapture = capture != null;
 
             // Tìm loop phù hợp với trạng thái capture

@@ -84,6 +84,7 @@ namespace Dragon.Controller.GlobalControl.TaskDeviceManager.Runners
                         }
                         else
                         {
+                            if (ctx.Session.AdbClient == null) return (Point.Empty, string.Empty);
                             var fb = ctx.Session.AdbClient.GetFrameBuffer(ctx.Session.DeviceData);
                             using var bmp = fb.ToImage();
                             if (bmp != null) bitmap = new Bitmap(bmp);

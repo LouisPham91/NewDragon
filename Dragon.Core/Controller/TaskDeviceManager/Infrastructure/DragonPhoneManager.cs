@@ -41,7 +41,7 @@ namespace Dragon.Controller.TaskDeviceManager.Infrastructure
             bool hasWifiSerial = dev != null && dev.Serial.Contains(":");
 
             // 2. Áp ConnectionType
-            string chosenConnection = null;
+            string chosenConnection = string.Empty;
 
             if (root.connectionType == ConnectionType.Auto)
             {
@@ -86,7 +86,7 @@ namespace Dragon.Controller.TaskDeviceManager.Infrastructure
                             // chỗ này phải tạo được 1 hàm custom cũng dùng dloop để mở setting rồi tìm chỗ click 7 lần..
                             // vì chỗ này bắt buộc là appcapture phải có nên có thể sử dụng để screenshot check như bình thường
                             // ngoài ra hàm này bị dưới hạm 1 dloop là 15 dloop con thôi nhiều hơn thì ko được
-                            var appCapture = AppCaptureManager.Instance.GetByDeviceId(phone.DeviceID);
+                            var appCapture = await AppCaptureManager.Instance.GetByDeviceId(phone.DeviceID);
                             if (appCapture == null) return false;
 
                             await appCapture.SendAsync("settings");
