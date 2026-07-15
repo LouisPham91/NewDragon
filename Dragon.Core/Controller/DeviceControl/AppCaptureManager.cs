@@ -345,8 +345,7 @@ namespace Dragon.Controller.DeviceControl
             }
             else
             {
-                CancellationToken token = CancellationToken.None;
-                var capt = await InitAppCaptureAsync(deviceId, token);
+                var capt = await InitAppCaptureAsync(deviceId, CancellationToken.None);
                 return capt;
             }
         }
